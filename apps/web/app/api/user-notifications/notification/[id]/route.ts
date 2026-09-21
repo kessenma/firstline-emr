@@ -1,0 +1,219 @@
+// This route handles operations on a specific user notification
+import { type NextRequest, NextResponse } from "next/server";
+import { verifySessionFromRequest } from "@/lib/dal";
+import { db } from "@/db";
+import { userNotifications, notifications, userMessages } from "@/db/schema";
+import { eq, and, sql } from "drizzle-orm";
+
+export const dynamic = "force-dynamic";
+
+// GET: Fetch a specific user notification
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  // Support both web sessions and mobile JWT tokens
+  // Authentication using DAL
+  const session = await verifySessionFromRequest(request);
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id: notificationId } = await context.params;
+
+  try {
+    // Find the user notification with related notification data
+    const userNotificationData = await db
+      .select({
+        id: userNotifications.id,
+        userId: userNotifications.userId,
+        notificationId: userNotifications.notificationId,
+        read: userNotifications.read,
+        readAt: userNotifications.readAt,
+        dismissed: userNotifications.dismissed,
+        dismissedAt: userNotifications.dismissedAt,
+        createdAt: userNotifications.createdAt,
+        // Include notification details
+        notification: {
+          id: notifications.id,
+          message: notifications.message,
+          type: notifications.type,
+          subject: notifications.subject,
+          patientId: notifications.patientId,
+          redirectTo: notifications.redirectTo,
+          createdAt: notifications.createdAt,
+        },
+      })
+      .from(userNotifications)
+      .innerJoin(
+        notifications,
+        eq(userNotifications.notificationId, notifications.id),
+      )
+      .where(
+        and(
+          eq(userNotifications.id, notificationId),
+          eq(userNotifications.userId, session.userId),
+        ),
+      )
+      .limit(1);
+
+    if (!userNotificationData || userNotificationData.length === 0) {
+      return NextResponse.json(
+        { error: "Notification not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json(userNotificationData[0]);
+  } catch (error) {
+    console.error("Error fetching notification:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch notification" },
+      { status: 500 },
+    );
+  }
+}
+
+// PATCH: Mark a specific user notification as read
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  // Support both web sessions and mobile JWT tokens
+  // Authentication using DAL
+  const session = await verifySessionFromRequest(request);
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id: notificationId } = await context.params;
+
+  try {
+    // Check if notification exists and belongs to user
+    const existingNotification = await db
+      .select()
+      .from(userNotifications)
+      .where(
+        and(
+          eq(userNotifications.id, notificationId),
+          eq(userNotifications.userId, session.userId),
+        ),
+      )
+      .limit(1);
+
+    if (!existingNotification || existingNotification.length === 0) {
+      return NextResponse.json(
+        { error: "Notification not found" },
+        { status: 404 },
+      );
+    }
+
+    // If already read, no need to update
+    if (existingNotification[0].read) {
+      return NextResponse.json({ success: true, alreadyRead: true });
+    }
+
+    // Mark as read
+    await db
+      .update(userNotifications)
+      .set({
+        read: true,
+        readAt: new Date(),
+      })
+      .where(
+        and(
+          eq(userNotifications.id, notificationId),
+          eq(userNotifications.userId, session.userId),
+        ),
+      );
+
+    // Decrement unread count in user messages
+    await db
+      .update(userMessages)
+      .set({
+        unreadCount: sql`${userMessages.unreadCount} - 1`,
+        updatedAt: new Date(),
+      })
+      .where(eq(userMessages.userId, session.userId));
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error marking notification as read:", error);
+    return NextResponse.json(
+      { error: "Failed to mark notification as read" },
+      { status: 500 },
+    );
+  }
+}
+
+// DELETE: Delete a specific user notification
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  // Support both web sessions and mobile JWT tokens
+  // Authentication using DAL
+  const session = await verifySessionFromRequest(request);
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id: notificationId } = await context.params;
+
+  try {
+    // Check if notification exists and get its read status
+    const notificationToDelete = await db
+      .select({
+        read: userNotifications.read,
+      })
+      .from(userNotifications)
+      .where(
+        and(
+          eq(userNotifications.id, notificationId),
+          eq(userNotifications.userId, session.userId),
+        ),
+      )
+      .limit(1);
+
+    if (!notificationToDelete || notificationToDelete.length === 0) {
+      return NextResponse.json(
+        { error: "Notification not found" },
+        { status: 404 },
+      );
+    }
+
+    const wasRead = notificationToDelete[0].read;
+
+    // Delete the notification
+    await db
+      .delete(userNotifications)
+      .where(
+        and(
+          eq(userNotifications.id, notificationId),
+          eq(userNotifications.userId, session.userId),
+        ),
+      );
+
+    // If it was unread, decrement the unread count
+    if (!wasRead) {
+      await db
+        .update(userMessages)
+        .set({
+          unreadCount: sql`${userMessages.unreadCount} - 1`,
+          updatedAt: new Date(),
+        })
+        .where(eq(userMessages.userId, session.userId));
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting notification:", error);
+    return NextResponse.json(
+      { error: "Failed to delete notification" },
+      { status: 500 },
+    );
+  }
+}

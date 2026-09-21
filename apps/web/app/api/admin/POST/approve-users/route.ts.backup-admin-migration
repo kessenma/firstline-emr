@@ -1,0 +1,93 @@
+// app/api/admin/POST/approve-users/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { inArray } from "drizzle-orm";
+import { verifyAdminToken } from "@/utils/adminAPI";
+import { sendApprovalEmail } from "@/utils/emails/user-approval";
+
+export async function POST(request: NextRequest) {
+  try {
+    // Verify admin access
+    const decoded = await verifyAdminToken(request);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Parse request body
+    const { userIds } = await request.json();
+
+    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+      return NextResponse.json(
+        { message: "User IDs are required" },
+        { status: 400 },
+      );
+    }
+
+    // Fetch users to approve (need their details for email)
+    const usersToApprove = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        accountType: users.accountType,
+      })
+      .from(users)
+      .where(inArray(users.id, userIds));
+
+    if (usersToApprove.length === 0) {
+      return NextResponse.json({ message: "No users found" }, { status: 404 });
+    }
+
+    // Update users to approve them
+    await db
+      .update(users)
+      .set({
+        authorized: true,
+        approvalDate: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(inArray(users.id, userIds));
+
+    // Send approval emails to each user
+    const emailPromises = usersToApprove.map((user) =>
+      sendApprovalEmail(
+        user.email,
+        user.firstName,
+        user.lastName,
+        user.accountType,
+      ).catch((error) => {
+        console.error(`Failed to send email to ${user.email}:`, error);
+        // Don't throw - we want to continue even if email fails
+        return null;
+      }),
+    );
+
+    // Wait for all emails to be sent
+    await Promise.all(emailPromises);
+
+    return NextResponse.json(
+      { message: "Users approved successfully" },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("Error approving users:", error);
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: `Authorization failed: ${error.message}` },
+        { status: 500 },
+      );
+    }
+    return NextResponse.json(
+      { message: "Unknown error occurred during authorization" },
+      { status: 500 },
+    );
+  }
+}

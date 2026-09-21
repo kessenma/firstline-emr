@@ -1,0 +1,80 @@
+// app/api/admin/GET/med-orders/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { medOrders, users, patients } from "@/db/schema";
+import { eq, desc, count } from "drizzle-orm";
+import { verifyAdminToken } from "@/utils/adminAPI";
+
+export async function GET(request: NextRequest) {
+  try {
+    // Verify admin access
+    const decoded = await verifyAdminToken(request);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Parse pagination parameters
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "20", 10);
+    const offset = (page - 1) * limit;
+
+    // Get total count of med orders
+    const [{ value: totalOrders }] = await db
+      .select({ value: count() })
+      .from(medOrders);
+
+    // Fetch med orders with pagination, including doctor and patient info
+    const orders = await db
+      .select({
+        id: medOrders.id,
+        oid: medOrders.oid,
+        patientId: medOrders.patientId,
+        patientName: medOrders.patientName,
+        patientPhone: medOrders.patientPhone,
+        patientCity: medOrders.patientCity,
+        patientCountry: medOrders.patientCountry,
+        drId: medOrders.drId,
+        prescribingDr: medOrders.prescribingDr,
+        drEmail: medOrders.drEmail,
+        doctorSpecialty: medOrders.doctorSpecialty,
+        orderDate: medOrders.orderDate,
+        medications: medOrders.medications,
+        validated: medOrders.validated,
+        createdAt: medOrders.createdAt,
+        updatedAt: medOrders.updatedAt,
+        // Doctor info from join
+        doctorFirstName: users.firstName,
+        doctorLastName: users.lastName,
+        doctorEmail: users.email,
+        // Patient info from join
+        patientFirstName: patients.firstName,
+        patientLastName: patients.lastName,
+      })
+      .from(medOrders)
+      .leftJoin(users, eq(medOrders.drId, users.id))
+      .leftJoin(patients, eq(medOrders.patientId, patients.id))
+      .orderBy(desc(medOrders.orderDate))
+      .limit(limit)
+      .offset(offset);
+
+    return NextResponse.json({
+      orders,
+      totalPages: Math.ceil(totalOrders / limit),
+      currentPage: page,
+      totalOrders,
+    });
+  } catch (error) {
+    console.error("Error fetching med orders:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch medication orders" },
+      { status: 500 },
+    );
+  }
+}

@@ -1,0 +1,92 @@
+name: DB Schema Check
+
+# Layer 1 of the migration failsafe: catch "edited the schema, forgot to run
+# db:generate" before it ever reaches a deploy.
+#
+# Repo-only by design — no DATABASE_URL, no network access to production. It
+# compares the schema files against the committed migrations and nothing else.
+# The companion check that compares migrations against the live database is the
+# `migrate` service in docker-compose.web.yml, which runs at deploy time.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/web/db/schema/**"
+      - "apps/web/db/migrations/**"
+      - "apps/web/drizzle.config.ts"
+  pull_request:
+    paths:
+      - "apps/web/db/schema/**"
+      - "apps/web/db/migrations/**"
+      - "apps/web/drizzle.config.ts"
+
+concurrency:
+  group: db-schema-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  schema-in-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      # drizzle.config.ts throws at import time if DATABASE_URL is unset, but
+      # `drizzle-kit generate` and `check` are entirely offline — they diff the
+      # schema against db/migrations/meta snapshots. This value is never dialed.
+      DATABASE_URL: postgres://unused:unused@127.0.0.1:5432/unused
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 📦 Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.4
+
+      - name: ⬢ Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # Scoped to apps/web and its workspace deps (@fajr/shared). The mobile
+      # workspace pulls the whole React Native tree and this job never touches it.
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile --filter 'web...'
+
+      - name: 🔎 Validate migration journal
+        working-directory: apps/web
+        run: pnpm run db:check
+
+      - name: 🧬 Check schema matches committed migrations
+        working-directory: apps/web
+        run: |
+          set -euo pipefail
+
+          before=$(git status --porcelain db/migrations | sort)
+
+          pnpm run db:generate
+
+          after=$(git status --porcelain db/migrations | sort)
+
+          if [ "$before" = "$after" ]; then
+            echo "✔ Schema and migrations are in sync."
+            exit 0
+          fi
+
+          echo ""
+          echo "✖ db/schema/ has changes with no matching migration."
+          echo ""
+          echo "  Running db:generate produced new or modified files:"
+          git status --porcelain db/migrations
+          echo ""
+          echo "  Fix locally, from apps/web:"
+          echo "    pnpm run db:generate    # creates the migration"
+          echo "    pnpm run db:migrate     # applies it"
+          echo "  then commit db/migrations/ along with the schema change."
+          echo ""
+          echo "  Diff drizzle wanted to add:"
+          git --no-pager diff -- db/migrations
+          exit 1

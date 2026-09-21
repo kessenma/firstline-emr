@@ -1,0 +1,53 @@
+// app/api/admin/GET/search-users/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { and, eq, ilike } from "drizzle-orm";
+import { verifyAdminToken } from "@/utils/adminAPI";
+
+export async function GET(request: NextRequest) {
+  try {
+    // Verify admin access
+    const decoded = await verifyAdminToken(request);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Get email search parameter
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get("email");
+
+    if (!email) {
+      return NextResponse.json(
+        { message: "Email query is required" },
+        { status: 400 },
+      );
+    }
+
+    // Search for authorized users with matching email (case-insensitive)
+    const usersList = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+      })
+      .from(users)
+      .where(and(ilike(users.email, `%${email}%`), eq(users.authorized, true)))
+      .limit(10);
+
+    return NextResponse.json({ users: usersList }, { status: 200 });
+  } catch (error) {
+    console.error("Error searching users:", error);
+    return NextResponse.json(
+      { message: "Failed to search users" },
+      { status: 500 },
+    );
+  }
+}

@@ -1,0 +1,1 @@
+ALTER TABLE "user_settings" ADD COLUMN "call_transcription_mode" varchar(16) DEFAULT 'off';

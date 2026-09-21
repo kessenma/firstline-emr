@@ -1,0 +1,69 @@
+// app/api/admin/GET/statistics/patient-specialty-spread/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { patients } from "@/db/schema";
+import { verifySessionFromRequest } from "@/lib/dal";
+import { DoctorSpecialtyList } from "@/data/doctorSpecialty.enum";
+
+export async function GET(request: NextRequest) {
+  try {
+    // Verify admin access
+    const decoded = await verifyAdminToken(request);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Get all patients with their specialties arrays
+    const allPatients = await db
+      .select({
+        specialties: patients.specialties,
+      })
+      .from(patients);
+
+    console.log("Raw patients data:", allPatients);
+
+    // Create a map of all specialties with count 0
+    const allSpecialties = Object.values(DoctorSpecialtyList).reduce(
+      (acc, specialty) => {
+        acc[specialty] = 0;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+    // Count specialties from the specialties arrays
+    allPatients.forEach((patient) => {
+      if (patient.specialties && Array.isArray(patient.specialties)) {
+        patient.specialties.forEach((specialty) => {
+          if (specialty && specialty in allSpecialties) {
+            allSpecialties[specialty]++;
+          }
+        });
+      }
+    });
+
+    // Create the specialty breakdown including all specialties
+    const specialtyBreakdown = Object.entries(allSpecialties).map(
+      ([specialty, count]) => ({
+        specialty,
+        count,
+      }),
+    );
+
+    console.log("Final specialty breakdown:", specialtyBreakdown);
+
+    return NextResponse.json({ specialtyBreakdown });
+  } catch (error) {
+    console.error("Error fetching patient specialty breakdown:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+}

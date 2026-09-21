@@ -1,0 +1,93 @@
+version: "3.8"
+
+x-build-args: &build-args
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_INLINE_CACHE: 1
+
+services:
+  livekit-server:
+    build:
+      context: ./apps/livekit-server
+      dockerfile: Dockerfile
+      args:
+        <<: *build-args
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      # LIVEKIT_KEYS format: "api_key: api_secret" — read by LiveKit directly.
+      LIVEKIT_KEYS: "${LIVEKIT_API_KEY:-devkey}: ${LIVEKIT_API_SECRET:-secret}"
+
+      # Redis (optional, for multi-node deployments)
+      # REDIS_HOST: ${REDIS_HOST:-redis}
+      # REDIS_PORT: ${REDIS_PORT:-6379}
+
+      # TURN realm — must match the hostname clients resolve for this server.
+      LIVEKIT_TURN_DOMAIN: ${LIVEKIT_TURN_DOMAIN:-livekit.fajrmission.org}
+
+      # Read by entrypoint.sh to render webhook.api_key into the config
+      # template, so the key is never committed. Must match the key half of
+      # LIVEKIT_KEYS above, or the receivers cannot verify the signature.
+      LIVEKIT_API_KEY: "${LIVEKIT_API_KEY:-devkey}"
+
+      # Origin the SFU posts call-log webhooks to. Both receiver paths
+      # (/api/video-call/webhook and /api/livekit/webhook) are appended to this
+      # by the config template. Override per environment so a dev SFU does not
+      # write into prod's call log.
+      LIVEKIT_WEBHOOK_BASE_URL: ${LIVEKIT_WEBHOOK_BASE_URL:-https://fajrmission.org}
+
+      NODE_ENV: ${NODE_ENV:-production}
+    ports:
+      # ICE/TCP fallback. Must match rtc.tcp_port in config.yaml — without it
+      # there is no fallback for clients that cannot do direct UDP, a common
+      # situation on hospital networks.
+      - "7881:7881/tcp"
+
+      # Direct WebRTC media, single UDP mux port.
+      # Must match rtc.udp_port in apps/livekit-server/config.yaml.
+      - "7882:7882/udp"
+
+      # TURN relay. Without this, mobile clients behind carrier-grade NAT
+      # frequently cannot establish a media path at all.
+      # Must match turn.udp_port in config.yaml.
+      - "3478:3478/udp"
+
+      # TURN relay allocations. Must match turn.relay_range_start/end in
+      # config.yaml. Publishing these is NOT optional: LiveKit advertises each
+      # relay candidate on the host's external IP, so the SFU's own ICE checks
+      # are sent to <SERVER_IP>:<relay port>. Unpublished, they leave the
+      # container and are dropped by the host — the allocation succeeds and
+      # then relays nothing, which presents as "TURN is enabled but calls
+      # still fail on mobile data".
+      #
+      # Kept to 20 ports: Docker spawns a docker-proxy process per published
+      # port, so LiveKit's 30000-40000 default would be 10001 of them.
+      - "30000-30019:30000-30019/udp"
+    # 7880 (HTTP/WebSocket signalling) is deliberately not published — Caddy
+    # proxies to it over the internal network and terminates TLS.
+    # Port 443 is likewise handled by Caddy.
+    networks:
+      - coolify
+    labels:
+      # Same shape as the PowerSync service: Caddy handles WebSocket upgrades
+      # natively through reverse_proxy, so no explicit matcher is needed.
+      caddy: livekit.fajrmission.org
+      caddy.reverse_proxy: "{{upstreams 7880}}"
+      # Caddy kills upgraded (WebSocket) connections on every config reload,
+      # and caddy-docker-proxy reloads on any container churn (e.g. deploys).
+      # Let established signal connections survive reloads for up to 24h.
+      caddy.reverse_proxy.stream_close_delay: 24h
+      caddy.encode: gzip
+    healthcheck:
+      # LiveKit 1.13 answers 406 to a plain GET / (it expects a WebSocket
+      # upgrade), so an HTTP status check can never pass. TCP connect is the
+      # meaningful liveness signal.
+      test: ["CMD", "nc", "-z", "localhost", "7880"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  coolify:
+    external: true

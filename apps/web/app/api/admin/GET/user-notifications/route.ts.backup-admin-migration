@@ -1,0 +1,198 @@
+// app/api/admin/GET/user-notifications/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { type NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import {
+  userNotifications,
+  notifications,
+  users,
+  userSettings,
+} from "@/db/schema";
+import { eq, and, desc, count, inArray } from "drizzle-orm";
+import { verifyAdminToken } from "@/utils/adminAPI";
+
+export async function GET(request: NextRequest) {
+  try {
+    // Verify admin access
+    const decoded = await verifyAdminToken(request);
+    if (!decoded) {
+      console.log("User notifications: Unauthorized access attempt");
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    console.log("User notifications: Admin access verified");
+
+    // Parse query parameters
+    const { searchParams } = new URL(request.url);
+    const page = Number.parseInt(searchParams.get("page") || "1");
+    const limit = Number.parseInt(searchParams.get("limit") || "20");
+    const userId = searchParams.get("userId");
+    const type = searchParams.get("type");
+
+    console.log("User notifications query params:", {
+      page,
+      limit,
+      userId,
+      type,
+    });
+
+    // Calculate pagination
+    const offset = (page - 1) * limit;
+
+    // Build where conditions for userNotifications table
+    const userNotificationConditions = [];
+    if (userId) {
+      userNotificationConditions.push(eq(userNotifications.userId, userId));
+    }
+
+    // Build where conditions for notifications table (for JOIN)
+    const notificationConditions = [];
+    if (type && type !== "all") {
+      notificationConditions.push(
+        eq(notifications.type, type as "message" | "alert"),
+      );
+    }
+
+    // Combine all conditions
+    const allConditions = [
+      ...userNotificationConditions,
+      ...notificationConditions,
+    ];
+
+    const whereClause =
+      allConditions.length > 0 ? and(...allConditions) : undefined;
+
+    // Get total count with the same filters
+    const countQuery = db
+      .select({ value: count() })
+      .from(userNotifications)
+      .innerJoin(
+        notifications,
+        eq(userNotifications.notificationId, notifications.id),
+      );
+
+    if (whereClause) {
+      countQuery.where(whereClause);
+    }
+
+    const [{ value: totalCount }] = await countQuery;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    console.log("User notifications count:", { totalCount, totalPages });
+
+    // Fetch user notifications with all related data using JOINs
+    const baseQuery = db
+      .select({
+        // UserNotification fields
+        id: userNotifications.id,
+        notificationId: userNotifications.notificationId,
+        userId: userNotifications.userId,
+        read: userNotifications.read,
+        readAt: userNotifications.readAt,
+        dismissed: userNotifications.dismissed,
+        createdAt: userNotifications.createdAt,
+        // Notification fields
+        message: notifications.message,
+        notificationType: notifications.type,
+        subject: notifications.subject,
+        patientId: notifications.patientId,
+        redirectTo: notifications.redirectTo,
+        notificationCreatedAt: notifications.createdAt,
+        // User fields
+        userEmail: users.email,
+        userFirstName: users.firstName,
+        userLastName: users.lastName,
+        userAccountType: users.accountType,
+      })
+      .from(userNotifications)
+      .innerJoin(
+        notifications,
+        eq(userNotifications.notificationId, notifications.id),
+      )
+      .innerJoin(users, eq(userNotifications.userId, users.id))
+      .orderBy(desc(userNotifications.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    if (whereClause) {
+      baseQuery.where(whereClause);
+    }
+
+    const userNotificationsList = await baseQuery;
+
+    console.log(`Fetched ${userNotificationsList.length} user notifications`);
+
+    // Get unique user IDs to fetch their settings
+    const userIds = [...new Set(userNotificationsList.map((n) => n.userId))];
+
+    // Fetch user settings for specialties
+    const settingsList =
+      userIds.length > 0
+        ? await db
+            .select({
+              userId: userSettings.userId,
+              doctorSpecialty: users.doctorSpecialty,
+            })
+            .from(userSettings)
+            .innerJoin(users, eq(userSettings.userId, users.id))
+            .where(inArray(userSettings.userId, userIds))
+        : [];
+
+    // Create a map of userId to specialty
+    const specialtyMap = settingsList.reduce(
+      (map, setting) => {
+        const specialty = setting.doctorSpecialty
+          ? Array.isArray(setting.doctorSpecialty)
+            ? setting.doctorSpecialty.join(", ")
+            : setting.doctorSpecialty
+          : "Unknown";
+        map[setting.userId] = specialty;
+        return map;
+      },
+      {} as Record<string, string>,
+    );
+
+    // Transform the data to match the expected format
+    const notificationsList = userNotificationsList.map((un) => ({
+      id: un.id,
+      notificationId: un.notificationId,
+      message: un.message,
+      type: un.notificationType,
+      subject: un.subject,
+      read: un.read,
+      createdAt: un.notificationCreatedAt,
+      patientId: un.patientId,
+      redirectTo: un.redirectTo,
+      recipient: {
+        id: un.userId,
+        name: `${un.userFirstName} ${un.userLastName}`,
+        email: un.userEmail,
+        accountType: un.userAccountType,
+      },
+      specialty: specialtyMap[un.userId] || "Unknown",
+    }));
+
+    console.log(
+      `Returning ${notificationsList.length} formatted notifications`,
+    );
+
+    return NextResponse.json({
+      notifications: notificationsList,
+      totalCount,
+      totalPages,
+      currentPage: page,
+    });
+  } catch (error) {
+    console.error("Error fetching user notifications:", error);
+    console.error("Error stack:", error instanceof Error ? error.stack : "N/A");
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+}

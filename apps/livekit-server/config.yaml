@@ -1,0 +1,117 @@
+# LiveKit Server Configuration
+#
+# NOTE: this is a template. entrypoint.sh substitutes __LIVEKIT_API_KEY__ and
+# __WEBHOOK_BASE__ at container start, so no credential is committed here.
+# Edit this file, not the rendered copy in /tmp.
+
+port: 7880
+log_level: info
+
+rtc:
+  # TCP fallback for networks that block UDP. Must be published in
+  # docker-compose.livekit.yml, or clients that cannot do direct UDP simply
+  # fail — a common situation on hospital networks.
+  tcp_port: 7881
+
+  # Single-port UDP mux for direct media. Preferred over port_range_start/end:
+  # publishing a large UDP range through Docker spawns a userland proxy per
+  # port, and the range has to be kept in sync with docker-compose by hand.
+  #
+  # This is the direct path; the TURN block below is the relay fallback for
+  # clients that cannot establish it. They are complementary, not alternatives.
+  udp_port: 7882
+
+  # Discover the public IP via STUN — required on cloud hosts where the
+  # container only sees a private address.
+  use_external_ip: true
+
+# API keys come from the LIVEKIT_KEYS env var ("<key>: <secret>"), set as a
+# Coolify secret. Leaving this empty is intentional.
+keys: {}
+
+room:
+  # Rooms are created on demand when a token holder connects.
+  auto_create: true
+
+  # Default for auto-created rooms: consults are 1:1 (doctor + patient).
+  # Without this, anyone holding the invite link could join a room containing
+  # PHI. Kept in sync with VIDEO_CALL_MAX_PARTICIPANTS in
+  # packages/shared/src/video-call/constants.ts.
+  #
+  # Staff group calls need more than two, so /api/calls pre-creates its
+  # `staff-` rooms through the RoomService API with their own maxParticipants
+  # instead of relying on this default. Raising this value would silently
+  # widen patient consult rooms too — don't.
+  max_participants: 2
+
+  # Kept short so room_finished fires promptly after the last participant
+  # leaves — the call log derives its end time from these events, and a long
+  # timeout would pad every entry. It also means an abandoned staff room is not
+  # left joinable on a leaked token. See apps/web/app/api/video-call/webhook/.
+  empty_timeout: 30
+
+# Call logging. LiveKit signs each payload with the secret belonging to
+# api_key; each receiver verifies it with WebhookReceiver (livekit-server-sdk).
+#
+# Both receivers are listed because they own disjoint room sets and each
+# ignores the other's: /api/video-call/webhook closes out `video_call_sessions`
+# for patient consults, /api/livekit/webhook closes out `calls` for `staff-`
+# rooms. Dropping either leaves that table's rows stuck in `active` forever
+# whenever a client crashes instead of hanging up cleanly.
+webhook:
+  api_key: __LIVEKIT_API_KEY__
+  urls:
+    - __WEBHOOK_BASE__/api/video-call/webhook
+    - __WEBHOOK_BASE__/api/livekit/webhook
+
+# TURN relay.
+#
+# Enabled for mobile. Without a relay, clients behind carrier-grade NAT fail to
+# connect a meaningful fraction of the time — direct UDP simply never
+# establishes. Plain TURN over UDP/3478 covers the overwhelming majority of
+# those cases, and does not contend with Caddy, which owns 443 on this host.
+#
+# TURN/TLS on 5349 is deliberately NOT enabled: it needs a certificate for this
+# domain mounted into the container (turn.cert_file / turn.key_file), because
+# the external_tls + Caddy passthrough route requires Caddy's layer4 module,
+# which the Coolify Caddy image does not ship. Add it only if a site turns out
+# to block UDP outright.
+#
+# `domain` is rewritten by entrypoint.sh from LIVEKIT_TURN_DOMAIN when set.
+turn:
+  enabled: true
+  # Realm only. NOT required for plain UDP TURN — verified: the server starts
+  # and logs "Starting TURN server" with this key absent. It selects the
+  # certificate for TURN/TLS on 5349, which is disabled below. Kept accurate
+  # anyway so nobody trusts a dead hostname later.
+  domain: livekit.fajrmission.org
+  udp_port: 3478
+
+  # Relay allocations. One port per relayed participant.
+  #
+  # These MUST be published in docker-compose.livekit.yml. LiveKit advertises
+  # the relay candidate on the node's *external* IP (RelayAddressGeneratorPortRange
+  # is built with RelayAddress = conf.RTC.NodeIP), so the SFU sends its ICE
+  # connectivity checks to <SERVER_IP>:<relay port>. On a bridge network
+  # those leave the container, hit the host, and are dropped unless the port is
+  # published — allocations would succeed and then relay nowhere. LiveKit's
+  # ports-and-firewall doc omits this entirely (livekit/livekit#3164).
+  #
+  # Narrowed from the 30000-40000 default: each published port costs a
+  # docker-proxy process (~2.4MB), so 10001 ports is not viable. 20 is ample
+  # for 1:1 staff calls and caps concurrent relayed participants at 20.
+  #
+  # Deliberately below net.ipv4.ip_local_port_range (32768-60999) so a
+  # transient outbound socket can never squat on a relay port.
+  relay_range_start: 30000
+  relay_range_end: 30019
+
+  # tls_port: 5349
+  # cert_file: /certs/fullchain.pem
+  # key_file: /certs/privkey.pem
+
+# Redis, for multi-node deployments. Single node today.
+# redis:
+#   address: redis:6379
+
+# prometheus_port: 6789

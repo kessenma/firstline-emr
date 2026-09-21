@@ -1,0 +1,36 @@
+# gitleaks config for Firstline EMR
+#
+# Extends the default ruleset and allowlists documented false positives so a
+# CI run fails only on something real. Every entry below was verified by hand.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+description = "generic-api-key with project allowlist"
+regex = '''(?i)(?:key|api|token|secret|client|passwd|password|auth|access)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\||:|<=|=>|:=|\?=|,)(?:'|\"|\s|=|\x60){0,5}([0-9a-z\-_.=]{10,150})(?:['|\"|\n|\r|\s|\x60|;|\\]|$)'''
+  [rules.allowlist]
+  regexTarget = "match"
+  regexes = [
+    # RFC 6455 handshake example nonce ("the sample nonce")
+    '''dGhlIHNhbXBsZSBub25jZQ==''',
+    # truncated example JWTs in docs — header only, no payload or signature
+    '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6[A-Za-z0-9_-]*\.\.\.''',
+  ]
+  paths = [
+    # CocoaPods integrity checksums, not credentials
+    '''apps/mobile/ios/Podfile\.lock''',
+  ]
+
+[allowlist]
+description = "Project-wide false positives"
+regexes = [
+  '''YOUR_API_KEY''',
+  '''YOUR_TOKEN''',
+  '''your-api-key-here''',
+  '''your-keychain-password''',
+  '''dev-local-key-12345''',
+  '''wrong-key''',
+  '''dGhlIHNhbXBsZSBub25jZQ==''',
+  '''<REDACTED-[a-z0-9-]+>''',
+]

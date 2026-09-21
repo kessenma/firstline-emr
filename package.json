@@ -1,0 +1,74 @@
+{
+  "name": "firstline-emr",
+  "private": true,
+  "scripts": {
+    "startBot": "turbo run start:bot --filter=telegram-bot",
+    "cronBot": "turbo run cron:bot --filter=telegram-bot",
+    "startWebSocket": "turbo run start:websocket --filter=websocket-server",
+    "build": "turbo run build",
+    "buildWeb": "turbo run build --filter=web",
+    "buildMobile": "turbo run build --filter=mobile",
+    "dev:all": "turbo run dev start:bot start:websocket --parallel",
+    "dev": "turbo run dev",
+    "devWeb": "turbo run dev --filter=web",
+    "devMobile": "turbo run dev --filter=mobile",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prune:web": "turbo prune --scope=web --docker",
+    "analyze:components": "node scripts/analyze-component-usage.js",
+    "analyze:components:csv": "node scripts/export-component-csv.js",
+    "analyze:components:all": "npm run analyze:components && npm run analyze:components:csv"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.8.1",
+    "@commitlint/config-conventional": "^17.8.1",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.20.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.0.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^4.1.17",
+    "turbo": "^2.5.0"
+  },
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": ">=22"
+  },
+  "overrides": {
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "csstype": "3.2.3",
+    "zod": "^4.1.12"
+  },
+  "pnpm": {
+    "overrides": {
+      "zod": "^4.1.12"
+    },
+    "patchedDependencies": {
+      "buffer-equal-constant-time@1.0.1": "patches/buffer-equal-constant-time@1.0.1.patch",
+      "@callstack/repack@5.2.3": "patches/@callstack__repack@5.2.3.patch",
+      "react-native-audio-api@0.8.4": "patches/react-native-audio-api@0.8.4.patch"
+    }
+  },
+  "turbo": {
+    "tasks": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          ".next/**",
+          "!.next/cache/**"
+        ]
+      },
+      "lint": {
+        "outputs": []
+      },
+      "dev": {
+        "cache": false,
+        "persistent": true
+      }
+    }
+  }
+}

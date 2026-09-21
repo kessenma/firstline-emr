@@ -1,0 +1,150 @@
+/* AUTO-GENERATED from @fajr/shared/theme — do not edit manually */
+/* Source: packages/shared/src/theme/palette.ts */
+/* Run: pnpm --filter @fajr/shared generate:css */
+
+@theme {
+
+  --color-teal-50: #f2fbfa;
+  --color-teal-100: #d5f2ee;
+  --color-teal-200: #abe4dd;
+  --color-teal-300: #79cfc7;
+  --color-teal-400: #4db4ad;
+  --color-teal-500: #359d98;
+  --color-teal-600: #277a78;
+  --color-teal-700: #236261;
+  --color-teal-800: #204f4f;
+  --color-teal-900: #1e4342;
+  --color-teal-950: #0c2627;
+
+  --color-blue-50: #f3f6fc;
+  --color-blue-100: #e6eef8;
+  --color-blue-200: #c8daef;
+  --color-blue-300: #98bce1;
+  --color-blue-400: #4f8ec9;
+  --color-blue-500: #3d7dba;
+  --color-blue-600: #2c629d;
+  --color-blue-700: #254f7f;
+  --color-blue-800: #22446a;
+  --color-blue-900: #213a59;
+  --color-blue-950: #16253b;
+
+  --color-red-50: #fdf3f3;
+  --color-red-100: #fbe5e6;
+  --color-red-200: #f9cfd1;
+  --color-red-300: #f3aeb1;
+  --color-red-400: #ea7f83;
+  --color-red-500: #da4248;
+  --color-red-600: #ca383e;
+  --color-red-700: #a92c31;
+  --color-red-800: #8c282c;
+  --color-red-900: #75272a;
+  --color-red-950: #3f1012;
+
+  --color-navy-50: #f2f6fc;
+  --color-navy-100: #e1eaf8;
+  --color-navy-200: #cadbf3;
+  --color-navy-300: #a5c4eb;
+  --color-navy-400: #7ba5df;
+  --color-navy-500: #5b86d6;
+  --color-navy-600: #476cc9;
+  --color-navy-700: #3d59b8;
+  --color-navy-800: #374a96;
+  --color-navy-900: #2a3867;
+  --color-navy-950: #222a49;
+
+  --color-eastern-blue-50: #f2f9f9;
+  --color-eastern-blue-100: #ddeff0;
+  --color-eastern-blue-200: #bfe0e2;
+  --color-eastern-blue-300: #92c9ce;
+  --color-eastern-blue-400: #5eaab2;
+  --color-eastern-blue-500: #4b9fa9;
+  --color-eastern-blue-600: #3a7580;
+  --color-eastern-blue-700: #356069;
+  --color-eastern-blue-800: #315159;
+  --color-eastern-blue-900: #2d454c;
+  --color-eastern-blue-950: #1a2c32;
+
+  --color-cello-50: #eff8ff;
+  --color-cello-100: #dbeffe;
+  --color-cello-200: #c0e4fd;
+  --color-cello-300: #95d4fb;
+  --color-cello-400: #62bbf8;
+  --color-cello-500: #3e9df3;
+  --color-cello-600: #2880e8;
+  --color-cello-700: #2069d5;
+  --color-cello-800: #2056ad;
+  --color-cello-900: #204a88;
+  --color-cello-950: #1d3865;
+
+  --color-orange-50: #fff4ed;
+  --color-orange-100: #ffe6d4;
+  --color-orange-200: #ffc8a8;
+  --color-orange-300: #ffa270;
+  --color-orange-400: #ff6f37;
+  --color-orange-500: #ff5722;
+  --color-orange-600: #f02e06;
+  --color-orange-700: #c71e07;
+  --color-orange-800: #9e1a0e;
+  --color-orange-900: #7f190f;
+  --color-orange-950: #450805;
+
+  --color-yellow-50: #fcfee8;
+  --color-yellow-100: #faffc2;
+  --color-yellow-200: #faff89;
+  --color-yellow-300: #ffff4d;
+  --color-yellow-400: #fdf312;
+  --color-yellow-500: #ecd906;
+  --color-yellow-600: #ccab02;
+  --color-yellow-700: #a37b05;
+  --color-yellow-800: #86600d;
+  --color-yellow-900: #724e11;
+  --color-yellow-950: #432a05;
+
+  --color-green-50: #E6F3F3;
+  --color-green-100: #CCE6E7;
+  --color-green-200: #99CDCF;
+  --color-green-300: #66B5B7;
+  --color-green-400: #339C9F;
+  --color-green-500: #008387;
+  --color-green-600: #00696C;
+  --color-green-700: #056E73;
+  --color-green-800: #056e73;
+  --color-green-900: #001A1B;
+  --color-green-950: #001516;
+
+  --color-grey-50: #f7f7f7;
+  --color-grey-100: #ededed;
+  --color-grey-200: #dfdfdf;
+  --color-grey-300: #c8c8c8;
+  --color-grey-400: #a8a8a8;
+  --color-grey-500: #999999;
+  --color-grey-600: #888888;
+  --color-grey-700: #7b7b7b;
+  --color-grey-800: #676767;
+  --color-grey-900: #545454;
+  --color-grey-950: #363636;
+
+  --color-black: #040f32;
+  --color-white: #fff9f4;
+
+  --color-doctor-primary: var(--color-blue-400);
+  --color-doctor-light: var(--color-blue-100);
+  --color-doctor-dark: var(--color-blue-700);
+  --color-doctor-lightest: var(--color-blue-50);
+  --color-doctor-darkest: var(--color-blue-900);
+  --color-triage-primary: var(--color-teal-500);
+  --color-triage-light: var(--color-teal-200);
+  --color-triage-dark: var(--color-teal-800);
+  --color-triage-lightest: var(--color-teal-50);
+  --color-triage-darkest: var(--color-teal-950);
+  --color-medical-primary: var(--color-red-500);
+  --color-medical-light: var(--color-red-200);
+  --color-medical-dark: var(--color-red-800);
+  --color-medical-lightest: var(--color-red-50);
+  --color-medical-darkest: var(--color-red-950);
+  --color-navy-primary: var(--color-navy-900);
+  --color-navy-light: var(--color-navy-300);
+  --color-navy-dark: var(--color-navy-700);
+  --color-navy-lightest: var(--color-navy-50);
+  --color-navy-darkest: var(--color-navy-950);
+}

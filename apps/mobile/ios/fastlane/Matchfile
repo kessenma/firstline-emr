@@ -1,0 +1,52 @@
+# The Matchfile allows you to configure match
+# For more information, check out the docs
+# https://docs.fastlane.tools/actions/match/
+
+# Git repository URL for storing certificates and provisioning profiles
+# Set MATCH_GIT_URL in environment, or default to your repo
+git_url(ENV['MATCH_GIT_URL'] || "git@github-work:YOUR_ORG/YOUR_CERTS_REPO.git")
+
+# Storage mode (git, google_cloud, s3, gitlab_secure_files)
+storage_mode("git")
+
+# App identifier
+app_identifier(["com.fajr.emr"])
+
+# Username for Apple Developer Portal
+username(ENV['APPLE_ID'])
+
+# Team ID
+team_id(ENV['TEAM_ID'])
+
+# Type of provisioning profile
+# Options: appstore, adhoc, development, enterprise
+type("appstore")
+
+# Additional certificate types to sync
+# Uncomment if you need development certificates too
+# additional_cert_types(["development"])
+
+# Platform
+platform("ios")
+
+# Keychain name and password (useful for CI/CD)
+keychain_name(ENV['KEYCHAIN_NAME'] || "login.keychain")
+keychain_password(ENV['KEYCHAIN_PASSWORD'])
+
+# Clone the git repository to a specific path
+# clone_branch_directly(true)
+
+# Shallow clone for faster performance
+shallow_clone(true)
+
+# Skip confirmation prompts
+force_for_new_devices(true)
+
+# Generate new certificates if they don't exist
+generate_apple_certs(true)
+
+# Skip docs
+skip_docs(false)
+
+# Verbose output
+verbose(false)

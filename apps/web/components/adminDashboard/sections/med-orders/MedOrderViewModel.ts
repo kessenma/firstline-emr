@@ -1,0 +1,69 @@
+// apps/web/components/auth/adminDashboard/sections/MedOrderViewModel.tsx
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import type { MedOrder } from "@/db/schema/medOrders";
+
+interface MedOrdersResponse {
+  orders: MedOrder[];
+  totalPages: number;
+  currentPage: number;
+}
+
+export function useMedOrdersViewModel() {
+  const { data: session } = useSession();
+  const token = session?.user.token;
+
+  const fetchAdminMedOrders = async ({
+    pageParam = 1,
+  }): Promise<MedOrdersResponse> => {
+    const res = await fetch(
+      `/api/admin/GET/med-orders?page=${pageParam}&limit=20`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add token to headers
+        },
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch med orders");
+    }
+
+    return res.json();
+  };
+
+  const {
+    data,
+    isLoading: loadingMedOrders,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["medOrders"], // Correct key syntax
+    queryFn: fetchAdminMedOrders,
+    initialPageParam: 1, // ✅ Required in TanStack Query v5
+    getNextPageParam: (lastPage) =>
+      lastPage.currentPage < lastPage.totalPages
+        ? lastPage.currentPage + 1
+        : undefined,
+  });
+
+  const flattenedMedOrders = data
+    ? data.pages.flatMap((page) => page.orders)
+    : [];
+
+  const nextMedOrders = () => {
+    if (!loadingMedOrders && hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  return {
+    medOrders: flattenedMedOrders,
+    loadingMedOrders,
+    hasMoreMedOrders: hasNextPage,
+    nextMedOrders,
+    refetchMedOrders: refetch,
+  };
+}

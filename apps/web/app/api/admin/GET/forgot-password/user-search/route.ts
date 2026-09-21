@@ -1,0 +1,77 @@
+// app/api/admin/GET/forgot-password/user-search/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { ilike } from "drizzle-orm";
+import { verifySessionFromRequest } from "@/lib/dal";
+
+export async function GET(request: NextRequest) {
+  try {
+    // Verify admin access
+    const session = await verifySessionFromRequest(request);
+    if (!session || !session.isAdmin) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Get email search parameter
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get("email") || "";
+
+    if (!email) {
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    }
+
+    // Search for user by email (case-insensitive)
+    const [user] = await db
+      .select({
+        id: users.id,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        email: users.email,
+        accountType: users.accountType,
+        countries: users.countries,
+        languages: users.languages,
+        doctorSpecialty: users.doctorSpecialty,
+        approvalDate: users.approvalDate,
+        passwordResetCount: users.passwordResetCount,
+        adminResetPasswordLink: users.adminResetPasswordLink,
+        adminResetLinkExpiry: users.adminResetLinkExpiry,
+      })
+      .from(users)
+      .where(ilike(users.email, `%${email}%`))
+      .limit(1);
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        accountType: user.accountType,
+        country: user.countries?.[0] || "N/A",
+        language: user.languages?.[0] || "N/A",
+        doctorSpecialty: user.doctorSpecialty,
+        approvalDate: user.approvalDate,
+        passwordResetCount: user.passwordResetCount,
+        resetLink: user.adminResetPasswordLink,
+        resetLinkExpiration: user.adminResetLinkExpiry,
+      },
+    });
+  } catch (error) {
+    console.error("Error searching user:", error);
+    return NextResponse.json(
+      { error: "Failed to search user" },
+      { status: 500 },
+    );
+  }
+}

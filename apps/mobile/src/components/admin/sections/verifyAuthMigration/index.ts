@@ -1,0 +1,1 @@
+export { VerifyAuthMigrationView } from './VerifyAuthMigrationView';

@@ -1,0 +1,1 @@
+ALTER TYPE "public"."note_type" ADD VALUE 'patient_call';

@@ -1,0 +1,258 @@
+name: Deploy iOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_type:
+        description: "Deployment Type"
+        required: true
+        type: choice
+        options:
+          - testflight
+          - appstore
+        default: "testflight"
+      bump_version:
+        description: "Bump Version (leave unchecked to only bump build number)"
+        required: false
+        type: boolean
+        default: false
+      version_bump_type:
+        description: "Version Bump Type (if bumping version)"
+        required: false
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: "patch"
+
+concurrency:
+  group: deploy-ios-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: macos-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ✅ Validate secrets and Match access
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
+        run: |
+          echo "🔍 Validating required secrets..."
+
+          # Check all required secrets are set
+          MISSING_SECRETS=()
+
+          [ -z "$MATCH_PASSWORD" ] && MISSING_SECRETS+=("MATCH_PASSWORD")
+          [ -z "$MATCH_GIT_TOKEN" ] && MISSING_SECRETS+=("MATCH_GIT_TOKEN")
+          [ -z "$MATCH_GIT_URL" ] && MISSING_SECRETS+=("MATCH_GIT_URL")
+          [ -z "$APP_STORE_CONNECT_API_KEY_ID" ] && MISSING_SECRETS+=("APP_STORE_CONNECT_API_KEY_ID")
+          [ -z "$APP_STORE_CONNECT_ISSUER_ID" ] && MISSING_SECRETS+=("APP_STORE_CONNECT_ISSUER_ID")
+          [ -z "$APP_STORE_CONNECT_API_KEY_CONTENT" ] && MISSING_SECRETS+=("APP_STORE_CONNECT_API_KEY_CONTENT")
+          [ -z "$APPLE_ID" ] && MISSING_SECRETS+=("APPLE_ID")
+          [ -z "$TEAM_ID" ] && MISSING_SECRETS+=("TEAM_ID")
+          [ -z "$APP_IDENTIFIER" ] && MISSING_SECRETS+=("APP_IDENTIFIER")
+
+          if [ ${#MISSING_SECRETS[@]} -gt 0 ]; then
+            echo "❌ Missing required secrets:"
+            printf '  - %s\n' "${MISSING_SECRETS[@]}"
+            exit 1
+          fi
+
+          echo "✅ All required secrets are set"
+
+          # Validate MATCH_GIT_URL format
+          if [[ ! "$MATCH_GIT_URL" =~ ^https:// ]]; then
+            echo "❌ MATCH_GIT_URL must use HTTPS format (https://github.com/...)"
+            echo "   Current value starts with: ${MATCH_GIT_URL:0:20}..."
+            exit 1
+          fi
+
+          echo "✅ MATCH_GIT_URL format is correct (HTTPS)"
+
+          # Test Match repository access
+          echo "🔍 Testing Match repository access..."
+          CERTS_REPO_URL="${MATCH_GIT_URL/https:\/\//https://x-access-token:${MATCH_GIT_TOKEN}@}"
+
+          if git ls-remote "$CERTS_REPO_URL" HEAD >/dev/null 2>&1; then
+            echo "✅ Successfully authenticated to Match certificates repository"
+          else
+            echo "❌ Failed to access Match certificates repository"
+            echo "   This usually means:"
+            echo "   1. MATCH_GIT_TOKEN doesn't have access to the repository"
+            echo "   2. Token has expired"
+            echo "   3. Token needs organization SSO authorization"
+            exit 1
+          fi
+
+          # Validate App Store Connect API key format
+          if [[ ! "$APP_STORE_CONNECT_API_KEY_CONTENT" =~ "BEGIN PRIVATE KEY" ]]; then
+            echo "❌ APP_STORE_CONNECT_API_KEY_CONTENT doesn't appear to be a valid .p8 key"
+            echo "   Make sure you copied the entire file including BEGIN/END lines"
+            exit 1
+          fi
+
+          echo "✅ APP_STORE_CONNECT_API_KEY_CONTENT format looks valid"
+          echo ""
+          echo "🎉 All validations passed! Proceeding with build..."
+
+      - name: 🔧 Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3.6"
+          bundler-cache: false
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 📦 Install pnpm
+        run: npm install -g pnpm
+
+      - name: 📦 Install Node dependencies
+        working-directory: apps/mobile
+        run: pnpm install
+
+      - name: 💎 Cache Ruby gems
+        uses: actions/cache@v4
+        with:
+          path: apps/mobile/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('apps/mobile/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: 💎 Install Ruby gems
+        working-directory: apps/mobile
+        run: |
+          export BUNDLE_GEMFILE="$(pwd)/Gemfile"
+          export BUNDLE_PATH="$(pwd)/vendor/bundle"
+          bundle install --jobs 4 --retry 3
+
+      - name: 📦 Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: apps/mobile/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('apps/mobile/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: 🍎 Install CocoaPods dependencies
+        working-directory: apps/mobile/ios
+        run: pod install
+
+      - name: 🗂️ Cache Xcode DerivedData
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-deriveddata-${{ hashFiles('apps/mobile/ios/**/*.xcodeproj', 'apps/mobile/ios/**/*.pbxproj') }}
+          restore-keys: |
+            ${{ runner.os }}-deriveddata-
+
+      - name: 🔐 Setup App Store Connect API Key
+        working-directory: apps/mobile/ios/fastlane
+        env:
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+        run: |
+          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" > AuthKey_${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}.p8
+          chmod 600 AuthKey_${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}.p8
+
+      - name: 🔐 Setup Fastlane Match for Code Signing
+        working-directory: apps/mobile
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
+        run: |
+          # Configure git to use the token for HTTPS authentication
+          git config --global url."https://x-access-token:${MATCH_GIT_TOKEN}@github.com/".insteadOf "https://github.com/"
+
+          # Sync certificates and profiles (readonly mode)
+          cd ios
+          BUNDLE_GEMFILE="$(pwd)/../Gemfile" bundle exec fastlane match appstore --readonly || true
+
+      - name: 📝 Configure Fastlane environment
+        working-directory: apps/mobile/ios/fastlane
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
+        run: |
+          cat > .env <<EOF
+          APP_STORE_CONNECT_API_KEY_ID=$APP_STORE_CONNECT_API_KEY_ID
+          APP_STORE_CONNECT_ISSUER_ID=$APP_STORE_CONNECT_ISSUER_ID
+          APP_STORE_CONNECT_API_PRIVATE_KEY_PATH=./AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8
+          DEVELOPER_TEAM_ID=$TEAM_ID
+          APP_IDENTIFIER=$APP_IDENTIFIER
+          SKIP_WAITING_FOR_BUILD_PROCESSING=true
+          DISTRIBUTE_EXTERNAL=false
+          NOTIFY_EXTERNAL_TESTERS=false
+          EOF
+
+      - name: 📱 Set version bump environment variables
+        if: inputs.bump_version == true
+        run: |
+          echo "BUMP_MARKETING_VERSION=1" >> $GITHUB_ENV
+          echo "BUMP_MARKETING_VERSION_BUMP_TYPE=${{ inputs.version_bump_type }}" >> $GITHUB_ENV
+
+      - name: 🚀 Deploy to TestFlight
+        if: inputs.deployment_type == 'testflight'
+        working-directory: apps/mobile
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: pnpm run deploy:ios:rock-beta-github
+
+      - name: 🚀 Deploy to App Store
+        if: inputs.deployment_type == 'appstore'
+        working-directory: apps/mobile
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: pnpm run deploy:ios:rock-release-github
+
+      - name: 📊 Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-logs-${{ github.run_number }}
+          path: |
+            apps/mobile/build-logs/
+            apps/mobile/.rock/cache/ios/
+          retention-days: 7
+
+      - name: 📝 Create deployment summary
+        if: success()
+        run: |
+          VERSION=$(cat apps/mobile/ios-version.json | jq -r '"\(.major).\(.minor).\(.patch)"')
+          BUILD=$(cat apps/mobile/ios-version.json | jq -r '.build')
+
+          echo "## 🎉 iOS Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment Type:** ${{ inputs.deployment_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "**Build Number:** $BUILD" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 [View in App Store Connect](https://appstoreconnect.apple.com/)" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🧹 Cleanup sensitive files
+        if: always()
+        run: |
+          rm -f apps/mobile/ios/fastlane/AuthKey_*.p8
+          rm -f apps/mobile/ios/fastlane/.env
+          git config --global --unset-all url."https://x-access-token:.*@github.com/".insteadOf || true

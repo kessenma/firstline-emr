@@ -1,0 +1,115 @@
+version: "3.8"
+
+services:
+  # Migration gate — must exit 0 before `web` is (re)created.
+  #
+  # This is what stops a release from going live against a database that is
+  # missing its columns. It runs from the NEW image, so it sees the NEW
+  # db/migrations; if anything is pending it exits non-zero, `docker compose up`
+  # aborts before touching the running web container, the Coolify deployment
+  # fails, and Coolify's Telegram deployment_failure notification fires.
+  #
+  # Note this is NOT Coolify's `pre_deployment_command` hook, which looks like the
+  # obvious home for it but cannot work: ApplicationDeploymentJob::
+  # run_pre_deployment_command() docker-execs into the *currently running* (old)
+  # container, so it would check the old release's journal — passing on exactly
+  # the deploy that introduces new migrations — and silently skips entirely when
+  # no container is running.
+  #
+  # It applies pending migrations that are purely additive, and refuses — failing
+  # the deploy — for anything that could lose data or break the release that is
+  # still serving (drops, truncates, deletes, backfill UPDATEs, column type
+  # changes, renames). A failure during the apply also fails the deploy; drizzle
+  # runs the batch in one transaction, so the schema rolls back untouched.
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: migrator
+    # Deliberately no `env_file: ./.env` (unlike `web`). This container needs one
+    # connection string; there is no reason to hand it every APNs key, bot token
+    # and storage secret in the file.
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      # Optional: set both to have the gate post the pending migration names to
+      # Telegram itself. Coolify's own failure notification carries no reason —
+      # just the app name and a link to the deployment logs.
+      TELEGRAM_OPS_BOT_TOKEN: ${TELEGRAM_OPS_BOT_TOKEN:-}
+      TELEGRAM_OPS_CHAT_ID: ${TELEGRAM_OPS_CHAT_ID:-}
+    restart: "no"
+    networks:
+      - coolify
+
+  web:
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: runner
+      args:
+        # Only pass NEXT_PUBLIC_* variables at build time (needed for Next.js compilation)
+        # All other secrets are passed at runtime only - this improves caching and reduces memory spikes
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        NEXT_PUBLIC_TELEGRAM_BOT_NAME: ${NEXT_PUBLIC_TELEGRAM_BOT_NAME}
+        NEXT_PUBLIC_ANALYTICS_URL: ${NEXT_PUBLIC_ANALYTICS_URL}
+        NEXT_PUBLIC_LIVEKIT_URL: ${NEXT_PUBLIC_LIVEKIT_URL}
+    env_file:
+      - ./.env
+    environment:
+      PORT: ${PORT_ENV}
+      NODE_ENV: ${NODE_ENV}
+      DATABASE_URL: ${DATABASE_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      OBJECT_STORAGE_CDN_ENDPOINT: ${OBJECT_STORAGE_CDN_ENDPOINT}
+      OBJECT_STORAGE_BUCKET: ${OBJECT_STORAGE_BUCKET}
+      OBJECT_STORAGE_ENDPOINT: ${OBJECT_STORAGE_ENDPOINT}
+      OBJECT_STORAGE_KEY: ${OBJECT_STORAGE_KEY}
+      OBJECT_STORAGE_REGION: ${OBJECT_STORAGE_REGION}
+      OBJECT_STORAGE_SECRET: ${OBJECT_STORAGE_SECRET}
+      # Intended storage budget, in bytes. S3/RustFS cannot report disk capacity,
+      # so the admin storage usage bar is measured against this, not real free space.
+      OBJECT_STORAGE_QUOTA_BYTES: ${OBJECT_STORAGE_QUOTA_BYTES}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
+      MEDFLOW_KEY: ${MEDFLOW_KEY}
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      NEXT_PUBLIC_TELEGRAM_BOT_NAME: ${NEXT_PUBLIC_TELEGRAM_BOT_NAME}
+      NEXTAUTH_URL_INTERNAL: ${NEXTAUTH_URL_INTERNAL}
+      RUSTFS_CONSOLE_URL: ${RUSTFS_CONSOLE_URL}
+      RUSTFS_CONSOLE_USERNAME: ${RUSTFS_CONSOLE_USERNAME}
+      RUSTFS_CONSOLE_PASSWORD: ${RUSTFS_CONSOLE_PASSWORD}
+      ANALYTICS_URL: ${ANALYTICS_URL}
+      NEXT_PUBLIC_ANALYTICS_URL: ${NEXT_PUBLIC_ANALYTICS_URL}
+      LIVEKIT_API_KEY: ${LIVEKIT_API_KEY}
+      LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET}
+      ANALYTICS_PASSPHRASE: ${ANALYTICS_PASSPHRASE}
+      NEXT_PUBLIC_LIVEKIT_URL: ${NEXT_PUBLIC_LIVEKIT_URL}
+      LIVEKIT_URL: ${LIVEKIT_URL}
+      POWERSYNC_JWT_SECRET: ${POWERSYNC_JWT_SECRET}
+      TRANSLATION_SERVICE_URL: ${TRANSLATION_SERVICE_URL:-http://translation-service:9000}
+      TRANSLATION_PORT: ${TRANSLATION_PORT:-9000}
+      TRANSLATION_API_KEY: ${TRANSLATION_API_KEY}
+      # Notifications server configuration
+      NOTIFICATIONS_SERVER_URL: ${NOTIFICATIONS_SERVER_URL:-http://notifications-server:8080}
+      GORUSH_URL: ${GORUSH_URL:-http://gorush:8088}
+      TOTP_ENCRYPTION_KEY: ${TOTP_ENCRYPTION_KEY}
+      SKIP_2FA_IN_DEV: ${SKIP_2FA_IN_DEV:-false}
+    ports:
+      - "${PORT_ENV}:${PORT_ENV}"
+    networks:
+      - coolify
+
+networks:
+  coolify:
+    name: coolify
+    external: true

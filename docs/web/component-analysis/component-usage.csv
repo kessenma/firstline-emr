@@ -1,0 +1,245 @@
+Component Name,Usage Count,Category,Priority Level,In Mobile?,Sample Files (first 3),Total Files Using
+Button,128,ui,High,No,app/auth/login/page.tsx; app/complete-signup/page.tsx; app/create-patient/page.jsx,128
+Card,55,ui,High,Yes,app/complete-signup/page.tsx; components/aboutPage/cards/UserRoleCard.tsx; components/aboutPage/sections/FeaturesSection.tsx,55
+CardContent,48,ui,Medium,No,components/adminDashboard/sections/ChangeAccountTypeView.tsx; components/adminDashboard/sections/ExpandableSection.tsx; components/adminDashboard/sections/ForgotPasswordView.tsx,48
+CardHeader,37,ui,Medium,No,components/adminDashboard/sections/ChangeAccountTypeView.tsx; components/adminDashboard/sections/ExpandableSection.tsx; components/adminDashboard/sections/ForgotPasswordView.tsx,37
+CardTitle,35,ui,Medium,No,components/adminDashboard/sections/ChangeAccountTypeView.tsx; components/adminDashboard/sections/ExpandableSection.tsx; components/adminDashboard/sections/ForgotPasswordView.tsx,35
+Input,33,ui,Medium,No,components/adminDashboard/AdminDashboardView.tsx; components/adminDashboard/sections/AdminManagementView.tsx; components/adminDashboard/sections/ForgotPasswordView.tsx,33
+useToast,32,hooks,Medium,No,components/adminDashboard/sections/AdminManagementViewModel.ts; components/adminDashboard/sections/DeniedDoctorsTriageEvacViewModel.ts; components/adminDashboard/sections/ForgotPasswordViewModel.ts,32
+Dialog,31,ui,Medium,No,app/auth/login/page.tsx; components/aboutPage/CountriesServedDialog.tsx; components/aboutPage/DoctorSpecialtiesDialog.tsx,31
+DialogContent,31,ui,Medium,No,app/auth/login/page.tsx; components/aboutPage/CountriesServedDialog.tsx; components/aboutPage/DoctorSpecialtiesDialog.tsx,31
+Label,31,ui,Medium,No,components/adminDashboard/sections/ForgotPasswordView.tsx; components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/profile-update-requests/ProfileUpdateRequestsView.tsx,31
+DialogTitle,29,ui,Medium,No,app/auth/login/page.tsx; components/aboutPage/CountriesServedDialog.tsx; components/aboutPage/DoctorSpecialtiesDialog.tsx,29
+DialogHeader,28,ui,Medium,No,app/auth/login/page.tsx; components/aboutPage/CountriesServedDialog.tsx; components/aboutPage/DoctorSpecialtiesDialog.tsx,28
+ScrollArea,24,ui,Medium,No,components/adminDashboard/sections/NewSignupsView.tsx; components/adminDashboard/sections/existing-users/UserEditLogsView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsView.tsx,24
+Badge,21,ui,Medium,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsTable.tsx; components/adminDashboard/sections/notifications/CentralNotificationsTable.tsx,21
+DialogDescription,19,ui,Lower,No,app/auth/login/page.tsx; components/aboutPage/CountriesServedDialog.tsx; components/aboutPage/DoctorSpecialtiesDialog.tsx,19
+TextFormField,19,form,Lower,No,components/auth/forgotPassword/VerificationStep.tsx; components/auth/signup/3SecurityQuestionsForm.tsx; components/auth/signup/admin-signup/AdminSignupVerify.tsx,19
+Checkbox,16,ui,Lower,No,components/adminDashboard/sections/NewSignupsView.tsx; components/adminDashboard/sections/notifications/AdminNotificationsView.tsx; components/adminDashboard/sections/patient-intake/PatientIntakeView.tsx,16
+Table,15,ui,Lower,No,components/adminDashboard/sections/AdminManagementView.tsx; components/adminDashboard/sections/DeniedDoctorsTriageEvacView.tsx; components/adminDashboard/sections/MedOrdersView.tsx,15
+PopoverTrigger,15,ui,Lower,No,components/adminDashboard/sections/analytics/AnalyticsView.tsx; components/adminDashboard/sections/image-storage/ImageStorageView.tsx; components/adminDashboard/sections/user-creation/AdminUserCreationView.tsx,15
+PopoverContent,15,ui,Lower,No,components/adminDashboard/sections/analytics/AnalyticsView.tsx; components/adminDashboard/sections/image-storage/ImageStorageView.tsx; components/adminDashboard/sections/user-creation/AdminUserCreationView.tsx,15
+FormItem,15,ui,Lower,No,components/form/DatePickerFormField.tsx; components/form/ImagesUpload.tsx; components/form/MultiChoiceFormField.tsx,15
+FormLabel,15,ui,Lower,No,components/form/DatePickerFormField.tsx; components/form/ImagesUpload.tsx; components/form/MultiChoiceFormField.tsx,15
+Popover,14,ui,Lower,No,components/adminDashboard/sections/analytics/AnalyticsView.tsx; components/adminDashboard/sections/image-storage/ImageStorageView.tsx; components/adminDashboard/sections/user-creation/AdminUserCreationView.tsx,14
+FormField,14,ui,Lower,No,components/form/DatePickerFormField.tsx; components/form/ImagesUpload.tsx; components/form/MultiChoiceFormField.tsx,14
+RadioCard,13,ui,Lower,No,app/auth/page.tsx; app/complete-signup/page.tsx; components/adminDashboard/sections/user-creation/AdminUserCreationView.tsx,13
+Accordion,13,ui,Lower,Yes,components/aboutPage/animations/HipaaAnimation.tsx; components/adminDashboard/sections/existing-users/UserEditLogsView.tsx; components/adminDashboard/sections/notifications/AdminNotificationsView.tsx,13
+AccordionItem,13,ui,Lower,No,components/aboutPage/animations/HipaaAnimation.tsx; components/adminDashboard/sections/existing-users/UserEditLogsView.tsx; components/adminDashboard/sections/notifications/AdminNotificationsView.tsx,13
+AccordionTrigger,13,ui,Lower,No,components/aboutPage/animations/HipaaAnimation.tsx; components/adminDashboard/sections/existing-users/UserEditLogsView.tsx; components/adminDashboard/sections/notifications/AdminNotificationsView.tsx,13
+AccordionContent,13,ui,Lower,No,components/aboutPage/animations/HipaaAnimation.tsx; components/adminDashboard/sections/existing-users/UserEditLogsView.tsx; components/adminDashboard/sections/notifications/AdminNotificationsView.tsx,13
+Skeleton,13,ui,Lower,No,components/adminDashboard/sections/ForgotPasswordView.tsx; components/auth/signup/admin-signup/AdminSignupVerify.tsx; components/medEvac-form/FormSkeleton.tsx,13
+DatePickerFormField,12,form,Lower,No,components/auth/signup/user-type-forms/DoctorSignupForm.tsx; components/auth/signup/user-type-forms/EvacSignupForm.tsx; components/auth/signup/user-type-forms/TriageSignupForm.tsx,12
+FormControl,12,ui,Lower,No,components/form/DatePickerFormField.tsx; components/form/ImagesUpload.tsx; components/form/MultiChoiceFormField.tsx,12
+DialogTrigger,11,ui,Lower,No,components/aboutPage/CountriesServedDialog.tsx; components/aboutPage/DoctorSpecialtiesDialog.tsx; components/adminDashboard/AdminDashboardView.tsx,11
+CardDescription,11,ui,Lower,No,components/adminDashboard/sections/UserBreakdownView.tsx; components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/powersync/PowerSyncView.tsx,11
+Select,11,ui,Lower,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsView.tsx; components/adminDashboard/sections/notifications/CentralNotificationsView.tsx,11
+SelectContent,11,ui,Lower,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsView.tsx; components/adminDashboard/sections/notifications/CentralNotificationsView.tsx,11
+SelectItem,11,ui,Lower,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsView.tsx; components/adminDashboard/sections/notifications/CentralNotificationsView.tsx,11
+SelectTrigger,11,ui,Lower,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsView.tsx; components/adminDashboard/sections/notifications/CentralNotificationsView.tsx,11
+SelectValue,11,ui,Lower,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsView.tsx; components/adminDashboard/sections/notifications/CentralNotificationsView.tsx,11
+FormMessage,11,ui,Lower,No,components/form/DatePickerFormField.tsx; components/form/MultiChoiceFormField.tsx; components/form/NumericalFormField.tsx,11
+Tooltip,9,form,Optional,No,components/adminDashboard/AdminDashboardView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsTable.tsx; components/adminDashboard/sections/notifications/CentralNotificationsTable.tsx,9
+DropdownMenu,9,ui,Optional,No,components/notifications/NotificationBell.tsx; components/patient-chart/telegram-messages/view/TelegramHeader.tsx; components/patient-dashboard/cells/TakeCaseCell.tsx,9
+DropdownMenuContent,9,ui,Optional,No,components/notifications/NotificationBell.tsx; components/patient-chart/telegram-messages/view/TelegramHeader.tsx; components/patient-dashboard/cells/TakeCaseCell.tsx,9
+DropdownMenuTrigger,9,ui,Optional,No,components/notifications/NotificationBell.tsx; components/patient-chart/telegram-messages/view/TelegramHeader.tsx; components/patient-dashboard/cells/TakeCaseCell.tsx,9
+DialogFooter,8,ui,Optional,No,components/adminDashboard/SessionExpiredModal.tsx; components/adminDashboard/sections/profile-update-requests/ProfileUpdateRequestsView.tsx; components/med-evac-table/MedEvacEditModal.tsx,8
+Avatar,8,ui,Optional,No,components/messages/InternalChatHeader.tsx; components/messages/InternalMessageList.tsx; components/messages/MessageThreadView.tsx,8
+usePatientDashboard,8,patient-chart,Optional,No,components/patient-chart/Medications/MedicationsView.tsx; components/patient-chart/Medications/med/MedOrderView.tsx; components/patient-chart/Medications/med/MedOrderViewModel.ts,8
+ToastComponent,7,hooks,Optional,No,app/ClientLayout.tsx; components/adminDashboard/AdminDashboardView.tsx; components/hooks/Providers.tsx,7
+useGlobalContext,7,globalContext,Optional,No,app/messages/[id]/page.tsx; components/nav/LayoutWrapper.tsx; components/patient-chart/telegram-messages/TelegramMessagesView.tsx,7
+TableColumn,7,unknown,Optional,No,components/adminDashboard/sections/AdminManagementView.tsx; components/adminDashboard/sections/DeniedDoctorsTriageEvacView.tsx; components/adminDashboard/sections/MedOrdersView.tsx,7
+Separator,7,ui,Optional,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/existing-users/UserEditLogsView.tsx; components/adminDashboard/sections/powersync/PowerSyncView.tsx,7
+Drawer,7,ui,Optional,No,components/adminDashboard/sections/patient-intake/PatientIntakeView.tsx; components/auth/signup/policy-and-terms/TermsAgreementDrawer.tsx; components/patient-chart/Medications/rx/RxOrderDrawerView.tsx,7
+DrawerContent,7,ui,Optional,No,components/adminDashboard/sections/patient-intake/PatientIntakeView.tsx; components/auth/signup/policy-and-terms/TermsAgreementDrawer.tsx; components/patient-chart/Medications/rx/RxOrderDrawerView.tsx,7
+Textarea,7,ui,Optional,No,components/adminDashboard/sections/profile-update-requests/ProfileUpdateRequestsView.tsx; components/medEvac-form/SinglePageView.tsx; components/medEvac-form/steps/2MedicalInfoStep.tsx,7
+Switch,7,ui,Optional,No,components/adminDashboard/sections/staistics/views/DoctorSpecialtySpreadView.tsx; components/adminDashboard/sections/staistics/views/PatientSpecialtySpreadView.tsx; components/adminDashboard/sections/staistics/views/SpecialtySpreadComparisonView.tsx,7
+AvatarFallback,6,ui,Optional,No,components/messages/InternalChatHeader.tsx; components/messages/InternalMessageList.tsx; components/messages/MessageThreadView.tsx,6
+ReadOnlyField,6,form,Optional,No,components/notifications/UnassignedSpecialtyPatientModal.tsx; components/ui/Table/MobilePatientDashboardTable.tsx; components/ui/Table/MobileTable.tsx,6
+ThemeProvider,5,ui,Optional,No,app/ClientLayout.tsx; app/auth/login/page.tsx; app/complete-signup/page.tsx,5
+AuroraBackground,5,ui,Optional,No,app/admin-signup/[token]/page.tsx; app/auth/login/page.tsx; app/rx-order/patient/[uuid]/page.tsx,5
+CardFooter,5,ui,Optional,No,components/adminDashboard/sections/ForgotPasswordView.tsx; components/messages/InternalMessagesView.tsx; components/patient-chart/telegram-messages/TelegramMessagesView.tsx,5
+useIsMobile,5,ui,Optional,No,components/adminDashboard/sections/notifications/AdminUserNotificationsView.tsx; components/adminDashboard/sections/notifications/CentralNotificationsView.tsx; components/patient-dashboard/PatientTable.tsx,5
+SingleChoiceFormField,5,form,Optional,No,components/adminDashboard/sections/patient-intake/PatientIntakeView.tsx; components/auth/signup/3SecurityQuestionsForm.tsx; components/auth/signup/user-type-forms/DoctorSignupForm.tsx,5
+DrawerHeader,5,ui,Optional,No,components/adminDashboard/sections/patient-intake/PatientIntakeView.tsx; components/patient-chart/Medications/rx/RxOrderDrawerView.tsx; components/patient-dashboard/PatientMobileActions.tsx,5
+RadioCardFormField,5,form,Optional,No,components/medEvac-form/steps/1BasicInfoStep.tsx; components/medEvac-form/steps/2MedicalInfoStep.tsx; components/medEvac-form/steps/3LogisticsStep.tsx,5
+ToastProvider,5,ui,Optional,No,components/patient-chart/Medications/med/MedOrderView.tsx; components/patient-chart/Medications/rx/RXOrderView.tsx; components/patient-chart/Medications/rx/RxOrderDrawerView.tsx,5
+ToastContext,4,hooks,Optional,No,app/ClientLayout.tsx; components/adminDashboard/AdminDashboardView.tsx; components/hooks/Providers.tsx,4
+InfiniteScroll,4,ui,Optional,No,components/adminDashboard/sections/DeniedDoctorsTriageEvacView.tsx; components/adminDashboard/sections/NewSignupsView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsView.tsx,4
+ChartContainer,4,ui,Optional,No,components/adminDashboard/sections/UserBreakdownView.tsx; components/adminDashboard/sections/staistics/views/DoctorSpecialtySpreadView.tsx; components/adminDashboard/sections/staistics/views/PatientSpecialtySpreadView.tsx,4
+Tabs,4,ui,Optional,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/powersync/PowerSyncView.tsx; components/adminDashboard/sections/translation-service/TranslationServiceView.tsx,4
+TabsContent,4,ui,Optional,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/powersync/PowerSyncView.tsx; components/adminDashboard/sections/translation-service/TranslationServiceView.tsx,4
+TabsList,4,ui,Optional,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/powersync/PowerSyncView.tsx; components/adminDashboard/sections/translation-service/TranslationServiceView.tsx,4
+TabsTrigger,4,ui,Optional,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/powersync/PowerSyncView.tsx; components/adminDashboard/sections/translation-service/TranslationServiceView.tsx,4
+Pagination,4,ui,Optional,No,components/adminDashboard/sections/existing-users/UserEditLogsView.tsx; components/adminDashboard/sections/notifications/AdminUserNotificationsView.tsx; components/adminDashboard/sections/notifications/CentralNotificationsView.tsx,4
+DrawerTitle,4,ui,Optional,No,components/adminDashboard/sections/patient-intake/PatientIntakeView.tsx; components/patient-dashboard/PatientMobileActions.tsx; components/patient-dashboard/cells/NotesCell.tsx,4
+useThemeTokens,4,ui,Optional,No,components/adminDashboard/sections/staistics/views/DoctorSpecialtySpreadView.tsx; components/adminDashboard/sections/staistics/views/PatientSpecialtySpreadView.tsx; components/adminDashboard/sections/staistics/views/SpecialtySpreadComparisonView.tsx,4
+useSignupContext,4,auth,Optional,No,components/auth/signup/3SecurityQuestionsForm.tsx; components/auth/signup/container/BackButton.tsx; components/auth/signup/container/NextButton.tsx,4
+PhoneFormField,4,form,Optional,No,components/medEvac-form/SinglePageView.tsx; components/medEvac-form/steps/1BasicInfoStep.tsx; components/patient-chart/patient-info/PatientInfoView.tsx,4
+useUserSettings,4,user-profile,Optional,No,components/nav/last-page-redirect.tsx; components/nav/save-button.tsx; components/ui/ThemeProvider.tsx,4
+DropdownMenuItem,4,ui,Optional,No,components/notifications/NotificationBell.tsx; components/patient-dashboard/cells/TakeCaseCell.tsx; components/rxQrCode/PatientRxView.tsx,4
+Modal,4,ui,Optional,No,components/notifications/NotificationsView.tsx; components/notifications/UnassignedSpecialtyPatientModal.tsx; components/patient-dashboard/ChatThreadModal.tsx,4
+DropdownMenuRadioGroup,4,ui,Optional,No,components/patient-dashboard/filters/DoctorDropdown.tsx; components/patient-dashboard/filters/PriorityDropdown.tsx; components/patient-dashboard/filters/SpecialtyDropdown.tsx,4
+DropdownMenuRadioItem,4,ui,Optional,No,components/patient-dashboard/filters/DoctorDropdown.tsx; components/patient-dashboard/filters/PriorityDropdown.tsx; components/patient-dashboard/filters/SpecialtyDropdown.tsx,4
+DropdownMenuSeparator,4,ui,Optional,No,components/patient-dashboard/filters/DoctorDropdown.tsx; components/patient-dashboard/filters/PriorityDropdown.tsx; components/patient-dashboard/filters/SpecialtyDropdown.tsx,4
+useToastState,3,hooks,Optional,No,app/ClientLayout.tsx; components/adminDashboard/AdminDashboardView.tsx; components/hooks/Providers.tsx,3
+StackedLoader,3,ui,Optional,No,app/admin/page.tsx; app/patient/[id]/page.tsx; components/adminDashboard/sections/ChangeAccountTypeView.tsx,3
+ChatThreadView,3,messages,Optional,No,app/messages/[id]/page.tsx; components/patient-dashboard/ChatThreadModal.tsx; components/patient-dashboard/cells/ChatIdCell.tsx,3
+Sheet,3,ui,Optional,No,components/aboutPage/animations/HipaaAnimation.tsx; components/medEvac-form/CompletionSidebar.tsx; components/ui/userDrawer.tsx,3
+SheetContent,3,ui,Optional,No,components/aboutPage/animations/HipaaAnimation.tsx; components/medEvac-form/CompletionSidebar.tsx; components/ui/userDrawer.tsx,3
+SheetTitle,3,ui,Optional,No,components/aboutPage/animations/HipaaAnimation.tsx; components/medEvac-form/CompletionSidebar.tsx; components/ui/userDrawer.tsx,3
+SheetDescription,3,ui,Optional,No,components/aboutPage/animations/HipaaAnimation.tsx; components/medEvac-form/CompletionSidebar.tsx; components/ui/userDrawer.tsx,3
+MedicalLicenseModal,3,adminDashboard,Optional,No,components/adminDashboard/sections/NewSignupsView.tsx; components/adminDashboard/sections/existing-users/ExistingDoctorsTriageEvacView.tsx; components/user-profile/UserProfileView.tsx,3
+useSpecialtyData,3,adminDashboard,Optional,No,components/adminDashboard/sections/staistics/views/DoctorSpecialtySpreadView.tsx; components/adminDashboard/sections/staistics/views/PatientSpecialtySpreadView.tsx; components/adminDashboard/sections/staistics/views/SpecialtySpreadComparisonView.tsx,3
+PasswordFormField,3,ui,Optional,No,components/auth/forgotPassword/ResetPasswordStep.tsx; components/auth/signup/2PasswordEmailForm.tsx; components/form/forgotPassword/ResetPasswordView.tsx,3
+MultiChoiceFormField,3,form,Optional,No,components/auth/signup/user-type-forms/DoctorSignupForm.tsx; components/auth/signup/user-type-forms/TriageSignupForm.tsx; components/user-profile/ProfileFields.tsx,3
+SelectFormField,3,form,Optional,No,components/medEvac-form/SinglePageView.tsx; components/patient-chart/patient-info/PatientInfoView.tsx; components/telegram-patient/container/intake-form/view/form-ui/PatientInfoFields.tsx,3
+Progress,3,ui,Optional,No,components/medEvac-form/components/FormProgress.tsx; components/medEvac-form/components/SegmentedProgress.tsx; components/patient-chart/media-gallery/PatientImageGalleryView.tsx,3
+CheckboxFormField,3,form,Optional,No,components/medEvac-form/steps/2MedicalInfoStep.tsx; components/medEvac-form/steps/3LogisticsStep.tsx; components/medEvac-form/steps/4DocumentationStep.tsx,3
+Slider,3,ui,Optional,No,components/messages/AudioNotePlayer.tsx; components/patient-chart/telegram-messages/view/AudioNotePlayer.tsx; components/user-profile/UserPhotoUploadModal.tsx,3
+TableSkeleton,3,ui,Optional,No,components/patient-dashboard/PatientDashboardClientWrapper.tsx; components/patient-dashboard/followUps/FollowUpsTable.tsx; components/patient-dashboard/followUps/FollowUpsView.tsx,3
+PRIORITIES,3,ui,Optional,No,components/patient-dashboard/filters/MobilePrioritySelect.tsx; components/patient-dashboard/filters/PriorityDropdown.tsx; components/patient-dashboard/utils/business-rules.ts,3
+STATUS,3,ui,Optional,No,components/patient-dashboard/filters/MobileStatusSelect.tsx; components/patient-dashboard/filters/StatusDropdown.tsx; components/patient-dashboard/utils/business-rules.ts,3
+LoginForm,2,auth,Optional,No,app/auth/login/page.tsx; app/auth/page.tsx,2
+Flex,2,ui,Optional,No,app/auth/page.tsx; app/complete-signup/page.tsx,2
+Text,2,ui,Optional,No,app/auth/page.tsx; app/complete-signup/page.tsx,2
+PrivacyPolicy,2,unknown,Optional,No,app/auth/user-privacy-policy/page.tsx; components/auth/signup/policy-and-terms/TermsAgreementDrawer.tsx,2
+TermsOfService,2,unknown,Optional,No,app/auth/user-terms-of-service/page.tsx; components/auth/signup/policy-and-terms/TermsAgreementDrawer.tsx,2
+AdminNotificationsView,2,adminDashboard,Optional,No,app/messages/admin-notifications/page.tsx; components/adminDashboard/AdminDashboardView.tsx,2
+UserProfileProvider,2,user-profile,Optional,No,app/my-profile/page.tsx; components/adminDashboard/sections/existing-users/ExistingDoctorsTriageEvacView.tsx,2
+BackgroundGradientAnimation,2,ui,Optional,No,app/new-patient/telegram/access-denied/page.tsx; app/telegram-patient/access-denied/page.tsx,2
+AccessDeniedContent,2,unknown,Optional,No,app/new-patient/telegram/access-denied/page.tsx; app/telegram-patient/access-denied/page.tsx,2
+Spotlight,2,telegram-patient,Optional,No,app/telegram-patient/[token]/page.tsx; components/telegram-patient/aboutPage/NewPatientTimeline.tsx,2
+SheetHeader,2,ui,Optional,No,components/aboutPage/animations/HipaaAnimation.tsx; components/medEvac-form/CompletionSidebar.tsx,2
+SpecialtyDataProvider,2,adminDashboard,Optional,No,components/adminDashboard/AdminDashboardView.tsx; components/adminDashboard/sections/staistics/SpecialtySpreadComparisonViewWrapper.tsx,2
+Alert,2,ui,Optional,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/powersync/PowerSyncView.tsx,2
+AlertDescription,2,ui,Optional,No,components/adminDashboard/sections/delete-patients/ClearTestDataView.tsx; components/adminDashboard/sections/powersync/PowerSyncView.tsx,2
+UserProfileView,2,user-profile,Optional,No,components/adminDashboard/sections/existing-users/ExistingDoctorsTriageEvacView.tsx; components/user-profile/ProfilePageContent.tsx,2
+ResponsiveTable,2,ui,Optional,No,components/adminDashboard/sections/notifications/AdminUserNotificationsTable.tsx; components/adminDashboard/sections/notifications/CentralNotificationsTable.tsx,2
+Form,2,ui,Optional,No,components/auth/signup/2PasswordEmailForm.tsx; components/patient-dashboard/cells/TakeCaseCell.tsx,2
+AutoExpandingInput,2,ui,Optional,No,components/messages/InternalMessageInput.tsx; components/patient-chart/telegram-messages/view/MessageInput.tsx,2
+MedEvacBottomMenu,2,ui,Optional,No,components/nav/LoggedInNav.tsx; components/nav/LoggedOutNav.tsx,2
+MedicalLicenseUploadModal,2,user-profile,Optional,No,components/nav/LoggedInNav.tsx; components/user-profile/UserProfileView.tsx,2
+TelegramMessagesDoctorView,2,patient-chart,Optional,No,components/notifications/UnassignedSpecialtyPatientModal.tsx; components/patient-chart/PatientViewModel.tsx,2
+Command,2,ui,Optional,No,components/patient-chart/PatientNotes/search/cpt-search.tsx; components/patient-chart/PatientNotes/search/icd10-search.tsx,2
+CommandEmpty,2,ui,Optional,No,components/patient-chart/PatientNotes/search/cpt-search.tsx; components/patient-chart/PatientNotes/search/icd10-search.tsx,2
+CommandGroup,2,ui,Optional,No,components/patient-chart/PatientNotes/search/cpt-search.tsx; components/patient-chart/PatientNotes/search/icd10-search.tsx,2
+CommandInput,2,ui,Optional,No,components/patient-chart/PatientNotes/search/cpt-search.tsx; components/patient-chart/PatientNotes/search/icd10-search.tsx,2
+CommandItem,2,ui,Optional,No,components/patient-chart/PatientNotes/search/cpt-search.tsx; components/patient-chart/PatientNotes/search/icd10-search.tsx,2
+CommandList,2,ui,Optional,No,components/patient-chart/PatientNotes/search/cpt-search.tsx; components/patient-chart/PatientNotes/search/icd10-search.tsx,2
+IconButton,2,ui,Optional,No,components/patient-chart/media-gallery/TelegramMessagesGalleryView.tsx; components/patient-chart/media-gallery/TelegramMessagesImageGalleryView.tsx,2
+AnimatedLogo,2,telegram-patient,Optional,No,components/telegram-patient/TelegramPatientFormContainer.tsx; components/telegram-patient/aboutPage/NewPatientTimeline.tsx,2
+ButtonProps,2,unknown,Optional,No,components/ui/iconButton.tsx; components/ui/pagination.tsx,2
+Providers,1,hooks,Optional,No,app/ClientLayout.tsx,1
+GlobalContextProvider,1,globalContext,Optional,No,app/ClientLayout.tsx,1
+LastPageRedirect,1,nav,Optional,No,app/ClientLayout.tsx,1
+LayoutWrapper,1,nav,Optional,No,app/ClientLayout.tsx,1
+AboutPageView,1,aboutPage,Optional,No,app/about/page.jsx,1
+AdminDashboardView,1,adminDashboard,Optional,Yes,app/admin/page.tsx,1
+AdminSignupToken,1,auth,Optional,No,app/admin-signup/[token]/page.tsx,1
+AdminSignupVerify,1,auth,Optional,No,app/admin-signup/verify/page.tsx,1
+ResetPasswordView,1,form,Optional,No,app/auth/login/page.tsx,1
+ForgotPasswordForm,1,auth,Optional,No,app/auth/login/page.tsx,1
+SignupProvider,1,auth,Optional,No,app/auth/page.tsx,1
+SignupSection,1,auth,Optional,No,app/auth/page.tsx,1
+MedEvacPatientForm,1,medEvac-form,Optional,No,app/create-med-evac-patient/page.tsx,1
+Home,1,other,Optional,No,app/home/page.tsx,1
+MedEvacAuditLogView,1,other,Optional,No,app/med-evac-audit-log/page.tsx,1
+MedEvacHome,1,other,Optional,No,app/med-evac-home/page.tsx,1
+MedEvacTable,1,other,Optional,No,app/med-evac-patient-table/page.tsx,1
+MessagesView,1,messages,Optional,No,app/messages/page.tsx,1
+ProfilePageContent,1,user-profile,Optional,No,app/my-profile/page.tsx,1
+NewPatientTimeline,1,telegram-patient,Optional,No,app/new-patient/page.tsx,1
+NotificationsView,1,notifications,Optional,No,app/notifications/page.tsx,1
+ThemePreview,1,ui,Optional,No,app/patient/[id]/page.tsx,1
+PatientViewModel,1,patient-chart,Optional,No,app/patient/[id]/page.tsx,1
+DashboardClientWrapper,1,unknown,Optional,No,app/patient-dashboard/page.tsx,1
+PatientRxView,1,rxQrCode,Optional,No,app/rx-order/patient/[uuid]/page.tsx,1
+PharmacyView,1,rxQrCode,Optional,No,app/rx-order/pharmacy/[uuid]/page.tsx,1
+TelegramPatientFormContainer,1,telegram-patient,Optional,No,app/telegram-patient/[token]/page.tsx,1
+LoadingSpinner,1,telegram-patient,Optional,No,app/telegram-patient/[token]/page.tsx,1
+SheetTrigger,1,ui,Optional,No,components/aboutPage/animations/HipaaAnimation.tsx,1
+PatientIntakeView,1,adminDashboard,Optional,No,components/adminDashboard/AdminDashboardView.tsx,1
+ForgotPasswordView,1,adminDashboard,Optional,No,components/adminDashboard/AdminDashboardView.tsx,1
+AdminManagement,1,unknown,Optional,No,components/adminDashboard/AdminDashboardView.tsx,1
+StatisticsView,1,adminDashboard,Optional,No,components/adminDashboard/AdminDashboardView.tsx,1
+ClearTestDataView,1,adminDashboard,Optional,No,components/adminDashboard/AdminDashboardView.tsx,1
+ImageStorageView,1,adminDashboard,Optional,No,components/adminDashboard/AdminDashboardView.tsx,1
+AnalyticsView,1,adminDashboard,Optional,No,components/adminDashboard/AdminDashboardView.tsx,1
+PdfViewer,1,ui,Optional,No,components/adminDashboard/MedicalLicenseModal.tsx,1
+useResizeObserver,1,adminDashboard,Optional,No,components/adminDashboard/sections/ExpandableSection.tsx,1
+ScrollBar,1,ui,Optional,No,components/adminDashboard/sections/NewSignupsView.tsx,1
+SessionExpiredModal,1,adminDashboard,Optional,No,components/adminDashboard/sections/NewSignupsView.tsx,1
+UserProfileLogViewer,1,user-profile,Optional,No,components/adminDashboard/sections/existing-users/ExistingDoctorsTriageEvacView.tsx,1
+UserEditLogsView,1,adminDashboard,Optional,No,components/adminDashboard/sections/existing-users/ExistingDoctorsTriageEvacView.tsx,1
+StyledTabs,1,ui,Optional,No,components/adminDashboard/sections/existing-users/UserEditLogsView.tsx,1
+AdminUserNotificationsView,1,adminDashboard,Optional,No,components/adminDashboard/sections/notifications/AdminNotificationsView.tsx,1
+CentralNotificationsView,1,adminDashboard,Optional,No,components/adminDashboard/sections/notifications/AdminNotificationsView.tsx,1
+AlertTitle,1,ui,Optional,No,components/adminDashboard/sections/powersync/PowerSyncView.tsx,1
+type UserProfileFormValues,1,unknown,Optional,No,components/adminDashboard/sections/userProfileAdminViewModel.ts,1
+userProfileSchema,1,user-profile,Optional,No,components/adminDashboard/sections/userProfileAdminViewModel.ts,1
+type UserProfileViewModel,1,unknown,Optional,No,components/adminDashboard/sections/userProfileAdminViewModel.ts,1
+useProfileMedicalLicense,1,user-profile,Optional,No,components/adminDashboard/sections/userProfileAdminViewModel.ts,1
+useApi,1,hooks,Optional,No,components/auth/LoginForm.tsx,1
+EmailField,1,ui,Optional,No,components/auth/signup/2PasswordEmailForm.tsx,1
+NextButton,1,auth,Optional,No,components/auth/signup/SignupSection.tsx,1
+Submit,1,auth,Optional,No,components/auth/signup/SignupSection.tsx,1
+BackButton,1,auth,Optional,No,components/auth/signup/SignupSection.tsx,1
+CalendarWithControls,1,ui,Optional,No,components/auth/signup/admin-signup/AdminSignupToken.tsx,1
+useMessageCacheStats,1,hooks,Optional,No,components/debug/CacheDebugPanel.tsx,1
+useClearMessageCaches,1,hooks,Optional,No,components/debug/CacheDebugPanel.tsx,1
+AuditHistoryPanel,1,medEvac-form,Optional,No,components/med-evac-home/MedEvacAuditLogView.tsx,1
+BasicInfoStep,1,medEvac-form,Optional,No,components/med-evac-table/MedEvacEditModal.tsx,1
+MedicalInfoStep,1,medEvac-form,Optional,No,components/med-evac-table/MedEvacEditModal.tsx,1
+LogisticsStep,1,medEvac-form,Optional,No,components/med-evac-table/MedEvacEditModal.tsx,1
+DocumentationStep,1,medEvac-form,Optional,No,components/med-evac-table/MedEvacEditModal.tsx,1
+ApprovalsStep,1,medEvac-form,Optional,No,components/med-evac-table/MedEvacEditModal.tsx,1
+FormFooter,1,medEvac-form,Optional,No,components/medEvac-form/MedEvacPatientForm.tsx,1
+SegmentedProgress,1,medEvac-form,Optional,No,components/medEvac-form/MedEvacPatientForm.tsx,1
+TelegramMessagesView,1,patient-chart,Optional,No,components/messages/ChatThreadView.tsx,1
+InternalMessagesView,1,messages,Optional,No,components/messages/ChatThreadView.tsx,1
+useTelegramMessagesViewModel,1,unknown,Optional,No,components/messages/ChatThreadView.tsx,1
+useInternalMessagesViewModel,1,unknown,Optional,No,components/messages/ChatThreadView.tsx,1
+DialogClose,1,ui,Optional,No,components/nav/LastViewed.tsx,1
+UserDrawer,1,ui,Optional,No,components/nav/LoggedInNav.tsx,1
+BottomMenu,1,ui,Optional,No,components/nav/LoggedInNav.tsx,1
+RotatingArrows,1,nav,Optional,No,components/nav/LoggedInNav.tsx,1
+SaveButton,1,nav,Optional,No,components/nav/LoggedInNav.tsx,1
+ChangeAccountTypeView,1,adminDashboard,Optional,No,components/nav/LoggedInNav.tsx,1
+NewSignupsView,1,adminDashboard,Optional,No,components/notifications/NotificationsView.tsx,1
+PatientViewModelContext,1,patient-chart,Optional,No,components/notifications/UnassignedSpecialtyPatientModal.tsx,1
+SpecialtyCell,1,patient-dashboard,Optional,No,components/notifications/UnassignedSpecialtyPatientModal.tsx,1
+MedOrderView,1,patient-chart,Optional,No,components/patient-chart/Medications/MedicationsView.tsx,1
+CombinedNotesView,1,patient-chart,Optional,No,components/patient-chart/PatientViewModel.tsx,1
+TimePickerFormField,1,form,Optional,No,components/patient-chart/videocall/VideoCallView.tsx,1
+DashboardView,1,patient-dashboard,Optional,No,components/patient-dashboard/PatientDashboardClientWrapper.tsx,1
+ResponsivePatientTable,1,ui,Optional,No,components/patient-dashboard/PatientTable.tsx,1
+DrawerFooter,1,ui,Optional,No,components/patient-dashboard/cells/NotesCell.tsx,1
+Box,1,ui,Optional,No,components/patient-dashboard/cells/TakeCaseCell.tsx,1
+NewPatientFormTelegramView,1,telegram-patient,Optional,No,components/telegram-patient/TelegramPatientFormContainer.tsx,1
+SubmittedPatientView,1,telegram-patient,Optional,No,components/telegram-patient/TelegramPatientFormContainer.tsx,1
+useTelegramPatientViewModel,1,telegram-patient,Optional,No,components/telegram-patient/TelegramPatientFormContainer.tsx,1
+ConfirmationContent,1,telegram-patient,Optional,No,components/telegram-patient/TelegramPatientFormContainer.tsx,1
+ErrorModal,1,telegram-patient,Optional,No,components/telegram-patient/TelegramPatientFormContainer.tsx,1
+LanguageSelector,1,telegram-patient,Optional,No,components/telegram-patient/container/access-denied.tsx,1
+translations,1,rxQrCode,Optional,No,components/telegram-patient/container/intake-form/view/LanguageSelector.tsx,1
+type LanguageString,1,unknown,Optional,No,components/telegram-patient/container/intake-form/view/LanguageSelector.tsx,1
+RadioGroup,1,ui,Optional,No,components/telegram-patient/container/intake-form/view/form-ui/GenderPreferenceField.tsx,1
+RadioGroupItem,1,ui,Optional,No,components/telegram-patient/container/intake-form/view/form-ui/GenderPreferenceField.tsx,1
+StatusDropdown,1,patient-dashboard,Optional,No,components/ui/Table/TableHeader.tsx,1
+PriorityDropdown,1,patient-dashboard,Optional,No,components/ui/Table/TableHeader.tsx,1
+SpecialtyDropdown,1,patient-dashboard,Optional,No,components/ui/Table/TableHeader.tsx,1
+DoctorDropdown,1,patient-dashboard,Optional,No,components/ui/Table/TableHeader.tsx,1
+TooltipContent,1,unknown,Optional,No,components/user-profile/PendingChangeIndicator.tsx,1
+TooltipProvider,1,unknown,Optional,No,components/user-profile/PendingChangeIndicator.tsx,1
+TooltipTrigger,1,unknown,Optional,No,components/user-profile/PendingChangeIndicator.tsx,1
+useUserProfile,1,user-profile,Optional,No,components/user-profile/ProfilePageContent.tsx,1
+Header,1,user-profile,Optional,No,components/user-profile/ProfilePageContent.tsx,1
+Toggle,1,ui,Optional,No,components/user-profile/ProfilePageContent.tsx,1
+UserSettingsView,1,user-profile,Optional,No,components/user-profile/ProfilePageContent.tsx,1
+AvatarImage,1,ui,Optional,No,components/user-profile/UserPhotoUploadModal.tsx,1
+SingleImageViewer,1,ui,Optional,No,components/user-profile/UserPhotoUploadModal.tsx,1
+useUserProfileAdminViewModel,1,adminDashboard,Optional,No,components/user-profile/UserProfileView.tsx,1
+UserProfileSkeleton,1,user-profile,Optional,No,components/user-profile/UserProfileView.tsx,1
+UserPhotoUploadModal,1,user-profile,Optional,No,components/user-profile/UserProfileView.tsx,1
+ToastProps,1,unknown,Optional,No,utils/apiWrapper.ts,1

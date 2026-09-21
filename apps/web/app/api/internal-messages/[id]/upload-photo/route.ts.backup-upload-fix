@@ -1,0 +1,96 @@
+import { NextRequest, NextResponse } from "next/server";
+import { verifySessionFromRequest } from "@/lib/dal";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
+const s3Client = new S3Client({
+  endpoint: `https://${process.env.OBJECT_STORAGE_ENDPOINT}`,
+  region: process.env.OBJECT_STORAGE_REGION || "fra1",
+  credentials: {
+    accessKeyId: process.env.OBJECT_STORAGE_KEY!,
+    secretAccessKey: process.env.OBJECT_STORAGE_SECRET!,
+  },
+  forcePathStyle: true, // Required for MinIO and self-hosted S3 services
+});
+
+export async function POST(req: NextRequest) {
+  try {
+    // Extract thread ID from request URL
+    const pathnameParts = req.nextUrl.pathname.split("/");
+    const threadId = pathnameParts[pathnameParts.length - 2];
+
+    if (!threadId) {
+      return NextResponse.json({ error: "Missing Thread ID" }, { status: 400 });
+    }
+
+    // Support both NextAuth sessions (web) and JWT tokens (mobile)
+    // Authentication using DAL
+    const session = await verifySessionFromRequest(req);
+
+    if (!session) {
+      return NextResponse.json(
+        { error: "Unauthorized access. Please log in." },
+        { status: 401 },
+      );
+    }
+
+    const formData = await req.formData();
+    const file = formData.get("file") as File | null;
+
+    if (!file) {
+      return NextResponse.json({ error: "File is missing" }, { status: 400 });
+    }
+
+    const { firstName, lastName, accountType } = user;
+    const senderInfo = `${accountType}-${firstName}-${lastName}`
+      .trim()
+      .replace(/\s+/g, "_");
+
+    // Generate unique file name
+    const folder = process.env.NODE_ENV === "development" ? "dev" : "prod";
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const sanitizedThreadId = threadId.replace(/[^a-zA-Z0-9_-]/g, "");
+    const fileName = `${timestamp}-${senderInfo}-${file.name}`;
+    const filePath = `${folder}/internal-messages/${sanitizedThreadId}/${fileName}`;
+
+    // Convert File to Buffer
+    const fileBuffer = await file.arrayBuffer();
+
+    // Upload to DigitalOcean Spaces
+    await s3Client.send(
+      new PutObjectCommand({
+        Bucket: process.env.OBJECT_STORAGE_BUCKET!,
+        Key: filePath,
+        Body: Buffer.from(fileBuffer),
+        ContentType: file.type || "application/octet-stream",
+        ACL: "private", // Ensure privacy of uploaded files
+      }),
+    );
+
+    // Generate signed URL
+    const signedUrl = await getSignedUrl(
+      s3Client,
+      new GetObjectCommand({
+        Bucket: process.env.OBJECT_STORAGE_BUCKET!,
+        Key: filePath,
+      }),
+      { expiresIn: 3600 }, // URL valid for 1 hour
+    );
+
+    console.log("Internal message photo uploaded to:", filePath);
+    return NextResponse.json({ filePath, signedUrl }, { status: 200 });
+  } catch (error: any) {
+    console.error(
+      "Error in internal-messages upload-photo route:",
+      error.message,
+    );
+    return NextResponse.json(
+      { error: "Failed to upload photo" },
+      { status: 500 },
+    );
+  }
+}

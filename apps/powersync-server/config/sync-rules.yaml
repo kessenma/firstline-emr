@@ -1,0 +1,488 @@
+# PowerSync Sync Rules Configuration - PHASE 1: ADMIN DATA ADDED
+# Now includes: patients, notes, and admin dashboard data
+# This file defines which data from PostgreSQL gets synced to mobile devices
+
+# IMPORTANT: PowerSync sync rules restrictions:
+# - No JOINs in parameters (use views instead)
+# - No ORDER BY or LIMIT in data queries
+# - For global buckets (all admins see same data): use a constant parameter
+# - Only SELECT from single tables or views
+
+# Bucket priorities (0-3, lower syncs first; unset means 3).
+#
+# The split that matters is user_data vs reference_data. user_data already
+# carries the requesting user's own patients, care team, rx and med orders, so
+# at priority 1 a clinician has a working chart for their own caseload long
+# before reference_data finishes pushing every patient and every note.
+#
+# AuthContext gates login on waitForFirstSync({ priority: 1 }), so priority 1
+# must stay small — do not add bulk data to user_data without revisiting that.
+#
+# Requires PowerSync Service >= 1.7.1 and React Native SDK >= 1.18.1. Priorities
+# must be static; they cannot depend on row values in a parameter query.
+bucket_definitions:
+  # User specific data bucket
+  user_data:
+    # Highest priority: this is the minimum set the app needs to be usable, and
+    # it is what the login-path first-sync gate waits on.
+    priority: 1
+    parameters:
+      # Create a bucket for the REQUESTING user only.
+      # The request.user_id() filter is required: without it PowerSync creates a
+      # bucket per user and subscribes every client to all of them, so any valid
+      # JWT receives every user's profile, settings and care team rows.
+      # Admins are unaffected — their full-data access comes from the 'global'
+      # bucket below, not from here.
+      - SELECT id as user_id FROM users WHERE id = request.user_id()
+    data:
+      # Current user's profile (including authorized status)
+      - SELECT id, first_name, last_name, email, account_type, missions, authorized, approval_date, created_at, updated_at
+        FROM users
+        WHERE id = bucket.user_id
+
+      # User's message read tracking
+      - SELECT *
+        FROM user_messages
+        WHERE user_id = bucket.user_id
+
+      # User's own settings (media cache preference, notification preferences, etc.).
+      # languages / countries / doctor_specialty are NOT here — migration 0045
+      # dropped them from user_settings and made `users` the single source.
+      - SELECT id, user_id,
+          media_cache_enabled, media_cache_wifi_only, data_sync_wifi_only, translation_model_wifi_only,
+          voice_sensitivity, call_transcription_mode,
+          patient_chart_view,
+          push_notifications_enabled, notify_internal_messages, notify_patient_messages, notify_patient_actions,
+          notify_calls,
+          quiet_hours_enabled, quiet_hours_start, quiet_hours_end, quiet_hours_timezone,
+          created_at, updated_at
+        FROM user_settings
+        WHERE user_id = bucket.user_id
+
+      # Care team memberships for current user
+      - SELECT *
+        FROM patient_care_team
+        WHERE user_id = bucket.user_id AND removed_at IS NULL
+
+      # Patients where user is on the care team (supplements existing doctor_id rule).
+      # The `AS patients` alias is required, not cosmetic: the client-side table
+      # name is the alias, or the unqualified source name when there is no alias
+      # (BaseSqlDataQuery.getOutputName). Without it these rows landed in a
+      # phantom `care_team_patients` table the client never declared.
+      # Largely redundant with the reference_data bucket, which already syncs
+      # every patient — kept so care team access does not depend on that rule.
+      - SELECT *
+        FROM powersync_views.care_team_patients AS patients
+        WHERE care_team_user_id = bucket.user_id
+
+      # Telegram link codes created by this user
+      - SELECT *
+        FROM telegram_link_codes
+        WHERE created_by_id = bucket.user_id
+
+      # Unresolved conflicts for patients the user is on the care team of.
+      # `AS care_team_conflicts` is what makes these rows reachable: the client
+      # declares care_team_conflicts (powerSyncSchema.ts) and useCareTeamConflicts
+      # queries it. Unaliased, they landed in `user_care_team_conflicts` and the
+      # in-chart conflict banner never appeared — even though the server-side
+      # push notification for the same event fired correctly.
+      - SELECT id, patient_id, conflicting_user_ids, status, resolved_by,
+               resolved_at, resolution_notes, created_at
+        FROM powersync_views.user_care_team_conflicts AS care_team_conflicts
+        WHERE team_member_user_id = bucket.user_id AND status = 'unresolved'
+
+      # Prescription orders for patients the user is on the care team of.
+      # Medications used to sync only via the 'global' (admins-only) bucket, so
+      # a doctor on the care team opened the chart to an empty Medications tab.
+      # The view denormalizes care team membership because sync rules cannot
+      # JOIN in data queries; `AS rx_orders` names the client table.
+      # Delivery + lock columns drive the "already sent" / "opened" /
+      # "suspicious activity" affordances in the mobile chart. The access code
+      # hash and attempt log are deliberately NOT here — they are server-only.
+      - SELECT id, patient_id, rx_order_id, doctor_specialty, prescribing_dr,
+               dr_email, dr_id, prescribed_date, valid_till, city,
+               prescriptions, submitted,
+               patient_rx_url, pharmacy_qr_url, pharmacy_qr_code,
+               patient_link_sent_at, patient_link_sent_by,
+               patient_link_opened_at, patient_link_open_count,
+               patient_link_failed_count, patient_link_last_failed_at,
+               patient_link_lock_state, pharmacy_link_opened_at,
+               rx_status,
+               cancelled_at, cancelled_by_role, cancelled_by_user_id,
+               cancellation_reason, cancellation_reason_code,
+               care_team_user_id
+        FROM powersync_views.care_team_rx_orders AS rx_orders
+        WHERE care_team_user_id = bucket.user_id
+
+      # Requests for unavailable medications, scoped the same way
+      - SELECT id, patient_id, prescribing_dr, order_date, medications,
+               care_team_user_id
+        FROM powersync_views.care_team_med_orders AS med_orders
+        WHERE care_team_user_id = bucket.user_id
+
+  # Admin data bucket - GLOBAL BUCKET PATTERN
+  # All admins see the same data
+  # Uses request.user_id() to validate the requesting user is an admin
+  # Only outputs global_id so all data queries use the same shared bucket
+  #
+  # Deliberately left at the default priority (3) — 24 data queries covering the
+  # entire database. Admins are users first; their own caseload (user_data) and
+  # messaging should land before the admin firehose.
+  global:
+    parameters:
+      # Only return a row if the requesting user (from JWT sub claim) is in the admins table
+      # This creates ONE shared 'global' bucket that only admin users can access
+      - SELECT 'global' as global_id FROM admins WHERE user_id = request.user_id()
+
+    data:
+      # All users (both pending and existing) - sync to 'users' table
+      - SELECT
+        id,
+        first_name,
+        last_name,
+        email,
+        account_type,
+        missions,
+        countries,
+        doctor_specialty,
+        medical_license,
+        created_at,
+        authorized,
+        approval_date,
+        denial_date
+        FROM users
+        WHERE bucket.global_id = 'global'
+
+      # Admin users - syncs directly from admins table
+      - SELECT
+        id,
+        user_id,
+        created_at,
+        first_name,
+        last_name,
+        email
+        FROM admins
+        WHERE bucket.global_id = 'global'
+
+      # User settings (for admin to see user preferences).
+      # languages / countries / doctor_specialty are NOT here — migration 0045
+      # dropped them from user_settings and made `users` the single source.
+      - SELECT
+        id,
+        user_id,
+        media_cache_enabled,
+        media_cache_wifi_only,
+        data_sync_wifi_only,
+        translation_model_wifi_only,
+        voice_sensitivity,
+        call_transcription_mode,
+        patient_chart_view,
+        push_notifications_enabled,
+        notify_internal_messages,
+        notify_patient_messages,
+        notify_patient_actions,
+        notify_calls,
+        quiet_hours_enabled,
+        quiet_hours_start,
+        quiet_hours_end,
+        quiet_hours_timezone,
+        created_at,
+        updated_at
+        FROM user_settings
+        WHERE bucket.global_id = 'global'
+
+      # Admin notifications (recent notifications sent by admins).
+      # No title / notify_doctors / notify_triage — the table has never had
+      # them. Targeting lives in notification_recipients, not on this row.
+      - SELECT
+        id,
+        message,
+        description,
+        type,
+        sender_id,
+        action_url,
+        links,
+        images,
+        created_at
+        FROM admin_notifications
+        WHERE bucket.global_id = 'global'
+
+      # User profile logs (audit trail for admin actions)
+      - SELECT
+        id,
+        user_id,
+        changed_by,
+        changed_at,
+        changes,
+        is_admin_action,
+        created_at
+        FROM user_profile_logs
+        WHERE bucket.global_id = 'global'
+
+      # Profile update requests (users requesting changes that need admin approval)
+      - SELECT
+        id,
+        user_id,
+        field_name,
+        current_value,
+        requested_value,
+        status,
+        user_email,
+        user_name,
+        reviewed_by,
+        reviewed_by_email,
+        reviewed_by_name,
+        reviewed_at,
+        review_notes,
+        requested_at,
+        created_at,
+        updated_at
+        FROM user_profile_update_requests
+        WHERE bucket.global_id = 'global'
+
+      # All missions - reference data for admin dashboard
+      - SELECT *
+        FROM missions
+        WHERE bucket.global_id = 'global'
+
+      # All patients - full data for admin dashboard and patient chart (offline)
+      # IMPORTANT: Must use direct table reference (not view) to ensure
+      # 'patients' is included in PostgreSQL replication publication
+      - SELECT *
+        FROM patients
+        WHERE bucket.global_id = 'global'
+
+      # All clinical notes for admin users (offline patient chart)
+      # IMPORTANT: Must use direct table reference for replication
+      - SELECT *
+        FROM notes
+        WHERE bucket.global_id = 'global'
+
+      # Note edit history — audit trail for note authorship and edits
+      - SELECT *
+        FROM note_edits
+        WHERE bucket.global_id = 'global'
+
+      # Medication orders (legacy) — pruned to used columns only
+      - SELECT id, patient_id, prescribing_dr, order_date, medications
+        FROM med_orders
+        WHERE bucket.global_id = 'global'
+
+      # Prescription orders — pruned to used columns only.
+      # patient_rx_url / pharmacy_qr_url / pharmacy_qr_code are required: they
+      # are the patient-facing link and QR the share sheet sends. Dropping them
+      # leaves mobile unable to share a prescription at all.
+      - SELECT id, patient_id, rx_order_id, doctor_specialty, prescribing_dr,
+               dr_email, dr_id, prescribed_date, valid_till, city,
+               prescriptions, submitted,
+               patient_rx_url, pharmacy_qr_url, pharmacy_qr_code,
+               patient_link_sent_at, patient_link_sent_by,
+               patient_link_opened_at, patient_link_open_count,
+               patient_link_failed_count, patient_link_last_failed_at,
+               patient_link_lock_state, pharmacy_link_opened_at,
+               rx_status,
+               cancelled_at, cancelled_by_role, cancelled_by_user_id,
+               cancellation_reason, cancellation_reason_code
+        FROM rx_orders
+        WHERE bucket.global_id = 'global'
+
+      # Patient media (photos, PDFs, etc.)
+      - SELECT *
+        FROM patient_media
+        WHERE bucket.global_id = 'global'
+
+      # Internal message threads (staff-to-staff) — exclude messages JSON blob
+      - SELECT id, title, participants, unread_count, status, last_activity,
+               created_by, is_group_chat, created_at, updated_at
+        FROM internal_message_threads
+        WHERE bucket.global_id = 'global'
+
+      # Internal message thread participants
+      - SELECT *
+        FROM internal_message_thread_participants
+        WHERE bucket.global_id = 'global'
+
+      # Internal messages (individual message rows - normalized)
+      - SELECT *
+        FROM internal_messages
+        WHERE bucket.global_id = 'global'
+
+      # Telegram threads (patient messaging) — exclude messages JSON blob
+      - SELECT id, chat_id, patient_id, participants, unread_count, status,
+               created_at, updated_at
+        FROM telegram_threads
+        WHERE bucket.global_id = 'global'
+
+      # Telegram messages (individual message rows - normalized)
+      - SELECT *
+        FROM telegram_messages
+        WHERE bucket.global_id = 'global'
+
+      # Telegram thread participants
+      - SELECT *
+        FROM telegram_thread_participants
+        WHERE bucket.global_id = 'global'
+
+      # User message read tracking
+      - SELECT *
+        FROM user_messages
+        WHERE bucket.global_id = 'global'
+
+      # Patient follow-ups
+      - SELECT *
+        FROM patient_follow_ups
+        WHERE bucket.global_id = 'global'
+
+      # All care team assignments
+      - SELECT *
+        FROM patient_care_team
+        WHERE bucket.global_id = 'global'
+
+      # All care team conflicts
+      - SELECT *
+        FROM care_team_conflicts
+        WHERE bucket.global_id = 'global'
+
+      # Mission attachments (admin view)
+      - SELECT *
+        FROM mission_attachments
+        WHERE bucket.global_id = 'global'
+
+      # User feedback submissions (admin reviewer)
+      - SELECT *
+        FROM user_feedback
+        WHERE bucket.global_id = 'global'
+
+      # Telegram link codes (admin view)
+      - SELECT *
+        FROM telegram_link_codes
+        WHERE bucket.global_id = 'global'
+
+  # Shared reference data - accessible by ALL authenticated users (not just admins)
+  # Uses a constant bucket so all users share the same cached data
+  #
+  # Deliberately left at the default priority (3) — this is the bulk: every
+  # patient and every note. It must not sit in front of user_data, or a clinician
+  # waits on the whole corpus before their own caseload is readable.
+  reference_data:
+    parameters:
+      # Creates one shared bucket for any authenticated user
+      - SELECT 'ref' as ref_id FROM users WHERE id = request.user_id()
+    data:
+      # Missions - small reference table, sync all to everyone
+      - SELECT *
+        FROM missions
+        WHERE bucket.ref_id = 'ref'
+
+      # Mission attachments - files uploaded to missions
+      - SELECT *
+        FROM mission_attachments
+        WHERE bucket.ref_id = 'ref'
+
+      # All patients — synced to every user's local database
+      # Visibility rules enforced in-app (triage sees all, doctors see assigned only)
+      - SELECT *
+        FROM patients
+        WHERE bucket.ref_id = 'ref'
+
+      # All clinical notes — offline patient chart access for all users
+      - SELECT *
+        FROM notes
+        WHERE bucket.ref_id = 'ref'
+
+      # Note edit history — audit trail for all users
+      - SELECT *
+        FROM note_edits
+        WHERE bucket.ref_id = 'ref'
+
+      # Video call log — so the patient chart's Video section still renders
+      # offline, like every other section.
+      #
+      # Columns are enumerated, not SELECT *, specifically to withhold
+      # invite_token: it is the patient's join credential and must never land
+      # in a client-side SQLite file. expires_at / is_revoked are invite
+      # mechanics the client has no use for either.
+      - SELECT id, patient_id, room_name, started_by_id, status,
+               started_at, patient_joined_at, ended_at, duration_seconds,
+               ended_reason, call_notes, created_at, updated_at
+        FROM video_call_sessions
+        WHERE bucket.ref_id = 'ref'
+
+  # User's internal messaging threads (non-admin access)
+  # Creates a bucket per thread based on participant membership
+  user_internal_messaging:
+    # Ahead of the bulk patient corpus: staff coordination is what the app is
+    # used for in the minutes right after opening it.
+    priority: 2
+    parameters:
+      - SELECT thread_id FROM internal_message_thread_participants WHERE user_id = request.user_id() AND left_at IS NULL
+    data:
+      - SELECT id, title, participants, unread_count, status, last_activity,
+               created_by, is_group_chat, created_at, updated_at
+        FROM internal_message_threads
+        WHERE id = bucket.thread_id
+
+      - SELECT *
+        FROM internal_message_thread_participants
+        WHERE thread_id = bucket.thread_id
+
+      # Internal messages for this thread
+      - SELECT *
+        FROM internal_messages
+        WHERE thread_id = bucket.thread_id
+
+  # User's telegram messaging threads (non-admin access)
+  # Creates a bucket per telegram thread based on participant membership
+  user_telegram_messaging:
+    # Same reasoning as user_internal_messaging — patient conversations are
+    # needed before the full patient list is.
+    priority: 2
+    parameters:
+      - SELECT thread_id FROM telegram_thread_participants WHERE user_id = request.user_id()
+    data:
+      - SELECT id, chat_id, patient_id, participants, unread_count, status,
+               created_at, updated_at
+        FROM telegram_threads
+        WHERE id = bucket.thread_id
+
+      - SELECT *
+        FROM telegram_thread_participants
+        WHERE thread_id = bucket.thread_id
+
+      # Telegram messages for this thread
+      - SELECT *
+        FROM telegram_messages
+        WHERE thread_id = bucket.thread_id
+
+      - SELECT *
+        FROM patient_follow_ups
+        WHERE telegram_thread_id = bucket.thread_id
+
+  # Staff directory — every authorized user, for the Contacts tab of staff calling.
+  #
+  # A SEPARATE bucket rather than extra rows on `reference_data` on purpose.
+  # Changing reference_data's definition makes PowerSync recompute that bucket,
+  # which forces every device to re-download all patients and notes. A new
+  # bucket confines the rollout to ~200KB.
+  #
+  # Non-admins otherwise only ever see their own `users` row (from user_data),
+  # so without this the Contacts tab is empty offline. Admins already receive
+  # every user via the `global` bucket; the overlap is harmless — PowerSync
+  # merges rows by table+id across buckets.
+  #
+  # `authorized = true`, never `IS NOT FALSE`: the column is nullable and NULL
+  # rows exist for users who have never been reviewed. They must not be callable.
+  staff_directory:
+    # Small (~200KB) and needed for the Contacts tab of staff calling, so it is
+    # cheap to pull ahead of the bulk corpus.
+    priority: 2
+    parameters:
+      - SELECT 'staff' as dir_id FROM users WHERE id = request.user_id()
+    data:
+      # No google_image — `users` has only `image`; the Google avatar was never
+      # a column here.
+      - SELECT id, first_name, last_name, email, account_type,
+               doctor_specialty, image, missions,
+               authorized, created_at, updated_at
+        FROM users
+        WHERE bucket.dir_id = 'staff' AND authorized = true

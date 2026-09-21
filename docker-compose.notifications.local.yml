@@ -1,0 +1,117 @@
+version: "3.8"
+
+x-build-args: &build-args
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_INLINE_CACHE: 1
+
+services:
+  # Init service - decodes APNs key before gorush starts
+  gorush-init:
+    image: alpine:latest
+    environment:
+      APNS_KEY_BASE64: ${APNS_KEY_BASE64}
+    volumes:
+      - ./tmp/gorush-keys:/keys
+    networks:
+      - medflow-local
+    entrypoint: /bin/sh
+    command: >
+      -c "
+      echo '🔐 Decoding APNs key from environment variable...' &&
+      if [ -n \"$$APNS_KEY_BASE64\" ]; then
+        echo \"$$APNS_KEY_BASE64\" | base64 -d > /keys/AuthKey.p8 &&
+        chmod 644 /keys/AuthKey.p8 &&
+        echo '✅ APNs key written successfully to /keys/AuthKey.p8' &&
+        ls -lah /keys/AuthKey.p8
+      else
+        echo '⚠️  APNS_KEY_BASE64 environment variable not set - gorush will fail to authenticate with APNs'
+      fi &&
+      echo '🎉 Init complete!'
+      "
+    restart: "no"
+
+  gorush:
+    depends_on:
+      gorush-init:
+        condition: service_completed_successfully
+    image: appleboy/gorush:latest
+    container_name: gorush-local
+    restart: always
+    volumes:
+      - ./tmp/gorush-keys:/keys:ro
+    environment:
+      # Core settings
+      GORUSH_CORE_PORT: "8088"
+      GORUSH_CORE_MODE: "release"
+      GORUSH_CORE_SYNC: "false"
+      GORUSH_CORE_MAX_NOTIFICATION: "100"
+      # iOS APNs settings
+      GORUSH_IOS_ENABLED: "true"
+      GORUSH_IOS_KEY_PATH: "/keys/AuthKey.p8"
+      GORUSH_IOS_KEY_TYPE: "p8"
+      GORUSH_IOS_KEY_ID: "24JDJGBV9T"
+      GORUSH_IOS_TEAM_ID: "RHPLRY9X9P"
+      GORUSH_IOS_PRODUCTION: "false"
+      GORUSH_IOS_MAX_RETRY: "3"
+      # Android (disabled for now)
+      GORUSH_ANDROID_ENABLED: "false"
+      # API endpoints
+      GORUSH_API_PUSH_URI: "/api/push"
+      GORUSH_API_STAT_GO_URI: "/api/stat/go"
+      GORUSH_API_STAT_APP_URI: "/api/stat/app"
+      GORUSH_API_CONFIG_URI: "/api/config"
+      GORUSH_API_HEALTH_URI: "/healthz"
+    networks:
+      - medflow-local
+    ports:
+      - "8088:8088"
+    healthcheck:
+      disable: true
+
+  notifications-server:
+    build:
+      context: ./apps/notifications-server
+      dockerfile: Dockerfile
+      args:
+        <<: *build-args
+    container_name: notifications-server-local
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      MEDFLOW_KEY: ${MEDFLOW_KEY}
+      API_BASE_URL: http://host.docker.internal:${PORT_ENV:-3000}
+      NOTIFICATIONS_PORT: ${NOTIFICATIONS_PORT:-8080}
+      OBJECT_STORAGE_CDN_ENDPOINT: ${OBJECT_STORAGE_CDN_ENDPOINT}
+      OBJECT_STORAGE_BUCKET: ${OBJECT_STORAGE_BUCKET}
+      OBJECT_STORAGE_ENDPOINT: ${OBJECT_STORAGE_ENDPOINT:-http://localhost:9100}
+      OBJECT_STORAGE_KEY: ${OBJECT_STORAGE_KEY}
+      OBJECT_STORAGE_REGION: ${OBJECT_STORAGE_REGION}
+      OBJECT_STORAGE_SECRET: ${OBJECT_STORAGE_SECRET}
+      GORUSH_URL: http://gorush:8088
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: ${NODE_ENV:-development}
+    depends_on:
+      gorush:
+        condition: service_started
+    networks:
+      - medflow-local
+    ports:
+      - "${NOTIFICATIONS_PORT:-8080}:8080"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "sh",
+          "-c",
+          "wget --no-verbose --tries=1 --spider http://localhost:8080/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  medflow-local:
+    driver: bridge

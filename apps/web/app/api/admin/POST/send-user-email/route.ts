@@ -1,0 +1,135 @@
+// app/api/admin/POST/send-user-email/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { verifySessionFromRequest } from "@/lib/dal";
+import { sendNewUserEmail } from "@/utils/emails/new-user-admin-email";
+
+interface SendUserEmailRequest {
+  userId: string;
+  confirmationToken: string;
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    // Verify admin access
+    const session = await verifySessionFromRequest(request);
+    if (!session || !session.isAdmin) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Get admin user ID from session
+    const adminUserId = session.userId as string;
+    if (!adminUserId) {
+      return NextResponse.json(
+        { message: "Admin user identification failed" },
+        { status: 400 },
+      );
+    }
+
+    // Fetch admin user information
+    const [adminUser] = await db
+      .select({
+        id: users.id,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        email: users.email,
+      })
+      .from(users)
+      .where(eq(users.id, adminUserId))
+      .limit(1);
+
+    if (!adminUser) {
+      return NextResponse.json(
+        { message: "Admin user not found" },
+        { status: 404 },
+      );
+    }
+
+    // Parse request body
+    const { userId, confirmationToken }: SendUserEmailRequest =
+      await request.json();
+
+    // Validate required fields
+    if (!userId || !confirmationToken) {
+      return NextResponse.json(
+        { message: "Missing required fields: userId, confirmationToken" },
+        { status: 400 },
+      );
+    }
+
+    // Find the target user
+    const [user] = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        accountType: users.accountType,
+        verificationCode: users.verificationCode,
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
+
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    // Send the welcome email with confirmation token
+    try {
+      await sendNewUserEmail({
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        confirmationToken: confirmationToken,
+        accountType: user.accountType,
+        verificationCode: user.verificationCode || "",
+        adminSender: {
+          firstName: adminUser.firstName,
+          lastName: adminUser.lastName,
+          email: adminUser.email,
+        },
+      });
+
+      return NextResponse.json(
+        {
+          success: true,
+          message: "Welcome email sent successfully",
+        },
+        { status: 200 },
+      );
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+
+      return NextResponse.json(
+        {
+          message:
+            "User created but failed to send email. Please try sending the email again.",
+        },
+        { status: 207 },
+      ); // 207 Multi-Status - partial success
+    }
+  } catch (error) {
+    console.error("Error sending user email:", error);
+
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: `Error sending email: ${error.message}` },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}

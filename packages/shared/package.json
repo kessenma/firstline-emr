@@ -1,0 +1,36 @@
+{
+  "name": "@fajr/shared",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./legal-content": "./src/legal-content/index.ts",
+    "./theme": "./src/theme/index.ts",
+    "./2fa": "./src/2fa/index.ts",
+    "./signup": "./src/signup/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./constants/*": "./src/constants/*.ts",
+    "./care-team": "./src/care-team/index.ts",
+    "./patient": "./src/patient/index.ts",
+    "./medications": "./src/medications/index.ts",
+    "./patient-utils": "./src/patient-utils/index.ts",
+    "./patient-share": "./src/patient-share/index.ts",
+    "./field-mapping": "./src/field-mapping/index.ts",
+    "./user": "./src/user/index.ts",
+    "./admin": "./src/admin/index.ts",
+    "./patient-dashboard": "./src/patient-dashboard/index.ts",
+    "./media": "./src/media/index.ts",
+    "./messaging": "./src/messaging/index.ts",
+    "./video-call": "./src/video-call/index.ts",
+    "./calls": "./src/calls/index.ts",
+    "./backup": "./src/backup/index.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0"
+  },
+  "scripts": {
+    "generate:css": "tsx scripts/generate-css-palette.ts"
+  }
+}

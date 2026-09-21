@@ -1,0 +1,70 @@
+// app/api/admin/GET/patient-intake/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { patientIntakes, users } from "@/db/schema";
+import { eq, desc } from "drizzle-orm";
+import { verifySessionFromRequest } from "@/lib/dal";
+
+export async function GET(request: NextRequest) {
+  try {
+    // Verify admin access
+    const session = await verifySessionFromRequest(request);
+    if (!session || !session.isAdmin) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Fetch patient intakes with user data using LEFT JOIN
+    const intakes = await db
+      .select({
+        id: patientIntakes.id,
+        intakeMessage: patientIntakes.intakeMessage,
+        confirmationMessage: patientIntakes.confirmationMessage,
+        mode: patientIntakes.mode,
+        createdAt: patientIntakes.createdAt,
+        updatedAt: patientIntakes.updatedAt,
+        updatedBy: patientIntakes.updatedBy,
+        // User details from join
+        updatedByFirstName: users.firstName,
+        updatedByLastName: users.lastName,
+        updatedByEmail: users.email,
+      })
+      .from(patientIntakes)
+      .leftJoin(users, eq(patientIntakes.updatedBy, users.id))
+      .orderBy(desc(patientIntakes.createdAt));
+
+    // Transform the data to match the expected format (similar to MongoDB populate)
+    const formattedIntakes = intakes.map((intake) => ({
+      id: intake.id,
+      intakeMessage: intake.intakeMessage,
+      confirmationMessage: intake.confirmationMessage,
+      mode: intake.mode,
+      createdAt: intake.createdAt,
+      updatedAt: intake.updatedAt,
+      updatedBy: intake.updatedBy
+        ? {
+            id: intake.updatedBy,
+            firstName: intake.updatedByFirstName,
+            lastName: intake.updatedByLastName,
+            email: intake.updatedByEmail,
+          }
+        : null,
+    }));
+
+    return NextResponse.json({
+      success: true,
+      patientIntakes: formattedIntakes,
+    });
+  } catch (error) {
+    console.error("Error fetching patient intake settings:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch patient intake settings" },
+      { status: 500 },
+    );
+  }
+}

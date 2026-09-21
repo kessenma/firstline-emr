@@ -1,0 +1,342 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1766157028458,
+      "tag": "0000_tearful_black_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1766426716092,
+      "tag": "0001_sloppy_white_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1766526775825,
+      "tag": "0002_eminent_gwen_stacy",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1766867125444,
+      "tag": "0003_absent_marvex",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1767987993335,
+      "tag": "0004_wooden_mathemanic",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1768068559017,
+      "tag": "0005_broken_silver_sable",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1768069503040,
+      "tag": "0006_wealthy_nova",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768589093926,
+      "tag": "0007_crazy_magdalene",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1769363676054,
+      "tag": "0008_slimy_giant_girl",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1769458902787,
+      "tag": "0009_brief_scream",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1769885488802,
+      "tag": "0010_faulty_sumo",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1770435399295,
+      "tag": "0011_pink_gladiator",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1770590433939,
+      "tag": "0012_fluffy_silver_surfer",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1770680744846,
+      "tag": "0013_free_thunderbolt",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1770768000000,
+      "tag": "2026_02_10_01_add_translation_model_wifi_only",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1770684399353,
+      "tag": "0015_clumsy_night_nurse",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1770859877116,
+      "tag": "0016_dapper_mattie_franklin",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1770940800000,
+      "tag": "0017_rename_patient_photos_to_media",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1770881851237,
+      "tag": "0018_mighty_skreet",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1771027200000,
+      "tag": "0019_remove_email_notification_columns",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1771113600000,
+      "tag": "0020_add_patient_care_team",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1771200000000,
+      "tag": "0021_add_mission_requests_and_group_chat",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1771286400000,
+      "tag": "2026_02_14_01_create_user_feedback",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1771372800000,
+      "tag": "2026_02_15_01_backfill_care_team_telegram_participants",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1771273929293,
+      "tag": "0024_productive_madripoor",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1771276270484,
+      "tag": "0025_add-feedback-platform",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1771620693578,
+      "tag": "0026_mushy_nick_fury",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1771718400000,
+      "tag": "0027_add_feedback_app_version",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1772403540449,
+      "tag": "0028_secret_roulette",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1773813349640,
+      "tag": "0029_glorious_exodus",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1773901729474,
+      "tag": "0030_magical_mongu",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1774074178388,
+      "tag": "0031_flimsy_romulus",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1774121260959,
+      "tag": "0032_lying_kate_bishop",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1774538318391,
+      "tag": "0033_lonely_shiva",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1774540960570,
+      "tag": "0034_careful_leech",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1774543684289,
+      "tag": "0035_sad_swordsman",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1783163604580,
+      "tag": "0036_useful_blazing_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1785777385525,
+      "tag": "0037_short_baron_zemo",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1785794678276,
+      "tag": "0038_merged_staff_calls",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1785871012341,
+      "tag": "0039_fancy_whirlwind",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1785954088843,
+      "tag": "0040_greedy_lord_hawal",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1785955338426,
+      "tag": "0041_massive_cloak",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1785955808155,
+      "tag": "0042_adorable_marrow",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1785955809155,
+      "tag": "0043_call_summary_message_type",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1786406400000,
+      "tag": "2026_08_11_01_rx_orders_updated_at_and_care_team_medication_views",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1786480196276,
+      "tag": "0045_single_source_user_fields",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1786492800000,
+      "tag": "2026_08_12_01_rx_order_delivery_and_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1786579200000,
+      "tag": "2026_08_12_02_rx_order_cancellation",
+      "breakpoints": true
+    }
+  ]
+}

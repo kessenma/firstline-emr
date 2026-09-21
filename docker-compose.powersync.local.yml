@@ -1,0 +1,45 @@
+version: "3.8"
+
+# LOCAL DEVELOPMENT - Exposes PowerSync on port 6061 for mobile emulator testing
+
+services:
+  powersync:
+    build:
+      context: ./apps/powersync-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      # Database connection - uses local .env.powersync
+      DATABASE_URL: ${DATABASE_URL}
+
+      # Authentication - must match your web app
+      JWT_SECRET: ${JWT_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+
+      # PowerSync configuration
+      POWERSYNC_PORT: 6061
+      POWERSYNC_LOG_LEVEL: debug
+      POWERSYNC_SLOT_NAME: powersync_slot_local
+      POWERSYNC_PUBLICATION: powersync_publication
+      POWERSYNC_SYNC_RULES_PATH: /config/sync-rules.yaml
+
+      # Environment
+      NODE_ENV: development
+
+    volumes:
+      - powersync-data-local:/data
+
+    # Expose port for local development
+    ports:
+      - "6061:6061"
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6061/probes/liveness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  powersync-data-local:
+    driver: local

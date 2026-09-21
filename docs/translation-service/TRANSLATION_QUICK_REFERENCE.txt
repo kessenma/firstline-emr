@@ -1,0 +1,81 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                   TRANSLATION SERVICE - QUICK REFERENCE                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📋 ENVIRONMENT VARIABLES (Add to .env)
+─────────────────────────────────────────────────────────────────────────────
+
+  # Required:
+  TRANSLATION_SERVICE_URL=http://translation-service:9000
+  TRANSLATION_API_KEY=<your-secure-key>  # Generate: openssl rand -hex 32
+  
+  # Optional:
+  TRANSLATION_PORT=9000
+  TRANSLATION_LOG_LEVEL=INFO
+
+─────────────────────────────────────────────────────────────────────────────
+
+🚀 DEPLOYMENT COMMANDS
+─────────────────────────────────────────────────────────────────────────────
+
+  # 1. Generate API key:
+  openssl rand -hex 32
+  
+  # 2. Add to .env (see above)
+  
+  # 3. Deploy translation service:
+  docker-compose -f docker-compose.translation.yml up -d --build
+  
+  # 4. Restart web app:
+  docker restart <web-container-name>
+  
+  # 5. Verify:
+  curl -H "X-API-Key: your-key" http://localhost:9000/health
+
+─────────────────────────────────────────────────────────────────────────────
+
+🧪 TEST TRANSLATION
+─────────────────────────────────────────────────────────────────────────────
+
+  curl -X POST http://localhost:9000/translate \
+    -H "Content-Type: application/json" \
+    -H "X-API-Key: your-api-key-here" \
+    -d '{"text": "مرحبا", "targetLang": "English"}'
+  
+  Expected: {"translatedText":"Hello"}
+
+─────────────────────────────────────────────────────────────────────────────
+
+📊 MONITORING
+─────────────────────────────────────────────────────────────────────────────
+
+  # View logs:
+  docker-compose -f docker-compose.translation.yml logs -f
+  
+  # Check status:
+  docker ps | grep translation
+  
+  # Health check:
+  curl -H "X-API-Key: your-key" http://localhost:9000/health
+
+─────────────────────────────────────────────────────────────────────────────
+
+🔒 SECURITY NOTES
+─────────────────────────────────────────────────────────────────────────────
+
+  ✓ TRANSLATION_API_KEY must be identical in both web app and service
+  ✓ Generate strong random key (32+ characters)
+  ✓ Works like MEDFLOW_KEY - only authorized clients can access
+  ✓ Service runs on internal Docker network only (no external exposure)
+
+─────────────────────────────────────────────────────────────────────────────
+
+📚 DOCUMENTATION
+─────────────────────────────────────────────────────────────────────────────
+
+  Quick Start:       your deployment platform’s docs
+  Environment Vars:  TRANSLATION_ENV_VARS.md
+  Full Docs:         apps/translation-service/README.md
+  Changes Summary:   TRANSLATION_SERVICE_CHANGES.md
+
+╚══════════════════════════════════════════════════════════════════════════════╝

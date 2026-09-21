@@ -1,0 +1,80 @@
+# Gorush Configuration for Fajr Mission EMR
+# Documentation: https://github.com/appleboy/gorush
+
+core:
+  enabled: true
+  port: "8088"
+  worker_num: 0 # 0 = use CPU cores
+  queue_num: 8192
+  max_notification: 100
+  sync: false
+  mode: "release"
+
+api:
+  push_uri: "/api/push"
+  stat_go_uri: "/api/stat/go"
+  stat_app_uri: "/api/stat/app"
+  config_uri: "/api/config"
+  sys_stat_uri: "/sys/stats"
+  metric_uri: "/metrics"
+  health_uri: "/healthz"
+
+# iOS APNS Configuration (Primary - Direct to Apple)
+# Option 1: Token-based authentication (Recommended - doesn't expire yearly)
+#   - Go to Apple Developer → Certificates, Identifiers & Profiles → Keys
+#   - Create a new Key, enable "Apple Push Notifications service (APNs)"
+#   - Download the .p8 file (you can only download once!)
+#   - Note the Key ID shown on the page
+#   - Get your Team ID from Apple Developer → Membership
+#
+# Option 2: Certificate-based authentication
+#   - Go to Apple Developer → Certificates → Create Certificate
+#   - Choose "Apple Push Notification service SSL (Sandbox & Production)"
+#   - Export as .pem or .p12
+ios:
+  enabled: true
+  # Token-based (JWT) authentication - RECOMMENDED
+  key_path: "/keys/AuthKey.p8"
+  key_type: "p8"
+  key_id: "24JDJGBV9T"  # From AuthKey_24JDJGBV9T.p8
+  team_id: "RHPLRY9X9P" # From DEVELOPER_TEAM_ID
+  # Certificate-based authentication (alternative):
+  # key_path: "/home/gorush/apns-cert.pem"
+  # key_type: "pem"
+  # password: ""  # If using .p12 with password
+  production: false  # Set to true for production, false for sandbox/development
+  max_retry: 3
+  max_concurrent_pushes: 100
+
+# Android FCM Configuration (Direct to Google)
+# Go to Firebase Console → Project Settings → Service Accounts
+# → Generate New Private Key → Download JSON file
+android:
+  enabled: false  # Disable for now, focusing on iOS
+  key_path: "/home/gorush/fcm-key.json"
+  max_retry: 3
+
+# Huawei HMS (disabled)
+huawei:
+  enabled: false
+  appid: ""
+  appsecret: ""
+  max_retry: 3
+
+# Queue configuration
+queue:
+  engine: "local" # local, nsq, nats, or redis
+
+# Statistics storage
+stat:
+  engine: "memory" # memory, redis, boltdb, buntdb, leveldb, or badgerdb
+
+# Logging
+log:
+  format: "string" # string or json
+  access_log: "stdout"
+  access_level: "debug"  # Set to debug for testing
+  error_log: "stderr"
+  error_level: "error"
+  hide_token: true # Hide device tokens in logs for security
+  hide_messages: false

@@ -1,0 +1,81 @@
+version: "3.8"
+
+x-build-args: &build-args
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_INLINE_CACHE: 1
+
+services:
+  rustfs-server:
+    build:
+      context: ./apps/object-storage
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./.env
+      - ./.env.object-storage.local
+    environment:
+      RUSTFS_ADDRESS: ":${OBJECT_STORAGE_PORT:-9100}"
+      RUSTFS_CONSOLE_ENABLE: ${RUSTFS_CONSOLE_ENABLE:-true}
+      RUSTFS_ACCESS_KEY: ${OBJECT_STORAGE_KEY}
+      RUSTFS_SECRET_KEY: ${OBJECT_STORAGE_SECRET}
+      # RUSTFS_SERVER_DOMAINS removed - causes virtual-host mode which breaks bucket creation
+      OBJECT_STORAGE_PORT: ${OBJECT_STORAGE_PORT:-9100}
+      OBJECT_STORAGE_ENDPOINT: ${OBJECT_STORAGE_ENDPOINT}
+      OBJECT_STORAGE_KEY: ${OBJECT_STORAGE_KEY}
+      OBJECT_STORAGE_SECRET: ${OBJECT_STORAGE_SECRET}
+      OBJECT_STORAGE_BUCKET: ${OBJECT_STORAGE_BUCKET}
+      OBJECT_STORAGE_REGION: ${OBJECT_STORAGE_REGION}
+      RUSTFS_GLOBAL_REGION: ${RUSTFS_GLOBAL_REGION:-${OBJECT_STORAGE_REGION}}
+      OBJECT_STORAGE_CDN_ENDPOINT: ${OBJECT_STORAGE_CDN_ENDPOINT}
+    command:
+      - "--address"
+      - ":${OBJECT_STORAGE_PORT:-9100}"
+      - "--console-enable"
+      - "--access-key"
+      - "${OBJECT_STORAGE_KEY}"
+      - "--secret-key"
+      - "${OBJECT_STORAGE_SECRET}"
+      - "--region"
+      - "${OBJECT_STORAGE_REGION:-us-east-1}"
+      # --server-domains removed - causes virtual-host mode which breaks bucket creation
+      - "/data"
+    ports:
+      - "${OBJECT_STORAGE_PORT:-9100}:${OBJECT_STORAGE_PORT:-9100}"
+      - "9001:9001"
+    volumes:
+      - rustfs_data:/data
+      - rustfs_logs:/logs
+    networks:
+      - coolify
+    labels:
+      # No caddy.* labels here on purpose: storage.fajrmission.org and
+      # storage-admin.fajrmission.org are served by the static
+      # /data/coolify/proxy/caddy/dynamic/object-storage*.caddy files on the
+      # box. These labels never worked (Coolify does not interpolate ${VAR}
+      # in labels, and caddy-docker-proxy >= 2.9 rejects "${" inside {{...}}
+      # templates), and duplicating a site already defined in a static file
+      # is a Caddy config error ("ambiguous site definition").
+      coolify.name: "RustFS Object Storage"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9001/rustfs/console/index.html",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  coolify:
+    name: coolify
+    external: true
+
+volumes:
+  rustfs_data:
+  rustfs_logs:

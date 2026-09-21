@@ -1,0 +1,103 @@
+// app/api/admin/POST/send-password-reset-email/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { verifyAdminToken } from "@/utils/adminAPI";
+import { sendVerificationEmail } from "@/utils/emails/forgot-password";
+
+export async function POST(request: NextRequest) {
+  try {
+    console.log("Received request to send password reset email.");
+
+    // Verify admin access
+    const decoded = await verifyAdminToken(request);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Parse request body
+    const { userId } = await request.json();
+    console.log("User ID from request body:", userId);
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "User ID is required" },
+        { status: 400 },
+      );
+    }
+
+    // Find the user by ID
+    const [user] = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
+
+    if (!user) {
+      console.error("User not found for ID:", userId);
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    console.log("User found:", {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
+
+    // Generate 6-digit verification code
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
+    console.log("Generated verification code:", verificationCode);
+
+    // Save the verification code and expiration to the database
+    const expirationDate = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+    await db
+      .update(users)
+      .set({
+        verificationCode: verificationCode,
+        verificationCodeExpiry: expirationDate,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId));
+
+    console.log("Verification code and expiration saved to database.");
+
+    // Send the verification email
+    console.log("Sending verification email to:", user.email);
+    await sendVerificationEmail(user.email, verificationCode);
+    console.log("Verification email sent successfully.");
+
+    return NextResponse.json({
+      message: "Password reset email sent successfully.",
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error occurred while sending password reset email:", {
+        message: error.message,
+        stack: error.stack,
+        details: error,
+      });
+    } else {
+      console.error("Unknown error occurred:", error);
+    }
+
+    return NextResponse.json(
+      { error: "Failed to send email." },
+      { status: 500 },
+    );
+  }
+}

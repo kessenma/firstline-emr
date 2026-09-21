@@ -1,0 +1,36 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env", "**/.env.*local"],
+  "tasks": {
+    "generate:css": {
+      "inputs": ["packages/shared/src/theme/**"],
+      "outputs": ["apps/web/styles/generated-palette.css"]
+    },
+    "build": {
+      "dependsOn": ["^build", "generate:css"],
+      "outputs": [".next/**", "dist/**", "!.next/cache/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "start:bot": {
+      "cache": false,
+      "persistent": true,
+      "outputs": []
+    },
+    "cron:bot": {
+      "cache": false,
+      "persistent": false,
+      "outputs": []
+    },
+    "start:websocket": {
+      "cache": false,
+      "persistent": true,
+      "outputs": []
+    }
+  }
+}

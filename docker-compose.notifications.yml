@@ -1,0 +1,180 @@
+version: "3.8"
+
+x-build-args: &build-args
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_INLINE_CACHE: 1
+
+services:
+  # Init service - decodes APNs key before gorush starts
+  gorush-init:
+    image: alpine:latest
+    environment:
+      APNS_KEY_BASE64: ${APNS_KEY_BASE64}
+    volumes:
+      - gorush-keys:/keys
+    networks:
+      - coolify
+    entrypoint: /bin/sh
+    command: >
+      -c "
+      echo '🔐 Decoding APNs key from environment variable...' &&
+      if [ -n \"$$APNS_KEY_BASE64\" ]; then
+        echo \"$$APNS_KEY_BASE64\" | base64 -d > /keys/AuthKey.p8 &&
+        chmod 644 /keys/AuthKey.p8 &&
+        echo '✅ APNs key written successfully to /keys/AuthKey.p8' &&
+        ls -lah /keys/AuthKey.p8
+      else
+        echo '⚠️  APNS_KEY_BASE64 environment variable not set - gorush will fail to authenticate with APNs'
+      fi &&
+      echo '🎉 Init complete!'
+      "
+    restart: "no"
+
+  gorush:
+    depends_on:
+      gorush-init:
+        condition: service_completed_successfully
+    image: appleboy/gorush:latest
+    restart: always
+    volumes:
+      - gorush-keys:/keys:ro
+    environment:
+      # Core settings
+      GORUSH_CORE_PORT: "8088"
+      GORUSH_CORE_MODE: "release"
+      GORUSH_CORE_SYNC: "false"
+      GORUSH_CORE_MAX_NOTIFICATION: "100"
+      # iOS APNs settings
+      GORUSH_IOS_ENABLED: "true"
+      GORUSH_IOS_KEY_PATH: "/keys/AuthKey.p8"
+      GORUSH_IOS_KEY_TYPE: "p8"
+      GORUSH_IOS_KEY_ID: ${GORUSH_IOS_KEY_ID}
+      GORUSH_IOS_TEAM_ID: ${GORUSH_IOS_TEAM_ID}
+      # This instance serves PRODUCTION APNs only (Release/TestFlight builds).
+      # Debug builds register sandbox tokens and are served by gorush-sandbox.
+      GORUSH_IOS_PRODUCTION: "true"
+      GORUSH_IOS_MAX_RETRY: "3"
+      # Android (disabled for now)
+      GORUSH_ANDROID_ENABLED: "false"
+      # API endpoints
+      GORUSH_API_PUSH_URI: "/api/push"
+      GORUSH_API_STAT_GO_URI: "/api/stat/go"
+      GORUSH_API_STAT_APP_URI: "/api/stat/app"
+      GORUSH_API_CONFIG_URI: "/api/config"
+      GORUSH_API_HEALTH_URI: "/healthz"
+    networks:
+      - coolify
+    ports:
+      - "8088:8088"
+    # Explicitly disable the built-in healthcheck from gorush image
+    healthcheck:
+      disable: true
+    #   test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8088/healthz"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 40s
+
+  # Second Gorush bound to the APNs SANDBOX gateway.
+  #
+  # One Gorush process serves exactly one APNs environment — GORUSH_IOS_PRODUCTION
+  # is read once at startup — but a token minted by a Debug build is only valid
+  # against sandbox, and a Release build's only against production. Since a Debug
+  # build on a physical device is the only way to exercise CallKit, serving just
+  # one environment makes the receiving side untestable.
+  #
+  # notifications-server routes per token via each push_devices row's
+  # `environment` column. See push.go / pusher.go.
+  gorush-sandbox:
+    depends_on:
+      gorush-init:
+        condition: service_completed_successfully
+    image: appleboy/gorush:latest
+    restart: always
+    volumes:
+      - gorush-keys:/keys:ro
+    environment:
+      GORUSH_CORE_PORT: "8088"
+      GORUSH_CORE_MODE: "release"
+      GORUSH_CORE_SYNC: "false"
+      GORUSH_CORE_MAX_NOTIFICATION: "100"
+      GORUSH_IOS_ENABLED: "true"
+      GORUSH_IOS_KEY_PATH: "/keys/AuthKey.p8"
+      GORUSH_IOS_KEY_TYPE: "p8"
+      # Same signing key as production — a p8 auth key is valid for both
+      # gateways. Only the gateway differs.
+      GORUSH_IOS_KEY_ID: ${GORUSH_IOS_KEY_ID}
+      GORUSH_IOS_TEAM_ID: ${GORUSH_IOS_TEAM_ID}
+      GORUSH_IOS_PRODUCTION: "false"
+      GORUSH_IOS_MAX_RETRY: "3"
+      GORUSH_ANDROID_ENABLED: "false"
+      GORUSH_API_PUSH_URI: "/api/push"
+      GORUSH_API_STAT_GO_URI: "/api/stat/go"
+      GORUSH_API_STAT_APP_URI: "/api/stat/app"
+      GORUSH_API_CONFIG_URI: "/api/config"
+      GORUSH_API_HEALTH_URI: "/healthz"
+    networks:
+      - coolify
+    # Deliberately NOT published on the host: this is reached only over the
+    # internal coolify network, unlike gorush which already exposes 8088.
+    expose:
+      - "8088"
+    healthcheck:
+      disable: true
+
+  notifications-server:
+    build:
+      context: ./apps/notifications-server
+      dockerfile: Dockerfile
+      args:
+        <<: *build-args
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      MEDFLOW_KEY: ${MEDFLOW_KEY}
+      API_BASE_URL: http://web:${PORT_ENV:-3000}
+      NOTIFICATIONS_PORT: ${NOTIFICATIONS_PORT:-8080}
+      OBJECT_STORAGE_CDN_ENDPOINT: ${OBJECT_STORAGE_CDN_ENDPOINT}
+      OBJECT_STORAGE_BUCKET: ${OBJECT_STORAGE_BUCKET}
+      OBJECT_STORAGE_ENDPOINT: "http://rustfs-server:9100"
+      OBJECT_STORAGE_KEY: ${OBJECT_STORAGE_KEY}
+      OBJECT_STORAGE_REGION: ${OBJECT_STORAGE_REGION}
+      OBJECT_STORAGE_SECRET: ${OBJECT_STORAGE_SECRET}
+      GORUSH_URL: http://gorush:8088
+      # Sandbox APNs gateway for tokens registered by Debug builds.
+      GORUSH_SANDBOX_URL: http://gorush-sandbox:8088
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: ${NODE_ENV}
+      PUBLIC_URL: ${PUBLIC_URL:-https://fajrmission.org}
+    depends_on:
+      gorush:
+        condition: service_started
+    networks:
+      - coolify
+    labels:
+      caddy: notifications.dev.emr.fajrscientific.org
+      caddy.encode: gzip
+      caddy.handle_path./health: "reverse_proxy {{upstreams 8080}}"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "sh",
+          "-c",
+          "wget --no-verbose --tries=1 --spider http://localhost:$${NOTIFICATIONS_PORT:-8080}/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  gorush-keys:
+    driver: local
+
+networks:
+  coolify:
+    name: coolify
+    external: true

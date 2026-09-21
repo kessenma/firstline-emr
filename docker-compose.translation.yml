@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  translation-service:
+    build:
+      context: ./apps/translation-service
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      # Python configuration
+      PYTHONUNBUFFERED: "1"
+      NODE_ENV: ${NODE_ENV:-production}
+      # Logging configuration
+      TRANSLATION_LOG_LEVEL: ${TRANSLATION_LOG_LEVEL:-INFO}
+      # Security - API Key (REQUIRED for production)
+      TRANSLATION_API_KEY: ${TRANSLATION_API_KEY:?TRANSLATION_API_KEY is required}
+      # Port configuration (internal only, not exposed)
+      TRANSLATION_PORT: "9000"
+      # Cache configuration
+      TRANSLATION_CACHE_MAX_SIZE: ${TRANSLATION_CACHE_MAX_SIZE:-1000}
+      TRANSLATION_CACHE_EVICTION_TIME: ${TRANSLATION_CACHE_EVICTION_TIME:-259200}
+    ports:
+      # Fixed port mapping - service always runs on 9000 internally
+      - "9000:9000"
+    volumes:
+      # Persist HuggingFace model cache to avoid re-downloading models on restart
+      - translation-models:/root/.cache/huggingface
+    networks:
+      - coolify
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "sh",
+          "-c",
+          'curl -f -H "X-API-Key: $${TRANSLATION_API_KEY}" http://localhost:9000/health || exit 1',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 300s # 5 minutes to allow for model downloads on first startup
+
+volumes:
+  translation-models:
+    driver: local
+
+networks:
+  coolify:
+    name: coolify
+    external: true

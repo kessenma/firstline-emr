@@ -1,0 +1,260 @@
+version: "3.8"
+
+x-build-args: &build-args
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_INLINE_CACHE: 1
+
+# =============================================================================
+# Fajr Mission SSO Authentication Stack
+# =============================================================================
+# This compose file sets up:
+# - Zitadel: Central identity provider with passkey support
+# - OAuth2 Proxy instances: Protect apps without native OIDC support
+#
+# Usage:
+#   Step 1: Create database (run once)
+#     docker-compose -f docker-compose.auth.yml --profile init run --rm zitadel-db-init
+#
+#   Step 2: Configure OIDC apps in Zitadel console, then deploy all services
+#     docker-compose -f docker-compose.auth.yml up -d
+#
+# Prerequisites:
+#   - Create 'zitadel' database in your Postgres instance
+#   - Set environment variables (CLIENT_ID, CLIENT_SECRET, COOKIE_SECRET)
+# =============================================================================
+
+x-oauth2-proxy-common: &oauth2-proxy-common
+  image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
+  restart: always
+  networks:
+    - coolify
+
+services:
+  # ===========================================================================
+  # Database Init (run once to create Zitadel database)
+  # ===========================================================================
+  # Usage: docker-compose -f docker-compose.auth.yml run --rm zitadel-db-init
+  zitadel-db-init:
+    image: postgres:17-alpine
+    env_file:
+      - ./.env
+    networks:
+      - coolify
+    entrypoint:
+      - sh
+      - -c
+      - |
+        # Parse DATABASE_URL (format: postgresql://user:password@host:port/database)
+        DB_URL_NO_PROTO=$${DATABASE_URL#postgresql://}
+        DB_URL_NO_PROTO=$${DB_URL_NO_PROTO#postgres://}
+        USER_PASS=$${DB_URL_NO_PROTO%%@*}
+        DB_USER=$${USER_PASS%%:*}
+        DB_PASS=$${USER_PASS#*:}
+        HOST_PORT_DB=$${DB_URL_NO_PROTO#*@}
+        HOST_PORT=$${HOST_PORT_DB%%/*}
+        DB_HOST=$${HOST_PORT%%:*}
+        DB_PORT=$${HOST_PORT#*:}
+        [ "$$DB_PORT" = "$$DB_HOST" ] && DB_PORT=5432
+
+        echo "Creating Zitadel database on $$DB_HOST:$$DB_PORT..."
+        export PGPASSWORD="$$DB_PASS"
+        psql -h "$$DB_HOST" -p "$$DB_PORT" -U "$$DB_USER" -d postgres -c 'CREATE DATABASE zitadel;' 2>/dev/null || echo 'Database may already exist'
+        echo 'Done! Zitadel database is ready.'
+    profiles:
+      - init
+
+  # ===========================================================================
+  # Zitadel - Identity Provider
+  # ===========================================================================
+  zitadel:
+    build:
+      context: ./apps/auth
+      dockerfile: Dockerfile
+      args:
+        <<: *build-args
+        ZITADEL_PORT: ${ZITADEL_PORT:-7777}
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      # DATABASE_URL is parsed by entrypoint.sh to configure Zitadel
+      # Format: postgresql://user:password@host:port/database
+      DATABASE_URL: ${DATABASE_URL}
+
+      # Port for Zitadel to listen on (default 8080)
+      ZITADEL_PORT: ${ZITADEL_PORT:-7777}
+
+      # Master key for encryption (must be exactly 32 characters)
+      ZITADEL_MASTERKEY: ${ZITADEL_MASTERKEY}
+
+      # External access configuration
+      ZITADEL_EXTERNALSECURE: "true"
+      ZITADEL_EXTERNALPORT: 443
+      ZITADEL_EXTERNALDOMAIN: ${ZITADEL_DOMAIN:-identity.fajrmission.org}
+
+      # Initial admin user (only used on first run)
+      ZITADEL_FIRSTINSTANCE_ORG_NAME: "Fajr Mission"
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_USERNAME: ${ZITADEL_ADMIN_USERNAME:-admin}
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD: ${ZITADEL_ADMIN_PASSWORD}
+
+      # Default settings
+      ZITADEL_DEFAULTINSTANCE_OIDCSETTINGS_ACCESSTOKENLIFETIME: 12h
+      ZITADEL_DEFAULTINSTANCE_OIDCSETTINGS_IDTOKENLIFETIME: 12h
+      ZITADEL_DEFAULTINSTANCE_OIDCSETTINGS_REFRESHTOKENIDLETEXPIRATION: 720h
+      ZITADEL_DEFAULTINSTANCE_OIDCSETTINGS_REFRESHTOKENEXPIRATION: 720h
+
+      # Enable passkeys/WebAuthn
+      ZITADEL_DEFAULTINSTANCE_LOGINPOLICY_PASSWORDLESSTYPE: 1
+      ZITADEL_DEFAULTINSTANCE_LOGINPOLICY_ALLOWUSERNAMEPASSWORD: "true"
+      ZITADEL_DEFAULTINSTANCE_LOGINPOLICY_ALLOWDOMAINDISCOVERY: "true"
+
+    expose:
+      - "${ZITADEL_PORT:-8080}"
+    networks:
+      - coolify
+    labels:
+      coolify.name: "Zitadel Identity"
+      coolify.description: "SSO Identity Provider"
+
+      # No caddy.* labels here on purpose: identity.fajrmission.org is served
+      # by the static /data/coolify/proxy/caddy/dynamic/sos-auth.caddy file on
+      # the box. These labels never worked (Coolify does not interpolate
+      # ${VAR} in labels, and caddy-docker-proxy >= 2.9 rejects "${" inside
+      # {{...}} templates), and duplicating a site already defined in a static
+      # file is a Caddy config error ("ambiguous site definition").
+
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget -q --spider http://localhost:${ZITADEL_PORT:-7777}/debug/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s  # First startup can take a while for DB migrations
+
+  # ===========================================================================
+  # OAuth2 Proxy - Analytics (Drizzle Studio)
+  # ===========================================================================
+  oauth2-proxy-analytics:
+    <<: *oauth2-proxy-common
+    env_file:
+      - ./.env
+      - ./.env.auth.local
+    environment:
+      # Pass MASTERPASS to be injected as Basic Auth to Drizzle Studio
+      OAUTH2_PROXY_UPSTREAM_BASIC_AUTH_PASSWORD: ${DRIZZLE_MASTERPASS}
+    command:
+      - --http-address=0.0.0.0:4180
+      - --upstream=http://drizzle-studio:4983
+      - --provider=oidc
+      - --oidc-issuer-url=https://${ZITADEL_DOMAIN:-identity.fajrmission.org}
+      - --client-id=${OAUTH2_PROXY_ANALYTICS_CLIENT_ID}
+      - --client-secret=${OAUTH2_PROXY_ANALYTICS_CLIENT_SECRET}
+      - --cookie-secret=${OAUTH2_PROXY_COOKIE_SECRET}
+      - --cookie-secure=true
+      - --cookie-name=_fajr_analytics_oauth2
+      - --cookie-domain=.fajrmission.org
+      - --email-domain=*
+      - --skip-provider-button=true
+      - --redirect-url=https://analytics.fajrmission.org/oauth2/callback
+      - --whitelist-domain=.fajrmission.org
+      - --reverse-proxy=true
+      - --pass-access-token=true
+      - --set-xauthrequest=true
+      # Pass basic auth to upstream (Drizzle Studio)
+      - --pass-basic-auth=true
+      - --basic-auth-password=${DRIZZLE_MASTERPASS}
+    expose:
+      - "4180"
+    labels:
+      coolify.name: "OAuth2 Proxy Analytics"
+      coolify.description: "SSO proxy for Drizzle Studio"
+
+      caddy: analytics.fajrmission.org
+      caddy.encode: gzip
+      caddy.reverse_proxy: "{{upstreams 4180}}"
+      # This container sits on two networks (coolify + the app network), and
+      # caddy-docker-proxy 2.8 emits {{upstreams}} in random order per poll,
+      # causing a Caddy reload every few seconds that kills every WebSocket
+      # on the box (PowerSync, LiveKit). Pin to one network so the generated
+      # Caddyfile is stable. Fixed upstream in caddy-docker-proxy v2.12.0.
+      caddy_ingress_network: coolify
+
+    depends_on:
+      zitadel:
+        condition: service_healthy
+
+  # ===========================================================================
+  # Storage Auth Proxy - Auto-login bridge for RustFS Console
+  # ===========================================================================
+  # This proxy sits between OAuth2 Proxy and RustFS Console.
+  # After SSO authentication, it automatically logs users into RustFS
+  # by injecting credentials into the login page.
+  storage-auth-proxy:
+    build:
+      context: ./apps/auth/storage-proxy
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      RUSTFS_HOST: rustfs-server
+      RUSTFS_PORT: "9001"
+      PROXY_PORT: "3001"
+      RUSTFS_ACCESS_KEY: ${OBJECT_STORAGE_KEY:-admin}
+      RUSTFS_SECRET_KEY: ${OBJECT_STORAGE_SECRET:-YourSecurePassword123!}
+    expose:
+      - "3001"
+    networks:
+      - coolify
+    labels:
+      coolify.name: "Storage Auth Proxy"
+      coolify.description: "Auto-login bridge for RustFS Console"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "-O", "/dev/null", "http://localhost:3001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  # ===========================================================================
+  # OAuth2 Proxy - Storage Console (RustFS)
+  # ===========================================================================
+  oauth2-proxy-storage:
+    <<: *oauth2-proxy-common
+    env_file:
+      - ./.env
+      - ./.env.auth.local
+    command:
+      - --http-address=0.0.0.0:4180
+      # Route through storage-auth-proxy for automatic RustFS login
+      - --upstream=http://storage-auth-proxy:3001
+      - --provider=oidc
+      - --oidc-issuer-url=https://${ZITADEL_DOMAIN:-identity.fajrmission.org}
+      - --client-id=${OAUTH2_PROXY_STORAGE_CLIENT_ID}
+      - --client-secret=${OAUTH2_PROXY_STORAGE_CLIENT_SECRET}
+      - --cookie-secret=${OAUTH2_PROXY_COOKIE_SECRET}
+      - --cookie-secure=true
+      - --cookie-name=_fajr_storage_oauth2
+      - --cookie-domain=.fajrmission.org
+      - --email-domain=*
+      - --skip-provider-button=true
+      - --redirect-url=https://storage-admin.fajrmission.org/oauth2/callback
+      - --whitelist-domain=.fajrmission.org
+      - --reverse-proxy=true
+      - --pass-access-token=true
+      - --set-xauthrequest=true
+    expose:
+      - "4180"
+    labels:
+      coolify.name: "OAuth2 Proxy Storage"
+      coolify.description: "SSO proxy for RustFS Console"
+
+    depends_on:
+      zitadel:
+        condition: service_healthy
+      storage-auth-proxy:
+        condition: service_healthy
+
+networks:
+  coolify:
+    name: coolify
+    external: true

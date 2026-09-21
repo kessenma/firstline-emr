@@ -1,0 +1,121 @@
+version: "3.8"
+
+# 🔧 TROUBLESHOOTING: If you encounter replication lock errors or 502 errors,
+# see docs/power-sync/TROUBLESHOOTING.md for step-by-step resolution
+
+# Required environment variables:
+#   DATABASE_URL - PostgreSQL connection string (e.g., postgres://user:pass@host:port/db)
+#   JWT_SECRET - JWT signing secret (must match web app)
+#
+# Optional environment variables (with defaults):
+#   NEXTAUTH_URL - Base URL for auth (default: https://fajrmission.org)
+#   NODE_ENV - Environment (default: production)
+#   POWERSYNC_LOG_LEVEL - Log level (default: info)
+#   POWERSYNC_PORT - PowerSync port (default: 6061)
+#   POWERSYNC_SLOT_NAME - Replication slot name (default: powersync_slot)
+#   POWERSYNC_PUBLICATION - Publication name (default: powersync_publication)
+
+services:
+  # Cleanup service - runs before PowerSync to clear stale locks and connections
+  powersync-cleanup:
+    image: postgres:17-alpine
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - coolify
+    entrypoint: /bin/sh
+    command: >
+      -c "
+      echo '🧹 Cleaning up PowerSync locks and connections...' &&
+
+      # Parse DATABASE_URL to extract components
+      DB_URL=\"$DATABASE_URL\" &&
+      DB_URL_NO_PROTO=\"$${DB_URL#postgres://}\" &&
+      DB_URL_NO_PROTO=\"$${DB_URL_NO_PROTO#postgresql://}\" &&
+      USER_PASS=\"$${DB_URL_NO_PROTO%%@*}\" &&
+      DB_USER=\"$${USER_PASS%%:*}\" &&
+      DB_PASS=\"$${USER_PASS#*:}\" &&
+      HOST_PORT_DB=\"$${DB_URL_NO_PROTO#*@}\" &&
+      HOST_PORT=\"$${HOST_PORT_DB%%/*}\" &&
+      DB_HOST=\"$${HOST_PORT%%:*}\" &&
+      DB_PORT=\"$${HOST_PORT#*:}\" &&
+      DB_NAME=\"$${HOST_PORT_DB#*/}\" &&
+      DB_NAME=\"$${DB_NAME%%\\?*}\" &&
+
+      export PGPASSWORD=\"$$DB_PASS\" &&
+      echo \"Connecting to $$DB_HOST:$$DB_PORT as $$DB_USER...\" &&
+
+      psql -h \"$$DB_HOST\" -p \"$$DB_PORT\" -U \"$$DB_USER\" -d \"$$DB_NAME\" -c \"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE application_name LIKE '%powersync%';\" &&
+      echo 'Waiting 3 seconds for connections to close...' &&
+      sleep 3 &&
+      psql -h \"$$DB_HOST\" -p \"$$DB_PORT\" -U \"$$DB_USER\" -d \"$$DB_NAME\" -c \"SELECT pg_drop_replication_slot(slot_name) FROM pg_replication_slots WHERE slot_name LIKE '%powersync%';\" 2>/dev/null || true &&
+      psql -h \"$$DB_HOST\" -p \"$$DB_PORT\" -U \"$$DB_USER\" -d \"$$DB_NAME\" -c \"UPDATE powersync.sync_rules SET state = 'STOPPED' WHERE state = 'ACTIVE';\" 2>/dev/null || true &&
+      psql -h \"$$DB_HOST\" -p \"$$DB_PORT\" -U \"$$DB_USER\" -d \"$$DB_NAME\" -c \"DELETE FROM powersync.locks;\" 2>/dev/null || true &&
+      echo '✅ Cleanup complete! Waiting 15 seconds for PostgreSQL to fully release resources...' &&
+      sleep 15 &&
+      echo '🎉 Ready for PowerSync to start!'
+      "
+    restart: "no"
+
+  powersync:
+    depends_on:
+      powersync-cleanup:
+        condition: service_completed_successfully
+    build:
+      context: ./apps/powersync-server
+      dockerfile: Dockerfile
+    restart: always
+    labels:
+      # Caddy reverse proxy configuration for sync.fajrmission.org
+      # Caddy natively handles WebSocket upgrades via reverse_proxy
+      caddy: sync.fajrmission.org
+      caddy.reverse_proxy: "{{upstreams 6061}}"
+      # Caddy kills upgraded (WebSocket) connections on every config reload,
+      # and caddy-docker-proxy reloads on any container churn (e.g. deploys).
+      # Let established sync streams survive reloads for up to 24h.
+      caddy.reverse_proxy.stream_close_delay: 24h
+      caddy.encode: gzip
+    environment:
+      # Database connection (parsed by entrypoint.sh)
+      DATABASE_URL: ${DATABASE_URL}
+
+      # Authentication
+      JWT_SECRET: ${JWT_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://fajrmission.org}
+
+      # PowerSync configuration
+      POWERSYNC_PORT: ${POWERSYNC_PORT:-6061}
+      POWERSYNC_LOG_LEVEL: ${POWERSYNC_LOG_LEVEL:-info}
+      POWERSYNC_SLOT_NAME: ${POWERSYNC_SLOT_NAME:-powersync_slot}
+      POWERSYNC_PUBLICATION: ${POWERSYNC_PUBLICATION:-powersync_publication}
+      POWERSYNC_SYNC_RULES_PATH: /config/sync-rules.yaml
+
+      # Environment
+      NODE_ENV: ${NODE_ENV:-production}
+
+    volumes:
+      - powersync-data:/data
+
+    # Internal only (no public port on the host)
+    expose:
+      - "${POWERSYNC_PORT:-6061}"
+
+    networks:
+      coolify:
+        aliases:
+          - powersync
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6061/probes/liveness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  powersync-data:
+    driver: local
+
+networks:
+  coolify:
+    external: true

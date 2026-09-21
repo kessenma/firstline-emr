@@ -1,0 +1,895 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+begin
+  require 'dotenv'
+  # Load both .env and .match.env files
+  # .match.env contains Apple ID and team settings for match
+  Dotenv.load(
+    File.join(__dir__, '.env'),
+    File.join(__dir__, '.match.env')
+  )
+rescue LoadError
+  UI.important("ℹ️  'dotenv' gem not available; ensure APP_STORE_CONNECT_API_PRIVATE_KEY_PATH is exported in your shell.")
+end
+
+EXPORT_OPTIONS_PATH = File.expand_path("../ExportOptions.plist", __dir__)
+
+# Entitlements the Release build asks for. Every key here must also be granted by the
+# provisioning profile, or the archive fails.
+APP_RELEASE_ENTITLEMENTS_PATH = File.expand_path("../FajrEMR/FajrEMR.Release.entitlements", __dir__)
+
+DISTRIBUTION_PROFILE_NAME = "match AppStore com.fajr.emr"
+
+PROVISIONING_PROFILE_PATHS = [
+  File.expand_path("~/Library/Developer/Xcode/UserData/Provisioning Profiles"),
+  File.expand_path("~/Library/MobileDevice/Provisioning Profiles")
+].freeze
+
+# Xcode toolchain selection ────────────────────────────────────────────────────
+#
+# Archiving against a BETA Xcode builds the app with a prerelease SDK. App Store
+# Connect accepts such a binary on *upload* and rejects it at *submission*
+# ("Unsupported SDK or Xcode version") — so the failure lands long after the ten
+# minutes of build that produced it.
+#
+# `xcode-select` is global machine state: installing an Xcode beta, or running its
+# first-launch setup, can make it the default for every project on the machine.
+# Rather than trust whatever is selected, resolve a released Xcode here and pin
+# DEVELOPER_DIR for the archive, the export and the upload — fastlane's `sh` and
+# the upload actions all inherit ENV, so one assignment covers the whole lane.
+#
+# Beta-ness is read from Apple's own marker rather than guessed from the path:
+#
+#   Contents/Resources/LicenseInfo.plist -> licenseType = GM    (released)
+#                                           licenseType = Beta  (prerelease)
+#
+# Matching "beta" in the path only works while the bundle happens to be named
+# Xcode-beta.app, which is a convention, not a guarantee — a beta renamed or moved
+# to Xcode.app would sail straight through. The path is still checked as a second
+# signal, but licenseType is the one that decides.
+XCODE_SEARCH_GLOBS = [
+  "/Applications/Xcode*.app",
+  File.expand_path("~/Applications/Xcode*.app")
+].freeze
+
+# Accepts either an .app bundle or its Contents/Developer dir; returns the bundle.
+def xcode_bundle_root(path)
+  return nil if path.nil?
+
+  path = path.to_s.strip
+  return nil if path.empty?
+
+  path = path.sub(%r{/Contents/Developer/?\z}, "")
+  path.end_with?(".app") ? path : nil
+end
+
+def xcode_info(bundle)
+  return nil if bundle.nil?
+
+  developer_dir = File.join(bundle, "Contents", "Developer")
+  return nil unless File.directory?(developer_dir)
+
+  read = lambda do |plist, key|
+    `/usr/libexec/PlistBuddy -c "Print :#{key}" "#{bundle}/Contents/#{plist}" 2>/dev/null`.strip
+  end
+
+  license = read.call("Resources/LicenseInfo.plist", "licenseType")
+  version = read.call("Info.plist", "CFBundleShortVersionString")
+  build   = read.call("version.plist", "ProductBuildVersion")
+
+  {
+    bundle: bundle,
+    developer_dir: developer_dir,
+    version: version.empty? ? "unknown" : version,
+    build: build.empty? ? "unknown" : build,
+    license: license.empty? ? "unreadable" : license,
+    # Either signal is enough to disqualify it. An unreadable licenseType on a
+    # normally-named bundle is *not* treated as beta — that would block the only
+    # Xcode on a machine over a plist that failed to parse.
+    beta: license.match?(/beta/i) || bundle.match?(/beta/i)
+  }
+end
+
+# Sortable version key: "26.5" -> [26, 5]
+def xcode_version_key(info)
+  info[:version].split(".").map(&:to_i)
+end
+
+def use_xcode!(info, reason)
+  ENV['DEVELOPER_DIR'] = info[:developer_dir]
+  UI.message("🛠  Xcode #{info[:version]} (build #{info[:build]}, licenseType #{info[:license]}) — #{reason}")
+  UI.message("   #{info[:developer_dir]}")
+  info
+end
+
+# Pin DEVELOPER_DIR to a released Xcode, switching away from a beta if one is
+# selected. Memoised: several lanes call it, and it should log once.
+#
+#   XCODE_PATH=/Applications/Xcode.app   pin a specific Xcode for one run
+#   ALLOW_BETA_XCODE=1                   build with a beta anyway (not submittable)
+def select_release_xcode!
+  return @selected_xcode if @selected_xcode
+
+  allow_beta = ENV['ALLOW_BETA_XCODE'] == '1'
+
+  # 1. An explicit XCODE_PATH wins, but is still checked — pinning the wrong thing
+  #    should say so now, not at submission.
+  requested = ENV['XCODE_PATH'].to_s.strip
+  unless requested.empty?
+    info = xcode_info(xcode_bundle_root(requested))
+    if info.nil?
+      UI.user_error!(
+        "❌ XCODE_PATH=#{requested.inspect} is not a usable Xcode installation.\n" \
+        "   Expected an .app bundle (or its Contents/Developer), e.g. /Applications/Xcode.app"
+      )
+    end
+    if info[:beta] && !allow_beta
+      UI.user_error!(
+        "❌ XCODE_PATH points at a BETA Xcode — #{info[:version]} (licenseType #{info[:license]}).\n\n" \
+        "   App Store Connect accepts beta-built binaries on upload and rejects them at\n" \
+        "   submission ('Unsupported SDK or Xcode version').\n\n" \
+        "   Point XCODE_PATH at a released Xcode, or set ALLOW_BETA_XCODE=1 to build anyway."
+      )
+    end
+    return @selected_xcode = use_xcode!(info, "pinned via XCODE_PATH")
+  end
+
+  # 2. Otherwise take what is already selected, if it is released.
+  current = xcode_info(
+    xcode_bundle_root(ENV['DEVELOPER_DIR']) || xcode_bundle_root(`xcode-select -p 2>/dev/null`)
+  )
+
+  return @selected_xcode = use_xcode!(current, "already selected") if current && !current[:beta]
+
+  if current && allow_beta
+    UI.important(
+      "⚠️  ALLOW_BETA_XCODE=1 — building with BETA Xcode #{current[:version]} (#{current[:build]}). " \
+      "This binary can be uploaded but will be rejected at submission."
+    )
+    return @selected_xcode = use_xcode!(current, "beta, explicitly allowed")
+  end
+
+  # 3. The selection is a beta (or unreadable) — fall back to the newest release.
+  fallback = XCODE_SEARCH_GLOBS
+    .flat_map { |glob| Dir.glob(glob) }
+    .uniq
+    .filter_map { |bundle| xcode_info(bundle) }
+    .reject { |info| info[:beta] }
+    .max_by { |info| xcode_version_key(info) }
+
+  if fallback.nil?
+    UI.user_error!(
+      "❌ #{current ? "The selected Xcode is a BETA (#{current[:version]}, build #{current[:build]})" : 'Could not read the selected Xcode'}, " \
+      "and no released Xcode was found in:\n" \
+      "#{XCODE_SEARCH_GLOBS.map { |glob| "     #{glob}" }.join("\n")}\n\n" \
+      "   Install a released Xcode, or pin one for this run:\n" \
+      "     XCODE_PATH=/Applications/Xcode.app pnpm run build:ios\n\n" \
+      "   To build with the beta anyway (not submittable): ALLOW_BETA_XCODE=1"
+    )
+  end
+
+  if current
+    UI.important(
+      "⚠️  Selected Xcode is a BETA — #{current[:version]} (build #{current[:build]}) at #{current[:bundle]}.\n" \
+      "    Switching to a released Xcode for this build; `xcode-select` is left untouched."
+    )
+  else
+    UI.important("⚠️  Could not read the selected Xcode — falling back to a released one.")
+  end
+
+  @selected_xcode = use_xcode!(fallback, "beta fallback")
+end
+
+# SHA-1 fingerprints of every codesigning identity we hold a private key for.
+def keychain_identity_shas
+  `security find-identity -v -p codesigning`.scan(/\)\s+([0-9A-F]{40})\s+"/).flatten
+end
+
+# Resolve CODE_SIGN_IDENTITY to a specific certificate fingerprint instead of the
+# ambiguous common name ("Apple Distribution").
+#
+# Multiple match repos on a single machine issue distribution certs that share the
+# exact same common name, so passing the name lets Xcode pick one arbitrarily —
+# usually the newest, which may belong to an unrelated app. When the pick isn't the
+# cert embedded in our profile the archive dies with:
+#
+#   Provisioning profile "match AppStore com.fajr.emr" doesn't include signing
+#   certificate "Apple Distribution: ... "
+#
+# Reading the fingerprint back out of the installed profile keeps the build correct
+# across both the name collision and future certificate renewals.
+def distribution_signing_identity!(profile_name = DISTRIBUTION_PROFILE_NAME)
+  @distribution_signing_identity ||= {}
+  return @distribution_signing_identity[profile_name] if @distribution_signing_identity[profile_name]
+
+  require 'openssl'
+  require 'plist'
+
+  profiles = PROVISIONING_PROFILE_PATHS
+    .flat_map { |dir| Dir.glob(File.join(dir, "*.{mobileprovision,provisionprofile}")) }
+    .filter_map do |path|
+      xml = `security cms -D -i "#{path}" 2>/dev/null`
+      next if xml.strip.empty?
+
+      plist = begin
+        Plist.parse_xml(xml)
+      rescue StandardError
+        nil
+      end
+      next unless plist && plist["Name"] == profile_name
+
+      expires = plist["ExpirationDate"]
+      expires = expires.to_time if expires.respond_to?(:to_time)
+      next if expires && expires < Time.now
+
+      created = plist["CreationDate"]
+      created = created.to_time if created.respond_to?(:to_time)
+
+      {
+        path: path,
+        expires: expires,
+        created: created,
+        entitlements: plist["Entitlements"] || {},
+        certs: Array(plist["DeveloperCertificates"])
+      }
+    end
+
+  if profiles.empty?
+    UI.user_error!(
+      "❌ No unexpired provisioning profile named #{profile_name.inspect} is installed.\n" \
+      "   Run: bundle exec fastlane match appstore --readonly"
+    )
+  end
+
+  usable = keychain_identity_shas
+
+  # Newest profile first, so a freshly synced one wins over stale duplicates.
+  #
+  # Expiry alone is not enough to order these. A profile expires when its certificate
+  # does, so a profile reissued to add a capability carries the SAME expiry as the one
+  # it replaces — and `sort_by` is not stable, making the winner arbitrary between two
+  # profiles that differ only in the entitlements they grant. Break the tie on issue
+  # date, and prefer whichever actually satisfies the app's entitlements.
+  required_entitlement_keys = begin
+    require 'plist'
+    File.exist?(APP_RELEASE_ENTITLEMENTS_PATH) ? (Plist.parse_xml(File.read(APP_RELEASE_ENTITLEMENTS_PATH)) || {}).keys : []
+  rescue StandardError
+    []
+  end
+
+  resolved = profiles
+    .sort_by do |profile|
+      satisfies = required_entitlement_keys.all? { |key| profile[:entitlements].key?(key) }
+      [satisfies ? 1 : 0, profile[:expires] || Time.at(0), profile[:created] || Time.at(0)]
+    end
+    .reverse
+    .flat_map { |profile| profile[:certs].map { |blob| [profile, blob] } }
+    .filter_map do |profile, blob|
+      der = blob.respond_to?(:string) ? blob.string : blob.to_s
+      cert = begin
+        OpenSSL::X509::Certificate.new(der)
+      rescue StandardError
+        next
+      end
+      next if cert.not_after < Time.now
+
+      [profile, cert, OpenSSL::Digest::SHA1.new(cert.to_der).hexdigest.upcase]
+    end
+    .find { |_profile, _cert, sha| usable.include?(sha) }
+
+  if resolved.nil?
+    UI.user_error!(
+      "❌ No keychain certificate matches profile #{profile_name.inspect}.\n" \
+      "   The profile's certificate is missing or its private key isn't in the keychain.\n" \
+      "   Run: bundle exec fastlane match appstore --readonly"
+    )
+  end
+
+  profile, cert, sha = resolved
+  common_name = cert.subject.to_a.find { |name| name[0] == "CN" }&.at(1)
+  UI.message("🔏 Signing identity: #{common_name} (#{sha})")
+  UI.message("   from profile #{File.basename(profile[:path])}")
+
+  @resolved_distribution_profile ||= {}
+  @resolved_distribution_profile[profile_name] = profile
+
+  @distribution_signing_identity[profile_name] = sha
+end
+
+# A provisioning profile grants a fixed set of entitlements, frozen at the moment it
+# was issued. Add a capability to the app (push, associated domains, …) after that
+# point and the installed profile silently keeps the old set — match has to reissue it.
+#
+# Xcode only notices deep into the archive, and reports it as a wall of
+#   Provisioning profile "..." doesn't include the ... capability
+# after several minutes of compiling. Compare up front and say what actually fixes it.
+def verify_profile_capabilities!(profile_name = DISTRIBUTION_PROFILE_NAME)
+  unless File.exist?(APP_RELEASE_ENTITLEMENTS_PATH)
+    UI.important("⚠️  No Release entitlements at #{APP_RELEASE_ENTITLEMENTS_PATH}; skipping capability check.")
+    return
+  end
+
+  require 'plist'
+
+  # Resolves (and memoises) the profile the archive will actually be signed with.
+  distribution_signing_identity!(profile_name)
+  profile = (@resolved_distribution_profile || {})[profile_name]
+  return if profile.nil?
+
+  required = Plist.parse_xml(File.read(APP_RELEASE_ENTITLEMENTS_PATH))
+  if required.nil?
+    UI.important("⚠️  Could not parse #{APP_RELEASE_ENTITLEMENTS_PATH}; skipping capability check.")
+    return
+  end
+
+  granted = begin
+    xml = `security cms -D -i "#{profile[:path]}" 2>/dev/null`
+    (Plist.parse_xml(xml) || {})["Entitlements"] || {}
+  rescue StandardError
+    {}
+  end
+
+  missing = required.keys.reject { |key| granted.key?(key) }
+
+  # aps-environment is present in both but can disagree (development vs production).
+  mismatched = required.keys.select do |key|
+    next false unless granted.key?(key)
+    next false unless required[key].is_a?(String) && granted[key].is_a?(String)
+    required[key] != granted[key]
+  end
+
+  return if missing.empty? && mismatched.empty?
+
+  details = []
+  missing.each { |key| details << "     • #{key} — not granted by the profile" }
+  mismatched.each { |key| details << "     • #{key} — app wants #{required[key].inspect}, profile grants #{granted[key].inspect}" }
+
+  UI.user_error!(
+    "❌ The installed provisioning profile is out of date — it predates capabilities the app now uses.\n\n" \
+    "   Profile: #{File.basename(profile[:path])} (issued #{profile[:created] ? profile[:created].strftime('%Y-%m-%d') : 'unknown'})\n" \
+    "   Mismatch against #{File.basename(APP_RELEASE_ENTITLEMENTS_PATH)}:\n" \
+    "#{details.join("\n")}\n\n" \
+    "   Fix — re-sync the profile from the match repo, then deploy again:\n" \
+    "     pnpm fastlane:sync\n\n" \
+    "   If that reports no change, the profile in the match repo is stale too and has to\n" \
+    "   be reissued against the App ID's current capabilities:\n" \
+    "     pnpm fastlane:sync:force\n\n" \
+    "   (Enable the capability on the App ID in the Developer Portal first if it isn't already.)"
+  )
+end
+
+# `xcodebuild -exportArchive` takes its signing config from ExportOptions.plist rather
+# than the command line, so the checked-in plist hits the same ambiguous-name problem
+# described above. Render a copy with `signingCertificate` pinned to the resolved
+# fingerprint — Apple accepts a SHA-1 hash there as well as a name.
+#
+# The repo's ExportOptions.plist stays the source of truth for every other key; only
+# the certificate is rewritten, and only in this throwaway copy.
+def export_options_with_resolved_identity(source_path = EXPORT_OPTIONS_PATH)
+  require 'plist'
+  require 'tmpdir'
+
+  UI.user_error!("❌ ExportOptions.plist not found at: #{source_path}") unless File.exist?(source_path)
+
+  options = Plist.parse_xml(File.read(source_path))
+  UI.user_error!("❌ Could not parse ExportOptions.plist at: #{source_path}") if options.nil?
+
+  options["signingCertificate"] = distribution_signing_identity!
+
+  rendered = File.join(Dir.mktmpdir("fajr-export-options"), "ExportOptions.plist")
+  File.write(rendered, options.to_plist)
+  rendered
+end
+
+# Build-number drift guard ─────────────────────────────────────────────────────
+#
+# `ios-version.json` is a purely local counter. It does not drift on its own — but
+# a deploy that uploads and then never has its bump committed leaves the file behind
+# what App Store Connect already holds. Observed 2026-08-24: the file sat at build
+# 128 while ASC held 128, 129 and 130, so the next `bump patch` would have produced
+# build 129 — a duplicate of an existing upload, rejected only *after* a full archive.
+#
+# `bump-ios-version.js` always does `build += 1` (every bump type), so the number the
+# next archive will carry is simply build + 1. Require that to be greater than the
+# newest build on App Store Connect.
+#
+# Runs before the bump, deliberately: an abort here must not leave a bump behind, for
+# the same reason verify_profile_capabilities! runs early.
+#
+# This uses fastlane's own latest_testflight_build_number action with the API key
+# already configured in fastlane/.env — no extra tooling, and nothing that moves this
+# project off fastlane.
+def verify_build_number_ahead_of_asc!
+  version_file = File.expand_path("../../ios-version.json", __dir__)
+  unless File.exist?(version_file)
+    UI.important("⚠️  No ios-version.json at #{version_file}; skipping build-number drift check.")
+    return
+  end
+
+  local_build = begin
+    JSON.parse(File.read(version_file))["build"].to_i
+  rescue StandardError => e
+    UI.important("⚠️  Could not read #{File.basename(version_file)} (#{e.message}); skipping drift check.")
+    return
+  end
+
+  # Best-effort: a network blip or an ASC outage must not block a build. The upload
+  # would still reject a duplicate, which is the backstop this check exists to front-run.
+  latest = begin
+    latest_testflight_build_number(
+      api_key: app_store_connect_api_key(
+        key_id: ENV['APP_STORE_CONNECT_API_KEY_ID'],
+        issuer_id: ENV['APP_STORE_CONNECT_ISSUER_ID'],
+        key_filepath: app_store_connect_key_path!,
+        in_house: false
+      ),
+      app_identifier: ENV['APP_IDENTIFIER'] || "com.fajr.emr",
+      platform: "ios"
+    ).to_i
+  rescue StandardError => e
+    UI.important("⚠️  Couldn't read the latest build number from App Store Connect (#{e.message}); skipping drift check.")
+    return
+  end
+
+  next_build = local_build + 1
+
+  if local_build < latest
+    UI.user_error!(
+      "❌ ios-version.json has drifted behind App Store Connect.\n\n" \
+      "   ios-version.json build : #{local_build}  (this deploy would upload #{next_build})\n" \
+      "   newest build on ASC    : #{latest}\n\n" \
+      "   Build #{next_build} is already taken, so the upload would be rejected after a full archive.\n" \
+      "   This happens when a deploy uploads but its version bump is never committed.\n\n" \
+      "   Fix — set ios-version.json to the newest uploaded build, then re-run:\n" \
+      "     apps/mobile/ios-version.json -> \"build\": #{latest}   (and \"patch\": #{latest - 1})\n" \
+      "     node scripts/bump-ios-version.js init\n\n" \
+      "   The next bump then produces build #{latest + 1}."
+    )
+  end
+
+  UI.message("🔢 Build number: #{next_build} next, #{latest} newest on App Store Connect — clear.")
+end
+
+def app_store_connect_key_path!
+  primary = ENV['APP_STORE_CONNECT_API_PRIVATE_KEY_PATH']
+  fallback = ENV['APP_STORE_CONNECT_API_KEY_PATH']
+  key_path = [primary, fallback].compact.map(&:strip).find { |value| !value.empty? }
+
+  UI.user_error!("❌ Set APP_STORE_CONNECT_API_PRIVATE_KEY_PATH in ios/fastlane/.env or export it before running Fastlane.") unless key_path
+
+  absolute_path = File.expand_path(key_path, __dir__)
+  UI.user_error!("❌ API key file not found at: #{absolute_path}") unless File.exist?(absolute_path)
+
+  absolute_path
+end
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Description of what the lane does"
+  lane :custom_lane do
+    # add actions here: https://docs.fastlane.tools/actions
+  end
+
+  desc "Build and archive the app for distribution"
+  lane :build do
+    # Build the app with automatic signing
+    build_app(
+      scheme: "FajrEMR",
+      workspace: "FajrEMR.xcworkspace",
+      configuration: "Release",
+      export_method: "development",
+      output_directory: "./build",
+      output_name: "FajrEMR.ipa",
+      clean: true,
+      include_bitcode: false,
+      include_symbols: true,
+      # Use automatic signing - Xcode will handle certificates and profiles
+      export_xcargs: "-allowProvisioningUpdates"
+    )
+  end
+
+  desc "Build and upload to TestFlight"
+  lane :beta do
+    # Never archive against a beta SDK — see select_release_xcode!
+    select_release_xcode!
+
+    # Fail now, not after a 10-minute archive, if the build number is already taken.
+    verify_build_number_ahead_of_asc!
+
+    # Bump version and build number via version script (keeps ios-version.json in sync)
+    sh("cd ../.. && node scripts/bump-ios-version.js bump patch")
+
+    # Archive the app with xcodebuild directly
+    archive_path = File.expand_path("./fastlane/build/FajrEMR.xcarchive")
+    export_path = File.expand_path("./fastlane/build/export")
+
+    sh("mkdir -p ./fastlane/build")
+    sh("rm -rf #{archive_path} #{export_path}")
+
+    sh("cd .. && xcodebuild -workspace FajrEMR.xcworkspace -scheme FajrEMR -configuration Release -destination 'generic/platform=iOS' -archivePath #{archive_path} CODE_SIGN_STYLE=Manual 'CODE_SIGN_IDENTITY=#{distribution_signing_identity!}' 'PROVISIONING_PROFILE_SPECIFIER=#{DISTRIBUTION_PROFILE_NAME}' archive")
+
+    # Export the archive to a properly signed IPA using ExportOptions.plist
+    export_options_path = export_options_with_resolved_identity
+    sh("mkdir -p #{export_path}")
+    sh("xcodebuild -exportArchive -archivePath #{archive_path} -exportPath #{export_path} -exportOptionsPlist #{export_options_path}")
+
+    ipa_path = "#{export_path}/FajrEMR.ipa"
+    UI.user_error!("IPA not found at #{ipa_path}") unless File.exist?(ipa_path)
+
+    # Upload to TestFlight with environment variable support
+    key_path = app_store_connect_key_path!
+    skip_waiting = ENV['SKIP_WAITING_FOR_BUILD_PROCESSING'] == 'true'
+    changelog_text = skip_waiting ? nil : "Automated build via Fastlane"
+
+    upload_to_testflight(
+      ipa: ipa_path,
+      api_key: {
+        key_id: ENV['APP_STORE_CONNECT_API_KEY_ID'],
+        issuer_id: ENV['APP_STORE_CONNECT_ISSUER_ID'],
+        key: File.binread(key_path)
+      },
+      skip_waiting_for_build_processing: skip_waiting,
+      wait_for_uploaded_build: !skip_waiting,
+      skip_submission: true,
+      distribute_external: ENV['DISTRIBUTE_EXTERNAL'] == 'true',
+      notify_external_testers: ENV['NOTIFY_EXTERNAL_TESTERS'] == 'true',
+      changelog: changelog_text
+    )
+
+    puts "✅ Successfully uploaded to TestFlight!"
+    puts "Build will be available for testing once processing is complete."
+  end
+
+  desc "Build and upload to App Store"
+  lane :release do
+    # Never archive against a beta SDK — see select_release_xcode!
+    select_release_xcode!
+
+    # Fail now, not after a 10-minute archive, if the build number is already taken.
+    verify_build_number_ahead_of_asc!
+
+    # Use custom version script to increment version and build number
+    sh("cd ../.. && node scripts/bump-ios-version.js bump patch")
+
+    # Build the app with manual signing
+    build_app(
+      scheme: "FajrEMR",
+      workspace: "FajrEMR.xcworkspace",
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: export_options_with_resolved_identity,
+      xcargs: %(CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="#{distribution_signing_identity!}" PROVISIONING_PROFILE_SPECIFIER="#{DISTRIBUTION_PROFILE_NAME}"),
+      output_directory: "./build",
+      output_name: "FajrEMR.ipa",
+      clean: true,
+      include_bitcode: false,
+      include_symbols: true,
+      export_xcargs: "-allowProvisioningUpdates"
+    )
+
+    # Upload to App Store Connect with environment variable support
+    key_path = app_store_connect_key_path!
+
+    upload_to_app_store(
+      api_key: {
+        key_id: ENV['APP_STORE_CONNECT_API_KEY_ID'],
+        issuer_id: ENV['APP_STORE_CONNECT_ISSUER_ID'],
+        key: File.binread(key_path)
+      },
+      force: true,
+      reject_if_possible: true,
+      skip_metadata: false,
+      skip_screenshots: true,
+      submit_for_review: false,
+      automatic_release: false
+    )
+
+    puts "✅ Successfully uploaded to App Store Connect!"
+    puts "Your app is ready for review. You can submit it manually from App Store Connect."
+  end
+
+  desc "Run tests"
+  lane :test do
+    run_tests(
+      workspace: "FajrEMR.xcworkspace",
+      scheme: "FajrEMR",
+      device: "iPhone 15",
+      clean: true
+    )
+  end
+
+  desc "Take screenshots for App Store"
+  lane :screenshots do
+    capture_screenshots(
+      workspace: "FajrEMR.xcworkspace",
+      scheme: "FajrEMR",
+      devices: [
+        "iPhone 15 Pro Max",
+        "iPhone 15",
+        "iPad Pro (12.9-inch) (6th generation)"
+      ],
+      languages: ["en-US"],
+      output_directory: "./screenshots",
+      clear_previous_screenshots: true,
+      override_status_bar: true,
+      localize_simulator: true
+    )
+  end
+
+  desc "Increment build number"
+  lane :bump_build do
+    # Use custom version script to increment build number only (patch bump increments build)
+    sh("cd ../.. && node scripts/bump-ios-version.js bump patch")
+  end
+
+  desc "Increment version number (patch)"
+  lane :bump_version_patch do
+    sh("cd ../.. && node scripts/bump-ios-version.js bump patch")
+  end
+
+  desc "Increment version number (minor)"
+  lane :bump_version_minor do
+    sh("cd ../.. && node scripts/bump-ios-version.js bump minor")
+  end
+
+  desc "Increment version number (major)"
+  lane :bump_version_major do
+    sh("cd ../.. && node scripts/bump-ios-version.js bump major")
+  end
+
+  desc "Upload pre-built IPA from Rock to TestFlight"
+  lane :upload_rock_testflight do |options|
+    # Default to the Rock-generated IPA location, but allow override
+    ipa_path = options[:ipa_path] || "../../.rock/cache/ios/export/FajrEMR.ipa"
+
+    # Convert to absolute path for Fastlane
+    ipa_path = File.absolute_path(ipa_path)
+
+    # Check if IPA exists
+    unless File.exist?(ipa_path)
+      UI.user_error!("❌ IPA not found at: #{ipa_path}. Make sure to run 'npm run build:ios:archive' first.")
+    end
+
+    UI.success("📦 Found IPA at: #{ipa_path}")
+
+    # Read version information from ios-version.json
+    version_file_path = File.expand_path("../../ios-version.json", __dir__)
+    if File.exist?(version_file_path)
+      begin
+        version_data = JSON.parse(File.read(version_file_path))
+        marketing_version = "#{version_data['major']}.#{version_data['minor']}.#{version_data['patch']}"
+        build_number = version_data['build']
+
+        UI.success("📱 App Version: #{marketing_version}")
+        UI.success("🔢 Build Number: #{build_number}")
+        puts ""
+        puts "🚀 Uploading build #{marketing_version} (#{build_number}) to TestFlight..."
+        puts ""
+      rescue JSON::ParserError => e
+        UI.important("⚠️  Could not parse version file: #{e.message}")
+      end
+    else
+      UI.important("⚠️  Version file not found at: #{version_file_path}")
+    end
+
+    # Upload to TestFlight with environment variable support
+    key_path = app_store_connect_key_path!
+    skip_waiting = ENV['SKIP_WAITING_FOR_BUILD_PROCESSING'] == 'true'
+    changelog_text = skip_waiting ? nil : (options[:changelog] || "Build created with Rock and uploaded via Fastlane")
+
+    upload_to_testflight(
+      ipa: ipa_path,
+      api_key: {
+        key_id: ENV['APP_STORE_CONNECT_API_KEY_ID'],
+        issuer_id: ENV['APP_STORE_CONNECT_ISSUER_ID'],
+        key: File.binread(key_path)
+      },
+      skip_waiting_for_build_processing: skip_waiting,
+      wait_for_uploaded_build: !skip_waiting,
+      skip_submission: true,
+      distribute_external: ENV['DISTRIBUTE_EXTERNAL'] == 'true',
+      notify_external_testers: ENV['NOTIFY_EXTERNAL_TESTERS'] == 'true',
+      changelog: changelog_text
+    )
+
+    # Show final confirmation with version details
+    if defined?(marketing_version) && defined?(build_number)
+      puts ""
+      puts "✅ Successfully uploaded build #{marketing_version} (#{build_number}) to TestFlight!"
+      puts "📱 App Version: #{marketing_version}"
+      puts "🔢 Build Number: #{build_number}"
+      puts "📦 IPA Location: #{ipa_path}"
+    else
+      puts "✅ Successfully uploaded Rock-built IPA to TestFlight!"
+    end
+    puts "Build will be available for testing once processing is complete."
+    puts ""
+    puts "🌐 View your build in App Store Connect:"
+    puts "https://appstoreconnect.apple.com/"
+  end
+
+  desc "Upload pre-built IPA from Rock to App Store Connect"
+  lane :upload_rock_app_store do |options|
+    # Default to the Rock-generated IPA location, but allow override
+    ipa_path = options[:ipa_path] || "../../.rock/cache/ios/export/FajrEMR.ipa"
+
+    # Convert to absolute path for Fastlane
+    ipa_path = File.absolute_path(ipa_path)
+
+    # Check if IPA exists
+    unless File.exist?(ipa_path)
+      UI.user_error!("❌ IPA not found at: #{ipa_path}. Make sure to run 'npm run build:ios:archive' first.")
+    end
+
+    UI.success("📦 Found IPA at: #{ipa_path}")
+
+    # Upload to App Store Connect with environment variable support
+    key_path = app_store_connect_key_path!
+
+    upload_to_app_store(
+      ipa: ipa_path,
+      api_key: {
+        key_id: ENV['APP_STORE_CONNECT_API_KEY_ID'],
+        issuer_id: ENV['APP_STORE_CONNECT_ISSUER_ID'],
+        key: File.binread(key_path)
+      },
+      force: true,
+      reject_if_possible: true,
+      skip_metadata: false,
+      skip_screenshots: true,
+      submit_for_review: options[:submit_for_review] || false,
+      automatic_release: false
+    )
+
+    puts "✅ Successfully uploaded Rock-built IPA to App Store Connect!"
+    puts "Your app is ready for review. You can submit it manually from App Store Connect."
+    puts ""
+    puts "🌐 View your build in App Store Connect:"
+    puts "https://appstoreconnect.apple.com/"
+  end
+
+  desc "Build with Rock and upload to TestFlight (end-to-end)"
+  lane :rock_beta do |options|
+    # Never archive against a beta SDK — see select_release_xcode!
+    select_release_xcode!
+
+    # Fail now, not after a 10-minute archive, if the build number is already taken.
+    verify_build_number_ahead_of_asc!
+
+    # Check signing before bumping the version: a failed archive still leaves the bump
+    # behind, so repeated signing failures silently inflate the build number.
+    verify_profile_capabilities!
+
+    # Use custom version script to increment build number (and optionally marketing version)
+    if ENV['BUMP_MARKETING_VERSION'] == '1'
+      bump_type = ENV['BUMP_MARKETING_VERSION_BUMP_TYPE'] || 'patch'
+      sh("cd ../.. && node scripts/bump-ios-version.js bump #{bump_type}")
+    else
+      # Just increment build number by bumping patch (which increments build automatically)
+      sh("cd ../.. && node scripts/bump-ios-version.js bump patch")
+    end
+    build_number = get_build_number(xcodeproj: "FajrEMR.xcodeproj")
+    version_number = begin
+      get_version_number(xcodeproj: "FajrEMR.xcodeproj")
+    rescue StandardError => e
+      UI.important("Unable to read marketing version from Xcode project: #{e.message}")
+      ENV['MARKETING_VERSION'] || 'unknown'
+    end
+    UI.message("📦 Preparing version #{version_number} (build #{build_number}) for TestFlight…")
+
+    # Clean any cached archives to ensure version bump is reflected
+    sh("rm -rf ../../.rock/cache/ios/archive/* ../../.rock/cache/ios/export/*")
+
+    # Build and archive with xcodebuild directly (Rock's --archive flag tries to export which fails)
+    sh("mkdir -p ../../.rock/cache/ios/archive")
+
+    # SWIFT_PRECOMPILE_BRIDGING_HEADER=NO: Xcode 26.x fails to archive with a
+    # precompiled Objective-C bridging header — a Swift compile loads the bridging
+    # header PCH whose AST references a Clang module (e.g. RCTDeprecation) that the
+    # consuming compilation reports as "not defined in any loaded module map file",
+    # aborting the archive. Skipping the PCH avoids the mismatch; the header is still
+    # imported normally, just not precompiled.
+    sh("cd .. && xcodebuild -workspace FajrEMR.xcworkspace -scheme FajrEMR -configuration Release -destination 'generic/platform=iOS' -archivePath ../.rock/cache/ios/archive/FajrEMR.xcarchive CODE_SIGN_STYLE=Manual 'CODE_SIGN_IDENTITY=#{distribution_signing_identity!}' 'PROVISIONING_PROFILE_SPECIFIER=#{DISTRIBUTION_PROFILE_NAME}' DEVELOPMENT_TEAM=RHPLRY9X9P SWIFT_PRECOMPILE_BRIDGING_HEADER=NO archive")
+
+    # Properly export the archive to IPA using xcodebuild -exportArchive with ExportOptions.plist
+    sh("mkdir -p ../../.rock/cache/ios/export")
+    sh("rm -f ../../.rock/cache/ios/export/FajrEMR.ipa")
+    export_options_path = export_options_with_resolved_identity
+    sh("xcodebuild -exportArchive -archivePath ../../.rock/cache/ios/archive/FajrEMR.xcarchive -exportPath ../../.rock/cache/ios/export -exportOptionsPlist #{export_options_path}")
+
+    UI.success("📦 IPA created successfully at: .rock/cache/ios/export/FajrEMR.ipa")
+
+    # Upload the built IPA to TestFlight
+    upload_rock_testflight()
+
+    UI.success("🎉 Uploaded version #{version_number} (build #{build_number}) to TestFlight.")
+    puts "✅ Successfully built with Rock and uploaded to TestFlight!"
+  end
+
+  desc "Build with Rock and upload to App Store Connect (end-to-end)"
+  lane :rock_release do |options|
+    # Never archive against a beta SDK — see select_release_xcode!
+    select_release_xcode!
+
+    # Fail now, not after a 10-minute archive, if the build number is already taken.
+    verify_build_number_ahead_of_asc!
+
+    # See rock_beta — check signing before the version bump.
+    verify_profile_capabilities!
+
+    # Use custom version script to increment version and build numbers
+    if options[:bump_type] || ENV['BUMP_MARKETING_VERSION'] == '1'
+      bump_type = options[:bump_type] || ENV['BUMP_MARKETING_VERSION_BUMP_TYPE'] || 'patch'
+      sh("cd ../.. && node scripts/bump-ios-version.js bump #{bump_type}")
+    else
+      # Just increment build number by bumping patch (which increments build automatically)
+      sh("cd ../.. && node scripts/bump-ios-version.js bump patch")
+    end
+    build_number = get_build_number(xcodeproj: "FajrEMR.xcodeproj")
+    version_number = begin
+      get_version_number(xcodeproj: "FajrEMR.xcodeproj")
+    rescue StandardError => e
+      UI.important("Unable to read marketing version from Xcode project: #{e.message}")
+      ENV['MARKETING_VERSION'] || 'unknown'
+    end
+    UI.message("📦 Preparing version #{version_number} (build #{build_number}) for App Store Connect…")
+
+    # Clean any cached archives to ensure version bump is reflected
+    sh("rm -rf ../../.rock/cache/ios/archive/* ../../.rock/cache/ios/export/*")
+
+    # Build and archive with xcodebuild directly (Rock's --archive flag tries to export which fails)
+    sh("mkdir -p ../../.rock/cache/ios/archive")
+
+    # SWIFT_PRECOMPILE_BRIDGING_HEADER=NO: Xcode 26.x fails to archive with a
+    # precompiled Objective-C bridging header — a Swift compile loads the bridging
+    # header PCH whose AST references a Clang module (e.g. RCTDeprecation) that the
+    # consuming compilation reports as "not defined in any loaded module map file",
+    # aborting the archive. Skipping the PCH avoids the mismatch; the header is still
+    # imported normally, just not precompiled.
+    sh("cd .. && xcodebuild -workspace FajrEMR.xcworkspace -scheme FajrEMR -configuration Release -destination 'generic/platform=iOS' -archivePath ../.rock/cache/ios/archive/FajrEMR.xcarchive CODE_SIGN_STYLE=Manual 'CODE_SIGN_IDENTITY=#{distribution_signing_identity!}' 'PROVISIONING_PROFILE_SPECIFIER=#{DISTRIBUTION_PROFILE_NAME}' DEVELOPMENT_TEAM=RHPLRY9X9P SWIFT_PRECOMPILE_BRIDGING_HEADER=NO archive")
+
+    # Properly export the archive to IPA using xcodebuild -exportArchive with ExportOptions.plist
+    sh("mkdir -p ../../.rock/cache/ios/export")
+    sh("rm -f ../../.rock/cache/ios/export/FajrEMR.ipa")
+    export_options_path = export_options_with_resolved_identity
+    sh("xcodebuild -exportArchive -archivePath ../../.rock/cache/ios/archive/FajrEMR.xcarchive -exportPath ../../.rock/cache/ios/export -exportOptionsPlist #{export_options_path}")
+
+    UI.success("📦 IPA created successfully at: .rock/cache/ios/export/FajrEMR.ipa")
+
+    # Upload the built IPA to App Store Connect
+    upload_rock_app_store(submit_for_review: options[:submit_for_review])
+
+    UI.success("🎉 Uploaded version #{version_number} (build #{build_number}) to App Store Connect.")
+    puts "✅ Successfully built with Rock and uploaded to App Store Connect!"
+  end
+
+
+
+  desc "Clean build artifacts"
+  lane :clean do
+    clear_derived_data
+    sh "rm -rf ../build"
+    sh "rm -rf ../screenshots"
+  end
+
+  error do |lane, exception|
+    # This block is called if there was an error running a lane
+    puts "❌ Fastlane failed in lane: #{lane}"
+    puts "Error: #{exception.message}"
+    puts "Check the logs above for more details."
+  end
+end

@@ -1,0 +1,53 @@
+// app/api/admin/POST/deny-users/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { inArray } from "drizzle-orm";
+import { verifySessionFromRequest } from "@/lib/dal";
+
+export async function POST(request: NextRequest) {
+  try {
+    // Verify admin access
+    const session = await verifySessionFromRequest(request);
+    if (!session || !session.isAdmin) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Parse request body to get user IDs
+    const { userIds } = await request.json();
+
+    if (!Array.isArray(userIds) || userIds.length === 0) {
+      return NextResponse.json(
+        { message: "Invalid or missing user IDs" },
+        { status: 400 },
+      );
+    }
+
+    // Update users to set authorized to false and add denialDate
+    const result = await db
+      .update(users)
+      .set({
+        authorized: false,
+        denialDate: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(inArray(users.id, userIds));
+
+    return NextResponse.json({
+      message: "Users denied successfully",
+      updatedCount: userIds.length,
+    });
+  } catch (error) {
+    console.error("Error denying users:", error);
+    return NextResponse.json(
+      { message: "Failed to deny users" },
+      { status: 500 },
+    );
+  }
+}

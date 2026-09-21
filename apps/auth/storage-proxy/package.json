@@ -1,0 +1,12 @@
+{
+  "name": "storage-auth-proxy",
+  "version": "1.0.0",
+  "description": "Auto-login proxy for RustFS console with SSO integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

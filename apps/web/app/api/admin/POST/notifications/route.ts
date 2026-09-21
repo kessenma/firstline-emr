@@ -1,0 +1,97 @@
+// app/api/admin/POST/notifications/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { notifications, notificationRecipients } from "@/db/schema";
+import { verifySessionFromRequest } from "@/lib/dal";
+
+interface CreateNotificationRequest {
+  message: string;
+  type?: "message" | "alert";
+  subject?: string;
+  patientId?: string;
+  redirectTo?: string;
+  recipients?: string[]; // Array of user IDs
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    // Verify admin access
+    const session = await verifySessionFromRequest(request);
+    if (!session || !session.isAdmin) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Parse request body
+    const {
+      message,
+      type = "message",
+      subject,
+      patientId,
+      redirectTo,
+      recipients = [],
+    }: CreateNotificationRequest = await request.json();
+
+    // Validate required fields
+    if (!message) {
+      return NextResponse.json(
+        { error: "Message is required" },
+        { status: 400 },
+      );
+    }
+
+    // Use a transaction for multi-table insert
+    const result = await db.transaction(async (tx) => {
+      // Create the notification
+      const [newNotification] = await tx
+        .insert(notifications)
+        .values({
+          message,
+          type,
+          subject,
+          patientId: patientId || null,
+          redirectTo: redirectTo || null,
+        })
+        .returning();
+
+      // Create notification recipient records if recipients provided
+      if (recipients.length > 0) {
+        const recipientRecords = recipients.map((userId) => ({
+          notificationId: newNotification.id,
+          userId,
+        }));
+
+        await tx.insert(notificationRecipients).values(recipientRecords);
+      }
+
+      return newNotification;
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        notification: result,
+      },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error("Error creating notification:", error);
+
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: "Failed to create notification", details: error.message },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json(
+      { error: "Failed to create notification" },
+      { status: 500 },
+    );
+  }
+}

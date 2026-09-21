@@ -1,0 +1,113 @@
+// app/api/patient/archived/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { type NextRequest, NextResponse } from "next/server";
+import { verifySessionFromRequest } from "@/lib/dal";
+import { db } from "@/db";
+import { patients, users } from "@/db/schema";
+import { eq, and, ne } from "drizzle-orm";
+
+export async function GET(request: NextRequest) {
+  try {
+    // Support both NextAuth sessions (web) and JWT tokens (mobile)
+    // Authentication using DAL
+    const session = await verifySessionFromRequest(request);
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Retrieve account type and user ID from the user object
+    const { id: userId, accountType } = user;
+
+    console.log(
+      "[Debug] Fetching archived patients for user:",
+      userId,
+      "accountType:",
+      accountType,
+    );
+
+    // Build query based on account type
+    const whereConditions =
+      accountType === "Evac"
+        ? and(
+            eq(patients.status, "Archived"),
+            eq(patients.coordinatorId, userId),
+          )
+        : eq(patients.status, "Archived");
+
+    const archivedPatients = await db
+      .select({
+        id: patients.id,
+        firstName: patients.firstName,
+        lastName: patients.lastName,
+        phone: patients.phone,
+        email: patients.email,
+        telegramChatId: patients.telegramChatId,
+        telegramAccessHash: patients.telegramAccessHash,
+        bmi: patients.bmi,
+        dob: patients.dob,
+        gender: patients.gender,
+        country: patients.country,
+        city: patients.city,
+        language: patients.language,
+        occupation: patients.occupation,
+        chiefComplaint: patients.chiefComplaint,
+        diagnosis: patients.diagnosis,
+        diagnosisCat: patients.diagnosisCat,
+        icd10: patients.icd10,
+        hospital: patients.hospital,
+        priority: patients.priority,
+        specialties: patients.specialties,
+        status: patients.status,
+        baselineAmbu: patients.baselineAmbu,
+        pmhx: patients.pmhx,
+        pshx: patients.pshx,
+        famhx: patients.famhx,
+        allergies: patients.allergies,
+        currentMeds: patients.currentMeds,
+        prevMeds: patients.prevMeds,
+        smokeCount: patients.smokeCount,
+        drinkCount: patients.drinkCount,
+        otherDrugs: patients.otherDrugs,
+        coordinatorId: patients.coordinatorId,
+        triagedBy: patients.triagedBy,
+        doctor: patients.doctor,
+        isPatient: patients.isPatient,
+        patientRelation: patients.patientRelation,
+        genderPreference: patients.genderPreference,
+        previouslyRegistered: patients.previouslyRegistered,
+        scheduledVidChat: patients.scheduledVidChat,
+        surgeryDate: patients.surgeryDate,
+        dashboardNotes: patients.dashboardNotes,
+        hasSubmittedInfo: patients.hasSubmittedInfo,
+        createdAt: patients.createdAt,
+        updatedAt: patients.updatedAt,
+        // Include coordinator details
+        coordinator: {
+          id: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          email: users.email,
+          accountType: users.accountType,
+        },
+      })
+      .from(patients)
+      .leftJoin(users, eq(patients.coordinatorId, users.id))
+      .where(whereConditions);
+
+    console.log(
+      "[Debug] Archived patients fetched from DB:",
+      archivedPatients.length,
+    );
+
+    return NextResponse.json(archivedPatients, { status: 200 });
+  } catch (error: any) {
+    console.error("[Error] Failed to fetch archived patients:", error.message);
+    return NextResponse.json(
+      { error: `Failed to fetch archived patients: ${error.message}` },
+      { status: 500 },
+    );
+  }
+}

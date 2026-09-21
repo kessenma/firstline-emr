@@ -1,0 +1,80 @@
+// app/api/admin/POST/forgot-password-link/route.ts
+
+export const dynamic = "force-dynamic";
+
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { verifySessionFromRequest } from "@/lib/dal";
+import { v4 as uuidv4 } from "uuid";
+
+const BASE_URL = process.env.NEXTAUTH_URL;
+
+export async function POST(request: NextRequest) {
+  try {
+    // Verify admin access
+    const session = await verifySessionFromRequest(request);
+    if (!session || !session.isAdmin) {
+      return NextResponse.json(
+        { message: "Unauthorized access" },
+        { status: 403 },
+      );
+    }
+
+    // Parse request body
+    const { userId } = await request.json();
+
+    if (!userId) {
+      return NextResponse.json(
+        { message: "User ID is required" },
+        { status: 400 },
+      );
+    }
+
+    // Check if user exists
+    const [user] = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        passwordResetCount: users.passwordResetCount,
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Generate unique reset code and link
+    const resetCode = uuidv4();
+    const resetLink = `${BASE_URL}/reset-password?code=${resetCode}`;
+    const expiration = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+
+    // Update user with the reset link and expiration
+    await db
+      .update(users)
+      .set({
+        adminResetPasswordLink: resetLink,
+        adminResetLinkExpiry: expiration,
+        passwordResetCount: (user.passwordResetCount || 0) + 1,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId));
+
+    console.log("Generated reset link:", resetLink);
+    console.log("Reset link expiration:", expiration);
+
+    return NextResponse.json({
+      resetLink,
+      resetLinkExpiration: expiration,
+    });
+  } catch (error) {
+    console.error("Error generating password reset link:", error);
+    return NextResponse.json(
+      { error: "Failed to generate reset link" },
+      { status: 500 },
+    );
+  }
+}
