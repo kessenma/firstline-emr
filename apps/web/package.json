@@ -135,7 +135,7 @@
     "react-zoom-pan-pinch": "^3.7.0",
     "recharts": "^3.2.1",
     "resend": "^4.0.0",
-    "sharp": "^0.34.4",
+    "sharp": "^0.35.4",
     "style-to-js": "^1.1.18",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
