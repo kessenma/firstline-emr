@@ -4,7 +4,7 @@
 import { useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import type { ProfileUpdateRequest } from '@fajr/shared/admin';
+import type { ProfileUpdateRequest } from '@firstline/shared/admin';
 
 export type { ProfileUpdateRequest };
 

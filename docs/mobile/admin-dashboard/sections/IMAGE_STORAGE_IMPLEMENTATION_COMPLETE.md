@@ -827,7 +827,7 @@ Once backend endpoints are implemented, this section will be **100% production-r
 
 **Section 3.12 - Image Storage Section (Frontend)**  
 of the  
-**Fajr Mission EMR Mobile Admin Dashboard**
+**Firstline Mobile Admin Dashboard**
 
 Has been successfully implemented, tested, documented, and integrated according to all frontend specifications and quality standards.
 

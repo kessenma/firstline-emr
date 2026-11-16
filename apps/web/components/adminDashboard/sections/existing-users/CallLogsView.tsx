@@ -27,7 +27,7 @@ import {
   X,
   Users,
 } from "lucide-react";
-import { formatDuration, type CallStatus } from "@fajr/shared/calls";
+import { formatDuration, type CallStatus } from "@firstline/shared/calls";
 import { cn } from "@/lib/utils";
 import {
   useCallLogsViewModel,

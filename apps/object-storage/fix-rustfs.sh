@@ -14,10 +14,10 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Configuration from environment variables
-ENDPOINT="${OBJECT_STORAGE_ENDPOINT:-s3.emr.fajr.org}"
+ENDPOINT="${OBJECT_STORAGE_ENDPOINT:-s3.firstline.care}"
 ACCESS_KEY="${OBJECT_STORAGE_KEY:-admin}"
 SECRET_KEY="${OBJECT_STORAGE_SECRET:-YourSecurePassword123!}"
-BUCKET="${OBJECT_STORAGE_BUCKET:-fajr-media}"
+BUCKET="${OBJECT_STORAGE_BUCKET:-firstline-media}"
 REGION="${OBJECT_STORAGE_REGION:-us-east-1}"
 PORT="${OBJECT_STORAGE_PORT:-9100}"
 

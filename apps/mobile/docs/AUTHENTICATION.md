@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Fajr-EMR mobile app uses a local-first authentication system powered by Couchbase Lite. User credentials are stored securely in the local database, allowing offline authentication.
+The Firstline-EMR mobile app uses a local-first authentication system powered by Couchbase Lite. User credentials are stored securely in the local database, allowing offline authentication.
 
 ## How It Works
 
@@ -90,7 +90,7 @@ const config = new DatabaseConfiguration();
 const encryptionKey = new EncryptionKey('your-secure-key');
 config.encryptionKey = encryptionKey;
 
-const database = new Database('fajr-emr', config);
+const database = new Database('firstline-emr', config);
 ```
 
 #### 3. Secure Key Storage
@@ -182,7 +182,7 @@ When implementing sync with Couchbase Sync Gateway:
 import { Replicator, ReplicatorConfiguration, URLEndpoint, BasicAuthenticator } from 'cbl-reactnative';
 
 const setupSync = async (email: string, password: string) => {
-  const endpoint = new URLEndpoint('wss://your-sync-gateway.com:4984/fajr-emr');
+  const endpoint = new URLEndpoint('wss://your-sync-gateway.com:4984/firstline-emr');
   const config = new ReplicatorConfiguration(database, endpoint);
   
   // Use basic auth

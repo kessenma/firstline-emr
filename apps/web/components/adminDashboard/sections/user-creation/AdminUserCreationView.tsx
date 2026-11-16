@@ -14,7 +14,7 @@ import { RadioCard } from '@/components/ui/radio-card';
 import { DoctorSpecialties } from '@/data/doctorSpecialty.enum';
 import { LanguagesList } from '@/data/languages.enum';
 import { AlertCircle, CheckCircle, Mail, User, Calendar, Globe, Languages, Eye, EyeOff, UserCog, UserPlus } from 'lucide-react';
-import { getRoleTheme } from '@fajr/shared/theme';
+import { getRoleTheme } from '@firstline/shared/theme';
 import { RoleIcon } from '@/components/ui/RoleIcon';
 import { AdminCreatedUsers } from '../../shared/adminCreatedUsers';
 import { PendingAdminCreatedUsers } from '../../shared/PendingAdminCreatedUsers';

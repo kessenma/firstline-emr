@@ -5,7 +5,7 @@
 import React, { memo, useState } from "react";
 import Image from "next/image";
 import { Play, ImageOff, FileText, Music, File } from "lucide-react";
-import type { MediaItem } from "@fajr/shared/media";
+import type { MediaItem } from "@firstline/shared/media";
 import { cn } from "@/lib/utils";
 
 interface MediaThumbnailProps {

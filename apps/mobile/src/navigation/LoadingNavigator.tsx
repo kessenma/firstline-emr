@@ -2,9 +2,10 @@
 // Loading screen navigator to show while app initializes
 
 import React from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { FirstlineMark } from '../components/icons/FirstlineMark';
 
 const Stack = createStackNavigator();
 
@@ -12,14 +13,10 @@ const LoadingScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image
-          source={require('../assets/fajr-triage-logo.png')}
-          style={styles.logoImage}
-          resizeMode="contain"
-        />
+        <FirstlineMark style={styles.logoImage} />
       </View>
       <ActivityIndicator size="large" color="#007AFF" style={styles.spinner} />
-      <Text style={styles.title}>Fajr EMR</Text>
+      <Text style={styles.title}>Firstline</Text>
       <Text style={styles.subtitle}>Loading your workspace...</Text>
     </View>
   );

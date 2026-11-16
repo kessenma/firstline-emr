@@ -256,7 +256,7 @@ apps/mobile/.rock/cache/ios/export/FajrEMR.ipa
 
 **Full Path:**
 ```
-/Users/kyleessenmacher/WS/fajr-medflow-emr/apps/mobile/.rock/cache/ios/export/FajrEMR.ipa
+/Users/kyleessenmacher/WS/firstline-emr/apps/mobile/.rock/cache/ios/export/FajrEMR.ipa
 ```
 
 This is the file that gets uploaded to TestFlight. You can:

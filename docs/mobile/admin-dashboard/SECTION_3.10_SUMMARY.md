@@ -168,7 +168,7 @@ Color coding:
 4. Taps "Open Analytics Dashboard" button
 5. Button shows "Opening..." state
 6. Analytics dashboard opens in browser
-7. User logs in with MedFlow credentials
+7. User logs in with Firstline credentials
 8. User views analytics in browser
 
 ### Copy URL Flow
@@ -189,7 +189,7 @@ Color coding:
 
 ### Analytics URL
 
-- Default: `https://analytics.dev.emr.fajrscientific.org/login`
+- Default: `https://analytics.dev.firstline.care/login`
 - Can be configured via environment variable
 - TODO: Get from app config/environment
 

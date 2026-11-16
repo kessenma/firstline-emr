@@ -6,7 +6,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   AppState,
   AppStateStatus,
   Linking,
@@ -21,6 +20,7 @@ import { pushNotificationService } from '../services/PushNotificationService';
 import { authService } from '../services/AuthService';
 import { SessionUser } from '../navigation/MainNavigator';
 import { useThemeColors } from '../contexts/ThemeContext';
+import { FirstlineMark } from '../components/icons/FirstlineMark';
 
 interface WaitingRoomScreenProps {
   user: SessionUser;
@@ -148,11 +148,7 @@ export default function WaitingRoomScreen({
       <View style={styles.content}>
         {/* Logo */}
         <View style={styles.logoContainer}>
-          <Image
-            source={require('../assets/fajr-triage-logo.png')}
-            style={styles.logoImage}
-            resizeMode="contain"
-          />
+          <FirstlineMark style={styles.logoImage} />
         </View>
 
         {/* Welcome Message */}

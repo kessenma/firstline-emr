@@ -2,7 +2,7 @@ import type { UseFormReturn } from "react-hook-form"
 import type { z } from "zod/v3"
 import type { DoctorSpecialtyList } from "@/data/doctorSpecialty.enum"
 import type { userProfileSchema } from "./schema"
-import type { PasskeyCredentialDisplay, MedicalLicenseView } from '@fajr/shared/user'
+import type { PasskeyCredentialDisplay, MedicalLicenseView } from '@firstline/shared/user'
 
 export type UserProfileFormValues = z.infer<typeof userProfileSchema>
 

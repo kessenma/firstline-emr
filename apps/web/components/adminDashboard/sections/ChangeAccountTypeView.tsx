@@ -9,7 +9,7 @@ import { Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import StackedLoader from "@/components/ui/StackedLoader";
 import { RoleIcon, getRoleButtonVariant } from "@/components/ui/RoleIcon";
-import { getRoleTheme } from "@fajr/shared/theme";
+import { getRoleTheme } from "@firstline/shared/theme";
 
 type AccountType = "Doctor" | "Triage";
 

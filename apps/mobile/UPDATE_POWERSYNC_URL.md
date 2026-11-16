@@ -16,10 +16,10 @@ curl http://<DB_HOST>:6061/health
 curl http://<DB_HOST>:8080/health
 
 # Option B: Domain (when DNS is configured)
-curl https://sync.emr.fajr.org/health
+curl https://sync.firstline.care/health
 
 # Option C: Path-based through main domain
-curl https://emr.fajr.org/powersync/health
+curl https://firstline.care/powersync/health
 ```
 
 The one that returns a response (like `{"status":"ok"}`) is your working URL.
@@ -48,7 +48,7 @@ const POWERSYNC_SERVER = {
 **If domain works:**
 ```typescript
 const POWERSYNC_SERVER = {
-  URL: 'https://sync.emr.fajr.org',
+  URL: 'https://sync.firstline.care',
   ENABLED: true,
 };
 ```
@@ -56,7 +56,7 @@ const POWERSYNC_SERVER = {
 **If path-based works:**
 ```typescript
 const POWERSYNC_SERVER = {
-  URL: 'https://emr.fajr.org/powersync',
+  URL: 'https://firstline.care/powersync',
   ENABLED: true,
 };
 ```

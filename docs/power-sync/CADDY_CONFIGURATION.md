@@ -19,7 +19,7 @@ PowerSync needs **all paths** to be proxied to the backend, not just specific pa
 ### Option 1: Coolify UI (Recommended)
 
 1. **Go to Coolify Dashboard**
-2. **Find the PowerSync service** (should be under `ws.emr.fajr.org`)
+2. **Find the PowerSync service** (should be under `ws.firstline.care`)
 3. **Enable WebSocket Support:**
    - Look for "Enable WebSocket" toggle or checkbox
    - Make sure it's enabled
@@ -35,7 +35,7 @@ If you need to manually edit the Caddyfile (advanced users only):
 
 ```caddy
 # PowerSync WebSocket Proxy
-ws.emr.fajr.org {
+ws.firstline.care {
     # Health check endpoint
     handle /probes/liveness {
         reverse_proxy http://powersync:6061 {
@@ -133,13 +133,13 @@ After updating Caddy config:
 
 ### 1. Test Health Endpoint
 ```bash
-curl https://ws.emr.fajr.org/health
+curl https://ws.firstline.care/health
 # Should return 200 OK
 ```
 
 ### 2. Test WebSocket Upgrade (No Auth)
 ```bash
-curl -v https://ws.emr.fajr.org/sync/stream \
+curl -v https://ws.firstline.care/sync/stream \
   -H "Connection: Upgrade" \
   -H "Upgrade: websocket" \
   -H "Sec-WebSocket-Version: 13" \
@@ -188,15 +188,15 @@ Coolify automatically generates Caddyfiles for services. To customize:
 1. **Environment Variables**: Use Coolify's environment variable support
 2. **Custom Caddy Config**: Some Coolify versions support custom Caddy snippets
 3. **Proxy Settings**: Configure via Coolify UI under service settings
-4. **Domain Settings**: Ensure domain is correctly pointed to `ws.emr.fajr.org`
+4. **Domain Settings**: Ensure domain is correctly pointed to `ws.firstline.care`
 
 ## Verification Checklist
 
 - [ ] PowerSync container is running
 - [ ] Container is on `coolify` network with alias `powersync`
 - [ ] Caddy can reach `http://powersync:6061`
-- [ ] Health endpoint returns 200: `https://ws.emr.fajr.org/health`
-- [ ] WebSocket upgrade returns 401 (not 404): `https://ws.emr.fajr.org/sync/stream`
+- [ ] Health endpoint returns 200: `https://ws.firstline.care/health`
+- [ ] WebSocket upgrade returns 401 (not 404): `https://ws.firstline.care/sync/stream`
 - [ ] Test script shows WebSocket working
 - [ ] Mobile app can connect and sync data
 

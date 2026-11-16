@@ -7,7 +7,7 @@
 // notifies the care team in one call.
 
 import { useCallback, useState } from 'react';
-import type { PrescriptionCancelFailureReason } from '@fajr/shared/medications';
+import type { PrescriptionCancelFailureReason } from '@firstline/shared/medications';
 import { getApiUrl } from '../../../config';
 import { getStoredToken } from '../../../utils/storage';
 

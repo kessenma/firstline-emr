@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Database Setup Script for Fajr Medical Flow EMR
+# Database Setup Script for Firstline
 # This script will set up your PostgreSQL database for the first time
 
 set -e  # Exit on any error
@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 echo ""
 echo "╔════════════════════════════════════════════════════════════╗"
-echo "║   Fajr Medical Flow EMR - Database Setup                  ║"
+echo "║   Firstline - Database Setup                              ║"
 echo "║   PostgreSQL + Drizzle ORM                                ║"
 echo "╚════════════════════════════════════════════════════════════╝"
 echo ""

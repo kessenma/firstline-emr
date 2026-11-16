@@ -2,7 +2,7 @@
 
 ## What Was Built
 
-Your Fajr-EMR mobile app now has a complete authentication system with:
+Your Firstline-EMR mobile app now has a complete authentication system with:
 
 ### ✅ Login Screen
 - Modern, medical-app styled UI

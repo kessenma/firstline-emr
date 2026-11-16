@@ -90,7 +90,7 @@ Quick reference for the Statistics Section of the Mobile Admin Dashboard.
 
 ### Text Export Structure
 ```
-=== Fajr Mission EMR STATISTICS ===
+=== Firstline STATISTICS ===
 
 Generated: [timestamp]
 

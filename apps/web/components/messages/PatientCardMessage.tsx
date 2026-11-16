@@ -5,8 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, User, Stethoscope } from "lucide-react";
 import { PatientDetailSheet } from "./PatientDetailSheet";
-import { getAnonymizedName } from "@fajr/shared/patient-utils";
-import { parsePatientCard } from "@fajr/shared/patient-share";
+import { getAnonymizedName } from "@firstline/shared/patient-utils";
+import { parsePatientCard } from "@firstline/shared/patient-share";
 
 interface PatientCardMessageProps {
   messageText: string;

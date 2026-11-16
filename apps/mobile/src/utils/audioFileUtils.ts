@@ -1,9 +1,9 @@
 // Utility to save Float32Array PCM audio to WAV file on disk.
 // Bridges useAudioRecorder (returns Float32Array) to sendAudio (requires file URI).
-// WAV encoding logic lives in @fajr/shared/media (float32ToWavBuffer).
+// WAV encoding logic lives in @firstline/shared/media (float32ToWavBuffer).
 
 import { CachesDirectoryPath, writeFile } from '@dr.pogodin/react-native-fs';
-import { float32ToWavBuffer } from '@fajr/shared/media';
+import { float32ToWavBuffer } from '@firstline/shared/media';
 
 const BASE64_CHARS =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';

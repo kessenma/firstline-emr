@@ -1,6 +1,6 @@
 # Web Application Documentation
 
-This directory contains technical documentation for the Fajr.EMR web application.
+This directory contains technical documentation for the Firstline web application.
 
 ## 📚 Documentation Index
 
@@ -141,5 +141,5 @@ When adding new documentation:
 
 ---
 
-**Maintained by:** Fajr.EMR Development Team  
+**Maintained by:** Firstline Development Team  
 **Questions?** Open an issue or contact the team lead

@@ -1,6 +1,6 @@
 # Navigation Directory
 
-This directory contains all navigation-related components and utilities for the Fajr EMR mobile app.
+This directory contains all navigation-related components and utilities for the Firstline mobile app.
 
 ## Structure
 
@@ -147,10 +147,10 @@ Available routes:
 The app supports deep linking for admin routes:
 
 **App Scheme:**
-- `fajrmission://admin/dashboard`
+- `firstlinemission://admin/dashboard`
 
 **HTTPS:**
-- `https://fajrmission.org/admin/dashboard`
+- `https://firstline.care/admin/dashboard`
 
 ### Configuration
 
@@ -159,7 +159,7 @@ Deep linking is configured in `MainNavigator.tsx`:
 ```typescript
 <NavigationContainer
   linking={{
-    prefixes: ['fajrmission://', 'https://fajrmission.org'],
+    prefixes: ['firstlinemission://', 'https://firstline.care'],
     config: {
       screens: {
         Admin: {
@@ -178,12 +178,12 @@ Deep linking is configured in `MainNavigator.tsx`:
 
 #### iOS Simulator
 ```bash
-xcrun simctl openurl booted "fajrmission://admin/dashboard"
+xcrun simctl openurl booted "firstlinemission://admin/dashboard"
 ```
 
 #### Android Emulator
 ```bash
-adb shell am start -W -a android.intent.action.VIEW -d "fajrmission://admin/dashboard"
+adb shell am start -W -a android.intent.action.VIEW -d "firstlinemission://admin/dashboard"
 ```
 
 ### Parsing Deep Links
@@ -193,7 +193,7 @@ Use `parseAdminDeepLink` to parse admin URLs:
 ```typescript
 import { parseAdminDeepLink } from './navigation';
 
-const result = parseAdminDeepLink('fajrmission://admin/dashboard');
+const result = parseAdminDeepLink('firstlinemission://admin/dashboard');
 // { screen: 'AdminDashboard' }
 ```
 

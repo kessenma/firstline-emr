@@ -7,7 +7,7 @@
 
 # Theme Refactor Checklist
 
-This checklist provides a structured, phased approach to refactoring the FAJR.EMR application for proper dark/light mode support and role-based theming. Each phase builds upon the previous one, ensuring systematic coverage of all components, pages, and views.
+This checklist provides a structured, phased approach to refactoring the Firstline application for proper dark/light mode support and role-based theming. Each phase builds upon the previous one, ensuring systematic coverage of all components, pages, and views.
 
 ## 🚨 Current Status (December 2, 2024)
 

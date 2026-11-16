@@ -45,12 +45,12 @@ const CUSTOM_SERVER_KEY = '@fajr_emr:customServer';
 
 // Canonical production URLs (also exposed as API_CONFIG.PROD for legacy callers).
 const PRODUCTION_URLS: ServerUrls = {
-  BASE_URL: 'https://fajrmission.org',
-  API_URL: 'https://fajrmission.org/api',
-  WS_URL: 'wss://fajrmission.org',
-  POWERSYNC_URL: 'https://sync.fajrmission.org',
-  STORAGE_ADMIN_URL: 'https://storage-admin.fajrmission.org',
-  LIVEKIT_URL: 'wss://livekit.fajrmission.org',
+  BASE_URL: 'https://firstline.care',
+  API_URL: 'https://firstline.care/api',
+  WS_URL: 'wss://firstline.care',
+  POWERSYNC_URL: 'https://sync.firstline.care',
+  STORAGE_ADMIN_URL: 'https://storage-admin.firstline.care',
+  LIVEKIT_URL: 'wss://livekit.firstline.care',
 };
 
 /**
@@ -233,20 +233,20 @@ export const AUTH_CONFIG = {
 
 // Database Configuration
 export const DB_CONFIG = {
-  NAME: 'fajr-emr',
+  NAME: 'firstline-emr',
 
   // Sync Gateway configuration (optional)
   SYNC_GATEWAY: {
     URL: __DEV__
-      ? 'ws://localhost:4984/fajr-emr'
-      : 'wss://your-sync-gateway-url.com/fajr-emr',
+      ? 'ws://localhost:4984/firstline-emr'
+      : 'wss://your-sync-gateway-url.com/firstline-emr',
     ENABLED: false, // Set to true when you have Sync Gateway setup
   },
 };
 
 // App Configuration
 export const APP_CONFIG = {
-  NAME: 'Fajr EMR',
+  NAME: 'Firstline',
   VERSION: '1.0.0',
 
   // Feature flags

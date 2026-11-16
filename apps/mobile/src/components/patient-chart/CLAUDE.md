@@ -24,7 +24,7 @@ PatientChartProvider
 |-----|-----------|-------------|
 | Patient Info | `patient-info/` | Editable form, PATCH `/patient/{id}` on save |
 | Notes | `notes/` | FlashList, draft/published tabs, 3 note templates, voice dictation (feature-flagged) |
-| Medications | `medications/` | RX + Med orders from PowerSync, creation sheets, `RxOrderDetailSheet` shares the patient link/QR. Types + helpers from `@fajr/shared/medications` (same module web uses) |
+| Medications | `medications/` | RX + Med orders from PowerSync, creation sheets, `RxOrderDetailSheet` shares the patient link/QR. Types + helpers from `@firstline/shared/medications` (same module web uses) |
 | Media | `media-gallery/` | Patient photos + Telegram media, FAB for camera/gallery upload, WiFi-only mode |
 | Messaging | `messaging/` | Telegram chat UI, real-time hooks, audio player, translation support |
 | Video | — | Placeholder (coming soon) |
@@ -39,7 +39,7 @@ PatientChartProvider
 
 - `PatientChartBottomBar.tsx` — absolute-positioned actions: back, refresh, view toggle, care team, send
 - `CareTeamSheet.tsx` — join/leave/yield-lead, role selection based on accountType
-- `RequestChartAccessSheet.tsx` — shown when a doctor opens a chart outside their specialty; joining the care team is what grants access, via `evaluateChartAccess` in `@fajr/shared/care-team`
+- `RequestChartAccessSheet.tsx` — shown when a doctor opens a chart outside their specialty; joining the care team is what grants access, via `evaluateChartAccess` in `@firstline/shared/care-team`
 - `SendPatientSheet.tsx` — sends patient card to internal messaging thread (reads threads from PowerSync)
 - `video-call/VideoCallSheet.tsx` — the reference implementation for anything non-trivial with sheets; its comments document the failure modes collected in the BottomSheet section below
 - `SectionSummaryCard.tsx` — reusable card for dashboard mode
@@ -50,7 +50,7 @@ PatientChartProvider
 - `NoteCreationSheet.tsx` — create/edit form
 - `DraftedNoteCard.tsx` — draft-specific card with edit/publish/delete
 - `voice-dictation/` — HandsFree, Guided, Smart dictation modes (gated by `VOICE_DICTATION` feature flag)
-- Note templates: Subjective (SOAP), Procedure, Blank — shared via `@fajr/shared/patient-utils/note-templates`
+- Note templates: Subjective (SOAP), Procedure, Blank — shared via `@firstline/shared/patient-utils/note-templates`
 
 ## Conventions
 

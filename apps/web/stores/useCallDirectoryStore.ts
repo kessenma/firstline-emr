@@ -12,7 +12,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { CallRecent, DirectoryUser } from "@fajr/shared/calls";
+import type { CallRecent, DirectoryUser } from "@firstline/shared/calls";
 
 /**
  * How long cached data is served without revalidating. Short, because a

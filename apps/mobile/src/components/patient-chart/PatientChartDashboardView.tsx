@@ -46,7 +46,7 @@ import type { Note } from '../../types/notes';
 // Record<string, string> and silently went stale whenever a note type was
 // added, which is how 'triage' ended up half-supported.
 import { NOTE_TYPE_LABELS } from '../../types/notes';
-import { getNotePreview } from '@fajr/shared/patient-utils';
+import { getNotePreview } from '@firstline/shared/patient-utils';
 
 // Sections that open via BottomSheet (notes excluded — it expands inline)
 type SheetSectionId = 'patient-info' | 'medications' | 'images' | 'messaging' | 'video';

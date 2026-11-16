@@ -44,7 +44,7 @@ func (c *APIClient) SaveTelegramThread(ctx context.Context, chatID, language str
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.MedFlowKey))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.ServiceKey))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -82,7 +82,7 @@ func (c *APIClient) SaveMessage(ctx context.Context, chatID string, msg *Telegra
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.MedFlowKey))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.ServiceKey))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -148,7 +148,7 @@ func (c *APIClient) LinkPatient(ctx context.Context, code, chatID string) (*Link
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.MedFlowKey))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.ServiceKey))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -195,7 +195,7 @@ func (c *APIClient) GetIntakeURL(ctx context.Context, chatID string) (string, er
 		return "", fmt.Errorf("request creation error: %w", err)
 	}
 
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.MedFlowKey))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.ServiceKey))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {

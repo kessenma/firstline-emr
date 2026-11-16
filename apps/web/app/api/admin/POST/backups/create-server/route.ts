@@ -14,8 +14,8 @@ import {
   CLINICAL_BACKUP_TABLES,
   FULL_MIGRATION_TABLES,
   type BackupMode,
-} from "@fajr/shared/admin";
-import { BACKUP_MIN_PASSPHRASE_LENGTH } from "@fajr/shared/backup";
+} from "@firstline/shared/admin";
+import { BACKUP_MIN_PASSPHRASE_LENGTH } from "@firstline/shared/backup";
 
 export async function POST(request: Request) {
   try {
@@ -114,7 +114,7 @@ export async function POST(request: Request) {
       const encryptedAuth = encryptBackup(envelope, passphrase!);
       const authFileName = `server-auth-${new Date()
         .toISOString()
-        .replace(/[:.]/g, "-")}.fajr-auth`;
+        .replace(/[:.]/g, "-")}.firstline-auth`;
       authUpload = await storageService.upload({
         file: encryptedAuth,
         fileName: authFileName,
@@ -127,7 +127,7 @@ export async function POST(request: Request) {
     const fileToUpload = shouldEncrypt
       ? encryptBackup(buffer, passphrase!)
       : buffer;
-    const fileExtension = shouldEncrypt ? ".fajr-backup" : ".json";
+    const fileExtension = shouldEncrypt ? ".firstline-backup" : ".json";
     const contentType = shouldEncrypt
       ? "application/octet-stream"
       : "application/json";

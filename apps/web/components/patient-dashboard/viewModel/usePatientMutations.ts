@@ -10,7 +10,7 @@ import { useToast } from "@/components/hooks/useToast"
 import type { Patient } from "@/db/schema/patients"
 import type { DoctorSpecialtyList } from "@/data/doctorSpecialty.enum"
 import type { PatientWithMessages, SpecialtyChangeParams, StatusChangeParams, LoadingStates } from "./types"
-import { ROLE_LABELS, type CareTeamRole } from "@fajr/shared/care-team"
+import { ROLE_LABELS, type CareTeamRole } from "@firstline/shared/care-team"
 
 const getPatientId = (patient: any) => {
     return patient.id?.toString() || ""

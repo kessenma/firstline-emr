@@ -23,8 +23,8 @@ import { getVideoCallTranslation } from "./video-call-patient-translations";
 import {
   isRtlLanguage,
   normalizeLanguage,
-} from "@fajr/shared/constants/languages";
-import type { CapturedPhoto, JoinCallResponse } from "@fajr/shared/video-call";
+} from "@firstline/shared/constants/languages";
+import type { CapturedPhoto, JoinCallResponse } from "@firstline/shared/video-call";
 
 /** Translation keys this page can put in `error`. */
 type ErrorKey = "linkInvalid" | "linkExpired" | "connectionFailed";

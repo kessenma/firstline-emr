@@ -24,7 +24,7 @@ import {
   shouldShowCareTeamScope,
   getActiveFilterCount,
   DASHBOARD_PRIORITY_OPTIONS,
-} from "@fajr/shared/patient-dashboard";
+} from "@firstline/shared/patient-dashboard";
 import { DoctorSpecialties } from "@/data/doctorSpecialty.enum";
 import { PatientStatuses } from "@/data/patientStatus.enum";
 import { FilterPillRow } from "./FilterPillRow";

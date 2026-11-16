@@ -18,7 +18,7 @@ services:
       PORT: "4983"
       STORE_PATH: /app
       # MASTERPASS removed - OAuth2 Proxy handles authentication
-      # Only authenticated admins via Zitadel/Fajr EMR can reach this service
+      # Only authenticated admins via Zitadel/Firstline can reach this service
       NODE_ENV: ${NODE_ENV:-production}
     volumes:
       - drizzle-data:/app
@@ -36,7 +36,7 @@ services:
       coolify.name: "Drizzle Studio"
       coolify.description: "Drizzle Studio Gateway running on port 4983"
       # NOTE: Caddy routing removed - OAuth2 Proxy in docker-compose.auth.yml
-      # handles public access at analytics.fajrmission.org with SSO
+      # handles public access at analytics.firstline.care with SSO
 
     healthcheck:
       test:

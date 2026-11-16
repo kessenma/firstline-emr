@@ -4,7 +4,7 @@
 import { sql } from "drizzle-orm";
 import { db, pool } from "@/db";
 import { TABLE_COLUMN_MAPS, TABLE_RESTORE_ORDER } from "./columnMaps";
-import type { ConflictStrategy, RestoreTableResult } from "@fajr/shared/admin";
+import type { ConflictStrategy, RestoreTableResult } from "@firstline/shared/admin";
 
 const BATCH_SIZE = 100;
 

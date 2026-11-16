@@ -1,1 +1,1 @@
-export { DoctorSpecialtyList, DoctorSpecialties } from '@fajr/shared/constants';
+export { DoctorSpecialtyList, DoctorSpecialties } from '@firstline/shared/constants';

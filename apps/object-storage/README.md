@@ -1,6 +1,6 @@
 # 🗄️ RustFS Object Storage
 
-This directory contains the configuration and documentation for the RustFS object storage service used by the Fajr Mission EMR system.
+This directory contains the configuration and documentation for the RustFS object storage service used by the Firstline system.
 
 ## ✨ **NEW: Auto-Bucket Creation!**
 
@@ -36,7 +36,7 @@ RustFS is a high-performance, S3-compatible distributed object storage system th
    docker-compose -f docker-compose.object-storage.yml logs -f rustfs-server
    
    # You should see:
-   # ✅ Bucket 'fajr-media' created successfully!
+   # ✅ Bucket 'firstline-media' created successfully!
    ```
 
 3. **That's it!** The bucket is automatically created.
@@ -47,8 +47,8 @@ Your object storage is ready to use immediately!
 
 1. **Update environment variables** in `.env`:
    ```bash
-   OBJECT_STORAGE_ENDPOINT=s3.emr.fajr.org
-   OBJECT_STORAGE_BUCKET=fajr-media
+   OBJECT_STORAGE_ENDPOINT=s3.firstline.care
+   OBJECT_STORAGE_BUCKET=firstline-media
    OBJECT_STORAGE_KEY=admin
    OBJECT_STORAGE_SECRET=YourSecurePassword123!  # CHANGE THIS!
    OBJECT_STORAGE_REGION=us-east-1
@@ -62,7 +62,7 @@ Your object storage is ready to use immediately!
 
 3. **Check deployment logs for bucket creation:**
    ```bash
-   # Look for: ✅ Bucket 'fajr-media' created successfully!
+   # Look for: ✅ Bucket 'firstline-media' created successfully!
    docker-compose -f docker-compose.object-storage.yml logs rustfs-server
    ```
 
@@ -107,13 +107,13 @@ If you still see this error:
    ```bash
    docker-compose -f docker-compose.object-storage.yml logs rustfs-server | grep -i bucket
    
-   # Look for: ✅ Bucket 'fajr-media' created successfully!
+   # Look for: ✅ Bucket 'firstline-media' created successfully!
    ```
 
 2. **If auto-creation failed, create manually:**
    ```bash
    mc alias set rustfs http://localhost:9100 admin YourSecurePassword123!
-   mc mb rustfs/fajr-media
+   mc mb rustfs/firstline-media
    docker-compose restart web
    ```
 
@@ -131,7 +131,7 @@ If you still see this error:
 
 2. **Access console:**
    - Local: http://localhost:9001/rustfs/console/index.html
-   - Production: https://s3.emr.fajr.org/console/
+   - Production: https://s3.firstline.care/console/
 
 3. **Login credentials:**
    - Username: `admin` (from `OBJECT_STORAGE_KEY`)
@@ -140,8 +140,8 @@ If you still see this error:
 ### SSL/TLS Errors in Web App?
 
 Check that `OBJECT_STORAGE_ENDPOINT` does **NOT** include the protocol:
-- ✅ Correct: `s3.emr.fajr.org`
-- ❌ Wrong: `https://s3.emr.fajr.org`
+- ✅ Correct: `s3.firstline.care`
+- ❌ Wrong: `https://s3.firstline.care`
 
 The storage service adds `https://` automatically.
 
@@ -171,17 +171,17 @@ See detailed troubleshooting in:
 
 ```bash
 # Required Variables
-OBJECT_STORAGE_ENDPOINT=s3.emr.fajr.org      # S3 API endpoint (no protocol!)
-OBJECT_STORAGE_BUCKET=fajr-media             # Bucket name
+OBJECT_STORAGE_ENDPOINT=s3.firstline.care      # S3 API endpoint (no protocol!)
+OBJECT_STORAGE_BUCKET=firstline-media             # Bucket name
 OBJECT_STORAGE_KEY=admin                     # Access key
 OBJECT_STORAGE_SECRET=YourSecurePassword123! # Secret key
 OBJECT_STORAGE_REGION=us-east-1              # AWS region
 OBJECT_STORAGE_PORT=9100                     # API port
 
 # Optional Variables
-OBJECT_STORAGE_CDN_ENDPOINT=s3.emr.fajr.org  # CDN endpoint
+OBJECT_STORAGE_CDN_ENDPOINT=s3.firstline.care  # CDN endpoint
 RUSTFS_CONSOLE_ENABLE=true                   # Enable web console
-RUSTFS_SERVER_DOMAINS=s3.emr.fajr.org        # Server domains
+RUSTFS_SERVER_DOMAINS=s3.firstline.care        # Server domains
 ```
 
 ### Ports
@@ -222,26 +222,26 @@ mc alias set rustfs http://localhost:9100 admin YourSecurePassword123!
 mc ls rustfs
 
 # Create bucket
-mc mb rustfs/fajr-media
+mc mb rustfs/firstline-media
 
 # Delete bucket (WARNING: destructive!)
-mc rb --force rustfs/fajr-media
+mc rb --force rustfs/firstline-media
 ```
 
 ### File Operations
 
 ```bash
 # Upload file
-mc cp photo.jpg rustfs/fajr-media/
+mc cp photo.jpg rustfs/firstline-media/
 
 # List files
-mc ls rustfs/fajr-media/
+mc ls rustfs/firstline-media/
 
 # Download file
-mc cp rustfs/fajr-media/photo.jpg ./downloaded.jpg
+mc cp rustfs/firstline-media/photo.jpg ./downloaded.jpg
 
 # Delete file
-mc rm rustfs/fajr-media/photo.jpg
+mc rm rustfs/firstline-media/photo.jpg
 ```
 
 ## 🔐 Security
@@ -270,13 +270,13 @@ mc rm rustfs/fajr-media/photo.jpg
 
 ```bash
 # Set bucket to private (recommended)
-mc policy set private rustfs/fajr-media
+mc policy set private rustfs/firstline-media
 
 # Set bucket to public read (use with caution!)
-mc policy set download rustfs/fajr-media
+mc policy set download rustfs/firstline-media
 
 # Check current policy
-mc policy get rustfs/fajr-media
+mc policy get rustfs/firstline-media
 ```
 
 ## 📊 Monitoring
@@ -295,21 +295,21 @@ curl http://localhost:9001/rustfs/console/index.html
 
 ```bash
 # Bucket size
-mc du rustfs/fajr-media
+mc du rustfs/firstline-media
 
 # Volume size
-docker volume inspect fajr-medflow-emr_rustfs_data
+docker volume inspect firstline-emr_rustfs_data
 ```
 
 ### Check File Counts
 
 ```bash
 # Total files
-mc find rustfs/fajr-media --name "*" | wc -l
+mc find rustfs/firstline-media --name "*" | wc -l
 
 # Files by type
-mc find rustfs/fajr-media --name "*.jpg" | wc -l
-mc find rustfs/fajr-media --name "*.mp3" | wc -l
+mc find rustfs/firstline-media --name "*.jpg" | wc -l
+mc find rustfs/firstline-media --name "*.mp3" | wc -l
 ```
 
 ## 🔄 Backup & Recovery
@@ -318,20 +318,20 @@ mc find rustfs/fajr-media --name "*.mp3" | wc -l
 
 ```bash
 # Backup entire bucket
-mc mirror rustfs/fajr-media /backup/fajr-media-$(date +%Y%m%d)/
+mc mirror rustfs/firstline-media /backup/firstline-media-$(date +%Y%m%d)/
 
 # Backup specific path
-mc mirror rustfs/fajr-media/prod /backup/fajr-media-prod-$(date +%Y%m%d)/
+mc mirror rustfs/firstline-media/prod /backup/firstline-media-prod-$(date +%Y%m%d)/
 ```
 
 ### Restore Data
 
 ```bash
 # Restore entire bucket
-mc mirror /backup/fajr-media-20241212/ rustfs/fajr-media
+mc mirror /backup/firstline-media-20241212/ rustfs/firstline-media
 
 # Restore specific path
-mc mirror /backup/fajr-media-prod-20241212/ rustfs/fajr-media/prod
+mc mirror /backup/firstline-media-prod-20241212/ rustfs/firstline-media/prod
 ```
 
 ## 🧪 Testing
@@ -343,16 +343,16 @@ mc mirror /backup/fajr-media-prod-20241212/ rustfs/fajr-media/prod
 echo "Hello RustFS" > test.txt
 
 # Upload
-mc cp test.txt rustfs/fajr-media/
+mc cp test.txt rustfs/firstline-media/
 
 # Download
-mc cp rustfs/fajr-media/test.txt downloaded.txt
+mc cp rustfs/firstline-media/test.txt downloaded.txt
 
 # Verify
 diff test.txt downloaded.txt
 
 # Cleanup
-mc rm rustfs/fajr-media/test.txt
+mc rm rustfs/firstline-media/test.txt
 rm test.txt downloaded.txt
 ```
 
@@ -361,13 +361,13 @@ rm test.txt downloaded.txt
 ```bash
 # Test upload speed (100MB file)
 dd if=/dev/zero of=test-100mb.dat bs=1M count=100
-time mc cp test-100mb.dat rustfs/fajr-media/
+time mc cp test-100mb.dat rustfs/firstline-media/
 rm test-100mb.dat
 
 # Test download speed
-time mc cp rustfs/fajr-media/test-100mb.dat downloaded.dat
+time mc cp rustfs/firstline-media/test-100mb.dat downloaded.dat
 rm downloaded.dat
-mc rm rustfs/fajr-media/test-100mb.dat
+mc rm rustfs/firstline-media/test-100mb.dat
 ```
 
 ## 📦 Integration
@@ -389,8 +389,8 @@ See `apps/web/lib/storage/readme.md` for API documentation.
 
 The web app requires these environment variables:
 ```bash
-OBJECT_STORAGE_ENDPOINT=s3.emr.fajr.org
-OBJECT_STORAGE_BUCKET=fajr-media
+OBJECT_STORAGE_ENDPOINT=s3.firstline.care
+OBJECT_STORAGE_BUCKET=firstline-media
 OBJECT_STORAGE_KEY=admin
 OBJECT_STORAGE_SECRET=YourSecurePassword123!
 OBJECT_STORAGE_REGION=us-east-1
@@ -426,8 +426,8 @@ OBJECT_STORAGE_REGION=us-east-1
 
 2. **Restore from backup:**
    ```bash
-   docker volume rm fajr-medflow-emr_rustfs_data
-   docker volume create fajr-medflow-emr_rustfs_data
+   docker volume rm firstline-emr_rustfs_data
+   docker volume create firstline-emr_rustfs_data
    # Copy backup data to volume
    ```
 

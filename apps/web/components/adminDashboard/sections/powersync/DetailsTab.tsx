@@ -45,7 +45,7 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
             <div className="flex justify-between py-2">
               <span className="font-medium">WebSocket Endpoint:</span>
               <code className="text-sm bg-muted px-2 py-1 rounded">
-                wss://sync.fajrmission.org
+                wss://sync.firstline.care
               </code>
             </div>
             <Separator />
@@ -77,7 +77,7 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
             <div className="flex justify-between py-2">
               <span className="font-medium">JWT Key ID (kid):</span>
               <code className="text-sm bg-muted px-2 py-1 rounded">
-                fajr-emr-key
+                firstline-emr-key
               </code>
             </div>
             <Separator />
@@ -161,7 +161,7 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
               </li>
               <li>
                 <strong>Could not find appropriate key:</strong> Verify
-                kid header matches &quot;fajr-emr-key&quot;
+                kid header matches &quot;firstline-emr-key&quot;
               </li>
               <li>
                 Ensure JWT_SECRET matches in web and PowerSync
@@ -186,7 +186,7 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
                 signature
               </li>
               <li>
-                Check mobile app is pointing to wss://sync.fajrmission.org
+                Check mobile app is pointing to wss://sync.firstline.care
               </li>
               <li>Force quit app if old tokens are cached</li>
             </ol>

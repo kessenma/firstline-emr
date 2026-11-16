@@ -1,5 +1,5 @@
-// Central theme configuration for the Fajr Mobile EMR app
-// Shared values (palette, spacing, borderRadius, fontSize) come from @fajr/shared/theme
+// Central theme configuration for the Firstline mobile app
+// Shared values (palette, spacing, borderRadius, fontSize) come from @firstline/shared/theme
 // Platform-specific values (shadows, animation, helpers) stay here
 
 import { lightColors, darkColors, palette, roleColors } from './colors';
@@ -7,7 +7,7 @@ import {
   spacing as sharedSpacing,
   borderRadius as sharedBorderRadius,
   typographyScale,
-} from '@fajr/shared/theme';
+} from '@firstline/shared/theme';
 
 // Re-export shared spacing and borderRadius
 export const spacing = sharedSpacing;

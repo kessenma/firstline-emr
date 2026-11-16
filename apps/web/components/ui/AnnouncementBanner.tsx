@@ -12,7 +12,11 @@ import { CopyButton } from "@/components/ui/CopyButton";
 const AnnouncementBanner = () => {
   const [isVisible, setIsVisible] = useState(false);
   const pathname = usePathname();
-  const url = "https://medflow.cloud";
+  // Migration notice pointing users at the canonical deployment. This was left
+  // over from a previous move and hardcoded a now-dead host; it is env-driven so
+  // it cannot rot again. If there is no migration in progress, delete this
+  // component rather than leaving a banner on every patient-dashboard visit.
+  const url = process.env.NEXT_PUBLIC_SITE_URL ?? "https://firstline.care";
 
   // Only show on "/patient-dashboard"
   const isDashboard = pathname === "/patient-dashboard";

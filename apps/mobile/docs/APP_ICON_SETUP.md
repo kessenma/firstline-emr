@@ -1,186 +1,55 @@
-# App Icon Setup Documentation
+# App icons
 
-This document explains the app icon configuration for the FajrEMR iOS app.
+App icons are **generated**, not hand-placed. Do not drop files into
+`Images.xcassets` or `res/mipmap-*` by hand — the next generator run overwrites them.
 
-## ✅ Icon Setup Complete
-
-The app icons have been successfully configured and are ready for deployment.
-
-## 📍 Icon Locations
-
-### Source Icons
-```
-apps/mobile/0assets/fajr-logo/apple-devices/AppIcon.appiconset/
-```
-- Contains all 46 icon files for iOS, macOS, and watchOS
-- Generated using makeappicon tool
-
-### Active Icons (Used by Xcode)
-```
-apps/mobile/ios/FajrEMR/Images.xcassets/AppIcon.appiconset/
-```
-- Contains the same 46 icon files
-- Referenced by the Xcode project
-- This is what gets bundled into the IPA
-
-## 📱 Required iOS Icon Sizes
-
-All required iOS icon sizes are present:
-
-| Size | Scale | Pixels | Filename | Purpose |
-|------|-------|--------|----------|---------|
-| 20x20 | @2x | 40x40 | icon-ios-20x20@2x.png | Notifications (iPhone) |
-| 20x20 | @3x | 60x60 | icon-ios-20x20@3x.png | Notifications (iPhone) |
-| 29x29 | @2x | 58x58 | icon-ios-29x29@2x.png | Settings (iPhone) |
-| 29x29 | @3x | 87x87 | icon-ios-29x29@3x.png | Settings (iPhone) |
-| 40x40 | @2x | 80x80 | icon-ios-40x40@2x.png | Spotlight (iPhone) |
-| 40x40 | @3x | 120x120 | icon-ios-40x40@3x.png | Spotlight (iPhone) |
-| **60x60** | **@2x** | **120x120** | **icon-ios-60x60@2x.png** | **App Icon (iPhone)** ⭐ |
-| **60x60** | **@3x** | **180x180** | **icon-ios-60x60@3x.png** | **App Icon (iPhone)** ⭐ |
-| 76x76 | @2x | 152x152 | icon-ios-76x76@2x.png | App Icon (iPad) |
-| 83.5x83.5 | @2x | 167x167 | icon-ios-83.5x83.5@2x.png | App Icon (iPad Pro) |
-| 1024x1024 | @1x | 1024x1024 | icon-ios-1024x1024.png | App Store Marketing |
-
-**Note**: The 120x120 icon (60x60@2x) is the critical icon that was missing and causing the validation error.
-
-## ✅ Verification
-
-To verify the icons are correct:
+## Regenerating
 
 ```bash
-# Check icon exists
-ls -lh apps/mobile/ios/FajrEMR/Images.xcassets/AppIcon.appiconset/icon-ios-60x60@2x.png
-
-# Verify dimensions
-sips -g pixelWidth -g pixelHeight apps/mobile/ios/FajrEMR/Images.xcassets/AppIcon.appiconset/icon-ios-60x60@2x.png
-
-# Count all icons (should be 46)
-ls -1 apps/mobile/ios/FajrEMR/Images.xcassets/AppIcon.appiconset/*.png | wc -l
+python3 scripts/brand/generate_brand_assets.py            # everything
+python3 scripts/brand/generate_brand_assets.py --only ios
+python3 scripts/brand/generate_brand_assets.py --only android
 ```
 
-Expected output:
-```
-pixelWidth: 120
-pixelHeight: 120
-```
+Python 3 standard library only — no ImageMagick, no Pillow, no `node_modules`.
+The mark's geometry lives in the constants at the top of that script; see
+[`brand/README.md`](../../../brand/README.md) for the spec.
 
-## 🔄 After Icon Changes
+## What it writes
 
-When you update icons, you MUST rebuild the app:
+**iOS** — `ios/FajrEMR/Images.xcassets/AppIcon.appiconset/`, exactly the 11 files
+`Contents.json` references (40, 60, 58, 87, 80, 120, 120, 180, 152, 167, 1024 px).
+
+These are written as **opaque RGB with no alpha channel**. App Store validation
+rejects an icon with alpha, so if you ever replace the generator, keep that
+property. Verify with:
 
 ```bash
-# Clean build artifacts
-pnpm run deploy:ios:clean
-
-# Rebuild and deploy to TestFlight
-pnpm run deploy:ios:rock-beta
+sips -g hasAlpha ios/FajrEMR/Images.xcassets/AppIcon.appiconset/icon-ios-1024x1024.png
 ```
 
-**Important**: Simply updating the icon files is not enough. The icons are bundled into the IPA during the build process, so you must rebuild to include the new icons.
+**Android** — `android/app/src/main/res/`:
 
-## 📦 What Gets Bundled
+| Path | Purpose |
+|---|---|
+| `mipmap-*/ic_launcher.png` | legacy launcher icon, opaque |
+| `mipmap-*/ic_launcher_round.png` | circular variant, alpha outside the disc |
+| `mipmap-*/ic_launcher_foreground.png` | adaptive foreground, 108dp canvas |
+| `mipmap-anydpi-v26/ic_launcher[_round].xml` | adaptive icon definition |
+| `drawable/ic_launcher_background.xml` | solid white background layer |
 
-When you build the app:
-1. Xcode reads from `ios/FajrEMR/Images.xcassets/AppIcon.appiconset/`
-2. Icons are compiled into the app bundle
-3. The IPA includes the compiled asset catalog
-4. Apple validates that all required icons are present
+The adaptive icon matters: without `mipmap-anydpi-v26/` the app renders inside a
+white squircle badge on Android 8+. That directory was previously generated into
+a staging folder and never copied into the project, so the app shipped without
+one.
 
-## 🐛 Troubleshooting
+**In-app mark** — `src/assets/firstline-mark{,@2x,@3x}.png`, a black-on-transparent
+mask. Render it through `components/icons/FirstlineMark.tsx`, which applies
+`tintColor`; used untinted it is invisible in dark mode.
 
-### Error: Missing 120x120 icon
+## Small sizes are not scale-downs
 
-**Problem**: 
-```
-Missing required icon file. The bundle does not contain an app icon 
-for iPhone / iPod Touch of exactly '120x120' pixels
-```
-
-**Solution**:
-The icons have been installed. Rebuild the app:
-```bash
-pnpm run deploy:ios:clean
-pnpm run deploy:ios:rock-beta
-```
-
-### Error: Icon dimensions incorrect
-
-**Problem**: Icon file exists but has wrong dimensions
-
-**Solution**:
-Verify the actual dimensions:
-```bash
-sips -g pixelWidth -g pixelHeight apps/mobile/ios/FajrEMR/Images.xcassets/AppIcon.appiconset/icon-ios-60x60@2x.png
-```
-
-If dimensions are wrong, replace with correct icon from source:
-```bash
-cp apps/mobile/0assets/fajr-logo/apple-devices/AppIcon.appiconset/icon-ios-60x60@2x.png \
-   apps/mobile/ios/FajrEMR/Images.xcassets/AppIcon.appiconset/
-```
-
-### Contents.json Out of Sync
-
-**Problem**: Icon files exist but Contents.json doesn't reference them
-
-**Solution**: The Contents.json has been updated to reference all icons. If you need to regenerate it, it's located at:
-```
-apps/mobile/ios/FajrEMR/Images.xcassets/AppIcon.appiconset/Contents.json
-```
-
-## 🎨 Updating Icons
-
-To update the app icons in the future:
-
-1. **Generate new icons** using a tool like [makeappicon.com](https://makeappicon.com/) or [appicon.co](https://appicon.co/)
-
-2. **Replace source icons**:
-   ```bash
-   # Replace all icons in source directory
-   cp -r path/to/new/AppIcon.appiconset/* apps/mobile/0assets/fajr-logo/apple-devices/AppIcon.appiconset/
-   ```
-
-3. **Copy to Xcode project**:
-   ```bash
-   cp apps/mobile/0assets/fajr-logo/apple-devices/AppIcon.appiconset/*.png \
-      apps/mobile/ios/FajrEMR/Images.xcassets/AppIcon.appiconset/
-   ```
-
-4. **Rebuild the app**:
-   ```bash
-   pnpm run deploy:ios:clean
-   pnpm run deploy:ios:rock-beta
-   ```
-
-## 📋 Icon Design Guidelines
-
-When creating app icons:
-
-- ✅ Use PNG format
-- ✅ Use RGB color space (not CMYK)
-- ✅ No transparency (alpha channel should be fully opaque)
-- ✅ Square aspect ratio
-- ✅ High contrast and simple design
-- ✅ Test at all sizes (icons should be recognizable at 29x29)
-- ❌ Don't include rounded corners (iOS adds them automatically)
-- ❌ Don't include text that's too small to read
-
-## 🔗 References
-
-- [Apple Human Interface Guidelines - App Icons](https://developer.apple.com/design/human-interface-guidelines/app-icons)
-- [iOS App Icon Sizes](https://developer.apple.com/design/human-interface-guidelines/app-icons#App-icon-sizes)
-- [Asset Catalog Format Reference](https://developer.apple.com/library/archive/documentation/Xcode/Reference/xcode_ref-Asset_Catalog_Format/)
-
-## 📊 Current Status
-
-- ✅ All 46 icon files installed
-- ✅ Contents.json properly configured
-- ✅ Critical 120x120 icon present and verified
-- ✅ 1024x1024 App Store icon present
-- ⏳ **Next Step**: Rebuild the app to include icons in IPA
-
----
-
-**Last Updated**: January 2025  
-**Icon Count**: 46 files  
-**Location**: `ios/FajrEMR/Images.xcassets/AppIcon.appiconset/`
+The generator thickens the stroke and tightens the inset as the canvas shrinks,
+reaching the master geometry at 120px and above. A fixed fractional stroke reads
+as a grey hairline at 16–40px because antialiasing softens roughly a constant
+pixel at each edge. If you change the mark, re-check the 40px notification icon.

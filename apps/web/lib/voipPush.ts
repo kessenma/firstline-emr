@@ -61,7 +61,7 @@ export async function sendVoipCallPush(
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.MEDFLOW_KEY ?? ""}`,
+          Authorization: `Bearer ${process.env.FIRSTLINE_SERVICE_KEY ?? ""}`,
         },
         // A ring is worthless if it arrives late; fail fast and report
         // undeliverable rather than holding the initiate request open.

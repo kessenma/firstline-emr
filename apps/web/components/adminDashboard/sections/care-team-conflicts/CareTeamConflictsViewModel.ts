@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useState, useCallback, useEffect } from "react";
 import { useToast } from "@/components/hooks/useToast";
-import type { ConflictUser, CareTeamConflictItem } from "@fajr/shared/admin";
+import type { ConflictUser, CareTeamConflictItem } from "@firstline/shared/admin";
 
 export type { ConflictUser, CareTeamConflictItem };
 

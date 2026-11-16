@@ -5,7 +5,7 @@
 - **Entry**: `PatientDashboardScreen.tsx` → `PatientDashboardScreenView.tsx` (view) + `usePatientDashboardViewModel.ts` (logic)
 - **Data**: ALL reads from PowerSync (offline-first) via `usePatientsWithMessages()`. Writes go to PowerSync locally, sync to server
 - **Device-adaptive**: mobile cards (`MobilePatientDashboardTable` with FlashList) vs tablet spreadsheet (`TabletPatientTable` with sortable columns)
-- **Shared types**: `@fajr/shared/patient-dashboard` for `DashboardFilters`, constants, defaults
+- **Shared types**: `@firstline/shared/patient-dashboard` for `DashboardFilters`, constants, defaults
 
 ## Data Flow
 
@@ -51,14 +51,14 @@ usePatientDashboardViewModel
 ### Shared
 - `PatientMobileActions.tsx` — bottom sheets for status, priority, specialty, notes, take-case (role-based business rules per accountType)
 - `FilterSheet.tsx` — view mode, care team scope, missions, clinical filters (priority/status/specialty/hospital), advanced toggles
-- `DashboardHelpSheet.tsx` — explains visibility/access rules; copy comes from `@fajr/shared/patient-dashboard` so it cannot drift from web
+- `DashboardHelpSheet.tsx` — explains visibility/access rules; copy comes from `@firstline/shared/patient-dashboard` so it cannot drift from web
 
 ## Chart access
 
 Every patient on the mission is visible here — nothing is filtered out by
 specialty. Opening a chart is gated instead:
 
-- All three entry points (card tap, tablet name-cell tap, and the chat shortcut) go through `guardChart()`, which calls `useChartAccess()` → `evaluateChartAccess` from `@fajr/shared/care-team`. The web app applies the identical rule
+- All three entry points (card tap, tablet name-cell tap, and the chat shortcut) go through `guardChart()`, which calls `useChartAccess()` → `evaluateChartAccess` from `@firstline/shared/care-team`. The web app applies the identical rule
 - Triage/Admin open any chart with no prompt. A Doctor opens charts in their specialty or where they're already on the care team; anything else raises `RequestChartAccessSheet`
 - Joining from that sheet is a local PowerSync write, so it works offline and syncs to `POST /api/patient/care-team` later
 - Triage are never prompted — they're recorded on the care team server-side when they edit a patient's specialty/status/priority (`recordPatientEditor`)

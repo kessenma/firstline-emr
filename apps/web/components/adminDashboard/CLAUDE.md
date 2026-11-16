@@ -5,7 +5,7 @@
 - **Entry point**: `AdminDashboardView.tsx` — wraps content in `ToastContext > QueryClientProvider > AdminConfigProvider`
 - **Section registry**: `sectionRegistry.ts` — single source of truth for all sections (id, title, icon, category, component)
 - **View modes**: Grid (card tiles → inline detail) and List (accordion). Both support search filtering
-- **Shared types/constants**: Import from `@fajr/shared/admin` (`AdminSectionId`, `AdminSectionCategory`, `CATEGORY_LABELS`, `CATEGORY_ORDER`)
+- **Shared types/constants**: Import from `@firstline/shared/admin` (`AdminSectionId`, `AdminSectionCategory`, `CATEGORY_LABELS`, `CATEGORY_ORDER`)
 
 ## Section Pattern
 

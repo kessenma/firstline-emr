@@ -2,7 +2,7 @@
 
 import { cn } from "@/utils/classNames";
 import useDashboardStore from "@/stores/useDashboardStore";
-import { VIEW_MODES, type ViewMode } from "@fajr/shared/patient-dashboard";
+import { VIEW_MODES, type ViewMode } from "@firstline/shared/patient-dashboard";
 
 export function ViewModeTabs() {
   const { filters, updateFilters } = useDashboardStore();

@@ -8,7 +8,6 @@ import {
   Platform,
   ScrollView,
   ActivityIndicator,
-  Image,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -32,6 +31,7 @@ import { useAppVersion } from '../hooks/useAppVersion';
 import { palette, brandColors } from '../utils/colors';
 import { ForgotPasswordSheet } from './forgot-password/ForgotPasswordSheet';
 import { TermsDrawer } from './signup/components/TermsDrawer';
+import { FirstlineMark } from '../components/icons/FirstlineMark';
 
 interface LoginScreenProps {
   onLoginSuccess: (user: any) => void;
@@ -353,13 +353,9 @@ export default function LoginScreen({ onLoginSuccess, onNavigateToSignup }: Logi
         >
           <View style={styles.header}>
             <View style={styles.logoContainer}>
-              <Image
-                source={require('../assets/fajr-triage-logo.png')}
-                style={styles.logoImage}
-                resizeMode="contain"
-              />
+              <FirstlineMark style={styles.logoImage} />
             </View>
-            <Text style={styles.title}>Fajr Mission EMR</Text>
+            <Text style={styles.title}>Firstline</Text>
             <Text style={styles.subtitle}>Electronic Medical Records</Text>
           </View>
 

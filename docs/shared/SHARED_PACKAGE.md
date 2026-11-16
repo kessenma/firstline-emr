@@ -1,4 +1,4 @@
-# @fajr/shared
+# @firstline/shared
 
 Shared TypeScript code used by both `apps/web` (Next.js) and `apps/mobile` (React Native). Uses direct source imports — no build step required.
 
@@ -6,27 +6,27 @@ Shared TypeScript code used by both `apps/web` (Next.js) and `apps/mobile` (Reac
 
 | Import | What's in it |
 |---|---|
-| `@fajr/shared/constants` | Domain reference data: doctor specialties, languages (8 locales), countries (8 locales), country codes |
-| `@fajr/shared/care-team` | Care team roles, labels, descriptions, badge colors, `getRolesForAccountType()`, `isLeadRole()` |
-| `@fajr/shared/patient` | Enums (status, priority, gender, account type, baseline-ambu), note content types + type guards, entity types (CareTeamMember, Medication, RxOrder, MedOrder) |
-| `@fajr/shared/patient-utils` | Pure formatting helpers, note validation/preview/templates, status/priority color maps |
-| `@fajr/shared/field-mapping` | `camelToSnake`/`snakeToCamel` case conversion + object key converters |
-| `@fajr/shared/theme` | Color palette, design tokens |
-| `@fajr/shared/2fa` | Two-factor auth types and constants |
-| `@fajr/shared/signup` | Signup form types, validation, step config (re-exports constants from `@fajr/shared/constants`) |
-| `@fajr/shared/user` | Profile types (`ProfileFormValuesBase`), settings types (`ThemeMode`, `PatientChartViewMode`), credential types (`PasskeyCredentialDisplay`, `MedicalLicense*`), validation, constants |
-| `@fajr/shared/legal-content` | Terms of service, privacy policy content |
-| `@fajr/shared/admin` | Admin dashboard entity types, section registry (categories, IDs, metadata), permissions enum, pagination/query utils |
+| `@firstline/shared/constants` | Domain reference data: doctor specialties, languages (8 locales), countries (8 locales), country codes |
+| `@firstline/shared/care-team` | Care team roles, labels, descriptions, badge colors, `getRolesForAccountType()`, `isLeadRole()` |
+| `@firstline/shared/patient` | Enums (status, priority, gender, account type, baseline-ambu), note content types + type guards, entity types (CareTeamMember, Medication, RxOrder, MedOrder) |
+| `@firstline/shared/patient-utils` | Pure formatting helpers, note validation/preview/templates, status/priority color maps |
+| `@firstline/shared/field-mapping` | `camelToSnake`/`snakeToCamel` case conversion + object key converters |
+| `@firstline/shared/theme` | Color palette, design tokens |
+| `@firstline/shared/2fa` | Two-factor auth types and constants |
+| `@firstline/shared/signup` | Signup form types, validation, step config (re-exports constants from `@firstline/shared/constants`) |
+| `@firstline/shared/user` | Profile types (`ProfileFormValuesBase`), settings types (`ThemeMode`, `PatientChartViewMode`), credential types (`PasskeyCredentialDisplay`, `MedicalLicense*`), validation, constants |
+| `@firstline/shared/legal-content` | Terms of service, privacy policy content |
+| `@firstline/shared/admin` | Admin dashboard entity types, section registry (categories, IDs, metadata), permissions enum, pagination/query utils |
 
 ## Usage
 
 ```ts
 // Import from specific modules — NOT from the root
-import { CareTeamRole, ROLE_LABELS, getRolesForAccountType } from '@fajr/shared/care-team';
-import { PatientStatus, PATIENT_PRIORITY_VALUES, sortByPriority } from '@fajr/shared/patient';
-import { formatDate, getInitials, isNotePublishable } from '@fajr/shared/patient-utils';
-import { DoctorSpecialtyList, LanguagesList, CountriesList } from '@fajr/shared/constants';
-import { camelToSnake, keysToCamelCase } from '@fajr/shared/field-mapping';
+import { CareTeamRole, ROLE_LABELS, getRolesForAccountType } from '@firstline/shared/care-team';
+import { PatientStatus, PATIENT_PRIORITY_VALUES, sortByPriority } from '@firstline/shared/patient';
+import { formatDate, getInitials, isNotePublishable } from '@firstline/shared/patient-utils';
+import { DoctorSpecialtyList, LanguagesList, CountriesList } from '@firstline/shared/constants';
+import { camelToSnake, keysToCamelCase } from '@firstline/shared/field-mapping';
 ```
 
 ## Adding a new module
@@ -35,30 +35,30 @@ import { camelToSnake, keysToCamelCase } from '@fajr/shared/field-mapping';
 2. Add `"./<module-name>": "./src/<module-name>/index.ts"` to `packages/shared/package.json` exports
 3. Add an alias in `apps/mobile/rspack.config.mjs` (Repack disables `exportsFields` by default):
    ```js
-   '@fajr/shared/<module-name>': path.resolve(__dirname, '../../packages/shared/src/<module-name>/index.ts'),
+   '@firstline/shared/<module-name>': path.resolve(__dirname, '../../packages/shared/src/<module-name>/index.ts'),
    ```
 4. No build step needed — both Next.js and Repack/Metro resolve `.ts` source directly
 
 ## Module details
 
-### `@fajr/shared/constants`
+### `@firstline/shared/constants`
 
-Domain-wide reference data. Previously lived in `@fajr/shared/signup` but used across the entire app (patient forms, profiles, admin, telegram, CSV parsing).
+Domain-wide reference data. Previously lived in `@firstline/shared/signup` but used across the entire app (patient forms, profiles, admin, telegram, CSV parsing).
 
 ```ts
-import { DoctorSpecialtyList, DoctorSpecialties } from '@fajr/shared/constants';
-import { Languages, LanguagesList, LanguagesListArabic } from '@fajr/shared/constants';
-import { Countries, CountriesList, CountryCodes, CountryCodesList } from '@fajr/shared/constants';
+import { DoctorSpecialtyList, DoctorSpecialties } from '@firstline/shared/constants';
+import { Languages, LanguagesList, LanguagesListArabic } from '@firstline/shared/constants';
+import { Countries, CountriesList, CountryCodes, CountryCodesList } from '@firstline/shared/constants';
 ```
 
 All language/country enums are available in 8 locales: English, Arabic, Farsi, Pashto, Turkish, Urdu, Spanish, French.
 
-### `@fajr/shared/care-team`
+### `@firstline/shared/care-team`
 
 Care team role system used in the many-to-many doctor-patient relationship.
 
 ```ts
-import type { CareTeamRole, CareTeamMemberJSON } from '@fajr/shared/care-team';
+import type { CareTeamRole, CareTeamMemberJSON } from '@firstline/shared/care-team';
 import {
   CARE_TEAM_ROLES,      // ['surgeon', 'assistant', 'consulting', 'triage', 'coordinator']
   ROLE_LABELS,           // { surgeon: 'Surgeon (Lead)', ... }
@@ -66,19 +66,19 @@ import {
   ROLE_BADGE_COLORS,     // { surgeon: { bg: '#dbeafe', text: '#1e40af' }, ... }
   getRolesForAccountType, // 'Doctor' -> ['surgeon','assistant','consulting']
   isLeadRole,            // Only 'surgeon' returns true
-} from '@fajr/shared/care-team';
+} from '@firstline/shared/care-team';
 ```
 
 **Badge colors** are hex values (work everywhere). For Tailwind class strings on web, use the local adapter at `apps/web/lib/care-team-tailwind.ts`.
 
-### `@fajr/shared/patient`
+### `@firstline/shared/patient`
 
 All patient-domain enums, note content types, and shared entity interfaces.
 
 #### Enums
 
 ```ts
-import type { PatientStatus, PatientPriority, BaselineAmbu, Gender, AccountType } from '@fajr/shared/patient';
+import type { PatientStatus, PatientPriority, BaselineAmbu, Gender, AccountType } from '@firstline/shared/patient';
 import {
   PATIENT_STATUS_VALUES,     // ['Pre-Op / Not Cleared', ...]
   PATIENT_STATUS_COLORS,     // { 'Pre-Op / Not Cleared': '#6B7280', ... }
@@ -88,7 +88,7 @@ import {
   sortByPriority,            // Sort items by priority (Emergency first)
   isValidPatientStatus,
   isValidPatientPriority,
-} from '@fajr/shared/patient';
+} from '@firstline/shared/patient';
 ```
 
 **Priority values** match the PostgreSQL enum exactly: `Not Selected | Routine | Moderate | Urgent | Emergency`.
@@ -105,14 +105,14 @@ import type {
   NoteContent,            // Union of all content types
   NoteBase,               // Shared note interface (id, patientId, noteType, content, ...)
   NoteEditBase,           // Shared note edit interface
-} from '@fajr/shared/patient';
+} from '@firstline/shared/patient';
 
 import {
   isProcedureNote,   // Type guard
   isSubjectiveNote,  // Type guard
   isBlankNote,       // Type guard
   NOTE_TYPE_LABELS,  // { procedure: 'Procedure', subjective: 'SOAP', blank: 'Brief Note', triage: 'Triage' }
-} from '@fajr/shared/patient';
+} from '@firstline/shared/patient';
 ```
 
 #### Entity types
@@ -124,10 +124,10 @@ import type {
   Medication,        // { diagnosis, medication, dosage, frequency, quantity }
   RxOrderBase,       // Prescription order
   MedOrderBase,      // Medication order
-} from '@fajr/shared/patient';
+} from '@firstline/shared/patient';
 ```
 
-### `@fajr/shared/patient-utils`
+### `@firstline/shared/patient-utils`
 
 Pure utility functions with zero React/RN dependencies.
 
@@ -156,10 +156,10 @@ import {
   // Color maps
   getStatusColor,      // Returns { background, text } hex pair
   getPriorityColor,    // Returns { background, text } hex pair (uses DB-canonical values)
-} from '@fajr/shared/patient-utils';
+} from '@firstline/shared/patient-utils';
 ```
 
-### `@fajr/shared/user`
+### `@firstline/shared/user`
 
 Profile, settings, and credential types shared across web and mobile.
 
@@ -177,9 +177,9 @@ import type {
   ThemeMode,                  // 'light' | 'dark' | 'system'
   PatientChartViewMode,       // 'tabs' | 'dashboard'
   UserSettingsBase,           // Shared settings shape
-  AccountType,                // Re-exported from @fajr/shared/patient
-  Gender,                     // Re-exported from @fajr/shared/patient
-} from '@fajr/shared/user';
+  AccountType,                // Re-exported from @firstline/shared/patient
+  Gender,                     // Re-exported from @firstline/shared/patient
+} from '@firstline/shared/user';
 ```
 
 #### Constants
@@ -194,7 +194,7 @@ import {
   PATIENT_CHART_VIEW_LABELS,      // { tabs: 'Tabs', dashboard: 'Dashboard' }
   PROFILE_CONSTRAINTS,            // { MIN_COUNTRIES: 1, MIN_LANGUAGES: 1, MAX_SPECIALTIES: 2, ... }
   MEDICAL_LICENSE_STATUSES,       // ['pending', 'verified', 'rejected']
-} from '@fajr/shared/user';
+} from '@firstline/shared/user';
 ```
 
 #### Validation
@@ -204,12 +204,12 @@ import {
   validateProfileBase,        // Pure TS validation -> { valid, errors }
   isValidThemeMode,           // Type guard
   isValidPatientChartView,    // Type guard
-} from '@fajr/shared/user';
+} from '@firstline/shared/user';
 ```
 
 **Platform extensions**: Mobile extends `ProfileFormValuesBase` with `city`, `isAdmin`, `googleId`, etc. Web extends it with `missions`. Each platform keeps its own Zod schema / form hooks.
 
-### `@fajr/shared/field-mapping`
+### `@firstline/shared/field-mapping`
 
 Generic case conversion utilities for TypeScript (camelCase) to PostgreSQL (snake_case) mapping.
 
@@ -223,7 +223,7 @@ import {
   entityToRow,        // Alias for keysToSnakeCase
   rowsToEntities,     // Array version
   entitiesToRows,     // Array version
-} from '@fajr/shared/field-mapping';
+} from '@firstline/shared/field-mapping';
 ```
 
 PowerSync-specific query builders and legacy MongoDB compatibility utilities remain in `apps/mobile/src/utils/fieldMapping.ts`.
@@ -235,4 +235,4 @@ PowerSync-specific query builders and legacy MongoDB compatibility utilities rem
 - **Sub-path exports** — import from specific modules, not the root
 - **Hex colors** — badge/status colors are hex values (universally usable). Platform-specific adapters (e.g., Tailwind classes) live in the consuming app
 - **DB-canonical values** — enums match PostgreSQL schema exactly
-- **Backward compatibility** — `@fajr/shared/signup` still re-exports constants for existing consumers
+- **Backward compatibility** — `@firstline/shared/signup` still re-exports constants for existing consumers

@@ -13,7 +13,7 @@ import {
 import { Eye, EyeOff, Lock, X } from 'lucide-react-native';
 import { useThemeColors } from '../../../../contexts/ThemeContext';
 import { spacing, borderRadius, typography } from '../../../../utils/theme';
-import { BACKUP_MIN_PASSPHRASE_LENGTH } from '@fajr/shared/backup';
+import { BACKUP_MIN_PASSPHRASE_LENGTH } from '@firstline/shared/backup';
 
 interface PassphraseModalProps {
   visible: boolean;

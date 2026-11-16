@@ -25,7 +25,7 @@ import {
   isSubjectiveNote,
   type NoteBase as Note,
   type NoteEditBase as NoteEdit,
-} from "@fajr/shared/patient";
+} from "@firstline/shared/patient";
 import { TranscriptBlock } from "../TranscriptBlock";
 
 /** Resolve attending physician name with fallback chain */

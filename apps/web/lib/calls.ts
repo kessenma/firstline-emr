@@ -20,7 +20,7 @@ import {
   findExistingGroupThread,
   getOrCreateDirectThread,
 } from "./internal-messages-helpers";
-import type { CallSummaryPayload } from "@fajr/shared/calls";
+import type { CallSummaryPayload } from "@firstline/shared/calls";
 
 // ---------------------------------------------------------------------------
 // Room naming

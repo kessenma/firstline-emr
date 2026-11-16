@@ -26,7 +26,7 @@ interface HealthData {
  * - docs/power-sync/01_01_2026_jwt_sub_claim_fix.md (JWT sub claim requirement)
  *
  * JWT Configuration:
- * - Key ID (kid): "fajr-emr-key"
+ * - Key ID (kid): "firstline-emr-key"
  * - Algorithm: HS256
  * - Secret: Base64-encoded, decoded before use
  * - Mobile Token Expiry: 14 days
@@ -44,7 +44,7 @@ export function usePowerSyncViewModel() {
 
   // Internal service URL (not exposed externally)
   // Actual API calls go through /api/powersync/* which routes to the internal Docker service
-  // External WebSocket URL for mobile clients: wss://sync.fajrmission.org
+  // External WebSocket URL for mobile clients: wss://sync.firstline.care
   const serviceUrl =
     typeof window !== "undefined"
       ? "http://powersync:6061"

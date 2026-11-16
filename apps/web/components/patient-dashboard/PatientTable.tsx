@@ -14,7 +14,7 @@ import { useIsMobile } from "@/components/ui/Table/hooks/use-mobile";
 import { PatientMobileActions } from "./PatientMobileActions";
 import { ChatThreadModal } from "./ChatThreadModal";
 import { RequestChartAccessModal } from "@/components/patient-chart/care-team/RequestChartAccessModal";
-import type { CareTeamRole } from "@fajr/shared/care-team";
+import type { CareTeamRole } from "@firstline/shared/care-team";
 import { useRouter } from "next/navigation";
 import type { DoctorSpecialtyList } from "@/data/doctorSpecialty.enum";
 import { updatePatient } from "@/lib/api";

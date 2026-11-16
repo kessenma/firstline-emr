@@ -9,7 +9,7 @@ import {
   type StorageImage,
   type StorageOwnerDetails,
   type StorageStats,
-} from '@fajr/shared/admin';
+} from '@firstline/shared/admin';
 
 // Owner lookups keyed by category+scope, shared across tiles and pages —
 // hovering ten files that belong to one patient should cost one request.
@@ -127,7 +127,7 @@ export function useImageStorageViewModel() {
   const consoleUrl =
     (typeof process !== 'undefined'
       ? process.env.NEXT_PUBLIC_RUSTFS_CONSOLE_URL
-      : undefined) ?? 'https://storage-admin.fajrmission.org';
+      : undefined) ?? 'https://storage-admin.firstline.care';
 
   const fetchPage = useCallback(
     async (targetPage: number, opts?: { refresh?: boolean; quiet?: boolean }) => {

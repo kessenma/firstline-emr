@@ -2,7 +2,7 @@
 
 import { cn } from "@/utils/classNames";
 import useDashboardStore from "@/stores/useDashboardStore";
-import { CARE_TEAM_SCOPES, shouldShowCareTeamScope } from "@fajr/shared/patient-dashboard";
+import { CARE_TEAM_SCOPES, shouldShowCareTeamScope } from "@firstline/shared/patient-dashboard";
 
 interface Props {
   accountType: string | undefined;

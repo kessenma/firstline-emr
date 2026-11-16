@@ -58,9 +58,9 @@ This means:
 ## Environment Settings
 
 ### Production
-- **Base URL**: `https://emr.fajr.org`
-- **API URL**: `https://emr.fajr.org/api`
-- **WebSocket**: `wss://emr.fajr.org`
+- **Base URL**: `https://firstline.care`
+- **API URL**: `https://firstline.care/api`
+- **WebSocket**: `wss://firstline.care`
 
 ### Local Development
 - **Base URL**: `http://localhost:3000`
@@ -83,7 +83,7 @@ This means:
 ┌─────────────────────────────────────┐
 │        Environment:                  │
 │  Local Dev  [====○] Production      │
-│  https://emr.fajr.org               │
+│  https://firstline.care               │
 └─────────────────────────────────────┘
 ```
 
@@ -144,10 +144,10 @@ ifconfig | grep "inet " | grep -v 127.0.0.1
 **Verification**: Check console logs after login:
 ```
 🔄 Environment changed to: production
-🌐 New base URL: https://emr.fajr.org
+🌐 New base URL: https://firstline.care
 ✅ Login successful
 🔍 Fetching threads...
-🌐 Current API config: { baseUrl: "https://emr.fajr.org", environment: "development" }
+🌐 Current API config: { baseUrl: "https://firstline.care", environment: "development" }
 ```
 
 The `baseUrl` in the API config should match your login URL.
@@ -199,17 +199,17 @@ The app logs environment info to help with debugging:
 ```
 # When environment changes:
 🔄 Environment changed to: production
-🌐 New base URL: https://emr.fajr.org
+🌐 New base URL: https://firstline.care
 
 # When fetching messages:
 🔍 Fetching threads...
 🌐 Current API config: { 
-  baseUrl: "https://emr.fajr.org", 
+  baseUrl: "https://firstline.care", 
   environment: "development" 
 }
 🌐 Fetching from URLs:
-  Internal: https://emr.fajr.org/api/internal-messages
-  Messages: https://emr.fajr.org/api/messages
+  Internal: https://firstline.care/api/internal-messages
+  Messages: https://firstline.care/api/messages
 ```
 
 If you see mismatched URLs, log out and log in again.

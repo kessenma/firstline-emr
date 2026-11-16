@@ -1,3 +1,4 @@
+import { CONTACT_EMAIL } from '@firstline/shared/constants';
 // apps/web/form-ui/telegram-patient/aboutPage/NewPatientTranslations.ts
 import { getTelegramBotUrl } from '@/utils/telegram';
 
@@ -30,11 +31,11 @@ export const newPatientTranslations: Translations = {
     english: {
         title: "New Patient Registration",
         subtitlePart1: "If you are a patient who needs a medical consultation and would like to register for our free telehealth app",
-        subtitlePart2: "MedFlow,",
+        subtitlePart2: "Firstline,",
         subtitlePart3: "please follow the steps below:",
         steps: [
             {
-                title: "Click the button Below to chat with Our Fajr Scientific Telegram chatbot",
+                title: "Click the button Below to chat with Our Firstline Telegram chatbot",
                 description: "Connect with our team on Telegram. This ensures flexible, quick, and easy communication.",
             },
             {
@@ -49,17 +50,17 @@ export const newPatientTranslations: Translations = {
         getStarted: "Ready to Get Started?",
         buttonText: "Chat with Our Team on Telegram",
         helpText: "Need Help?",
-        contactInfo: "If you have any issues or need further assistance, send us an email at info@fajr.org or send us a message on Instagram @fajrglobal.en.",
+        contactInfo: `If you have any issues or need further assistance, send us an email at ${CONTACT_EMAIL} or send us a message on Instagram @TODO-SET-INSTAGRAM.`,
         telegramLink: getTelegramBotUrl(),
     },
     arabic: {
         title: "تسجيل المرضى الجدد",
         subtitlePart1: "إذا كنت مريضًا يحتاج إلى استشارة طبية وترغب في التسجيل في تطبيقنا المجاني للرعاية الصحية عن بعد،",
-        subtitlePart2: "MedFlow,",
+        subtitlePart2: "Firstline,",
         subtitlePart3: "يرجى اتباع الخطوات أدناه:",
         steps: [
             {
-                title: "اضغط على الزر أدناه للدردشة مع بوت تليجرام الخاص بـ Fajr Scientific",
+                title: "اضغط على الزر أدناه للدردشة مع بوت تليجرام الخاص بـ Firstline",
                 description: "تواصل مع فريقنا على تليجرام لضمان تواصل مرن وسريع وسهل.",
             },
             {
@@ -74,17 +75,17 @@ export const newPatientTranslations: Translations = {
         getStarted: "هل أنت مستعد للبدء؟",
         buttonText: "تواصل مع فريقنا على تليجرام",
         helpText: "تحتاج مساعدة؟",
-        contactInfo: "إذا واجهت أي مشكلات أو كنت بحاجة إلى مساعدة إضافية، يرجى إرسال بريد إلكتروني إلى info@fajr.org أو رسالة على إنستغرام @fajrglobal.en.",
+        contactInfo: `إذا واجهت أي مشكلات أو كنت بحاجة إلى مساعدة إضافية، يرجى إرسال بريد إلكتروني إلى ${CONTACT_EMAIL} أو رسالة على إنستغرام @TODO-SET-INSTAGRAM.`,
         telegramLink: getTelegramBotUrl(),
     },
     pashto: {
         title: "د نوي ناروغ ثبت کول",
         subtitlePart1: "که تاسو یو ناروغ یاست چې طبي مشورې ته اړتیا لرئ او غواړئ زموږ د وړیا ټیلی هیلت ایپ لپاره نوم لیکنه وکړئ،",
-        subtitlePart2: "MedFlow,",
+        subtitlePart2: "Firstline,",
         subtitlePart3: "مهرباني وکړئ لاندې ګامونه تعقیب کړئ:",
         steps: [
             {
-                title: "لاندې تڼۍ کېکاږئ ترڅو زموږ د Fajr Scientific ټلیګرام چټ بوټ سره خبرې وکړئ",
+                title: "لاندې تڼۍ کېکاږئ ترڅو زموږ د Firstline ټلیګرام چټ بوټ سره خبرې وکړئ",
                 description: "زموږ له ټیم سره په ټلیګرام اړیکه ونیسئ. دا د انعطاف وړ، چټک، او اسانه اړیکې ډاډ ورکوي.",
             },
             {
@@ -99,17 +100,17 @@ export const newPatientTranslations: Translations = {
         getStarted: "د پیل لپاره چمتو یاست؟",
         buttonText: "زموږ ټیم سره په ټلیګرام خبرې وکړئ",
         helpText: "مرستې ته اړتیا لرئ؟",
-        contactInfo: "که تاسو کومه ستونزه لرئ یا اضافي مرستې ته اړتیا لرئ، موږ ته په info@fajr.org بریښنالیک واستوئ یا زموږ انسټاګرام کې پیغام ولیکئ @fajrglobal.en.",
+        contactInfo: `که تاسو کومه ستونزه لرئ یا اضافي مرستې ته اړتیا لرئ، موږ ته په ${CONTACT_EMAIL} بریښنالیک واستوئ یا زموږ انسټاګرام کې پیغام ولیکئ @TODO-SET-INSTAGRAM.`,
         telegramLink: getTelegramBotUrl(),
     },
     farsi: {
         title: "ثبت نام بیمار جدید",
         subtitlePart1: "اگر بیمار هستید که نیاز به مشاوره پزشکی دارید و می خواهید در برنامه رایگان بهداشت از راه دور ما ثبت نام کنید،",
-        subtitlePart2: "MedFlow",
+        subtitlePart2: "Firstline",
         subtitlePart3: "لطفا مراحل زیر را دنبال کنید:",
         steps: [
             {
-                title: "بر روی دکمه زیر کلیک کنید تا با ربات تلگرام Fajr Scientific گفتگو کنید",
+                title: "بر روی دکمه زیر کلیک کنید تا با ربات تلگرام Firstline گفتگو کنید",
                 description: "با تیم ما در تلگرام ارتباط برقرار کنید. این امر ارتباط آسان، سریع و منعطف را تضمین می‌کند.",
             },
             {
@@ -124,7 +125,7 @@ export const newPatientTranslations: Translations = {
         getStarted: "آماده شروع هستید؟",
         buttonText: "با تیم ما در تلگرام گفتگو کنید",
         helpText: "نیاز به کمک دارید؟",
-        contactInfo: "اگر مشکلی دارید یا به کمک بیشتری نیاز دارید، لطفاً یک ایمیل به info@fajr.org ارسال کنید یا به ما در اینستاگرام پیام دهید @fajrglobal.en.",
+        contactInfo: `اگر مشکلی دارید یا به کمک بیشتری نیاز دارید، لطفاً یک ایمیل به ${CONTACT_EMAIL} ارسال کنید یا به ما در اینستاگرام پیام دهید @TODO-SET-INSTAGRAM.`,
         telegramLink: getTelegramBotUrl(),
     },
 };

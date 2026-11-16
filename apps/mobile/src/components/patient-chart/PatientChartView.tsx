@@ -21,7 +21,7 @@ import {
   AlertTriangle,
   Users,
 } from 'lucide-react-native';
-import { roleColors } from '@fajr/shared/theme';
+import { roleColors } from '@firstline/shared/theme';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePatientChart } from './PatientChartContext';

@@ -74,7 +74,7 @@ final class CallAudioRecorder {
   }
 
   private let capture = CallAudioCapture.shared
-  private let queue = DispatchQueue(label: "org.fajrmission.emr.callAudioRecorder")
+  private let queue = DispatchQueue(label: "care.firstline.emr.callAudioRecorder")
 
   private var doctor: StreamWriter?
   private var patient: StreamWriter?

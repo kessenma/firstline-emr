@@ -28,7 +28,7 @@ export interface OidcAccount {
 const getIssuerUrl = (): string => {
   // In production, use the actual domain
   if (process.env.NODE_ENV === 'production') {
-    return process.env.OIDC_ISSUER_URL || 'https://fajrmission.org';
+    return process.env.OIDC_ISSUER_URL || 'https://firstline.care';
   }
   // In development, use localhost
   return process.env.OIDC_ISSUER_URL || 'http://localhost:3000';
@@ -37,7 +37,7 @@ const getIssuerUrl = (): string => {
 // Get the Zitadel callback URL
 const getZitadelCallbackUrl = (): string => {
   return process.env.ZITADEL_CALLBACK_URL ||
-    'https://identity.fajrmission.org/ui/login/login/externalidp/callback';
+    'https://identity.firstline.care/ui/login/login/externalidp/callback';
 };
 
 // Find account by ID - used by oidc-provider to look up users
@@ -213,7 +213,7 @@ export function createOidcConfiguration(): Configuration {
     // Registered clients (Zitadel)
     clients: [
       {
-        client_id: process.env.OIDC_ZITADEL_CLIENT_ID || 'fajr-emr-oidc',
+        client_id: process.env.OIDC_ZITADEL_CLIENT_ID || 'firstline-emr-oidc',
         client_secret: process.env.OIDC_ZITADEL_CLIENT_SECRET,
         redirect_uris: [
           zitadelCallback,

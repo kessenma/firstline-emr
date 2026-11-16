@@ -1,4 +1,4 @@
-# Quick Start Guide - Fajr EMR Mobile App
+# Quick Start Guide - Firstline Mobile App
 
 ## Setup (First Time)
 
@@ -11,8 +11,8 @@
 
 ```bash
 # Clone and install
-git clone https://github.com/<your-org>/fajr-medflow-emr.git
-cd fajr-medflow-emr/apps/mobile
+git clone https://github.com/<your-org>/firstline-emr.git
+cd firstline-emr/apps/mobile
 npm install
 
 # iOS only
@@ -36,7 +36,7 @@ npm run android # Android Emulator
 
 1. Open the app (LoginScreen appears)
 2. Toggle: **Production** (right side)
-3. URL shows: `https://emr.fajr.org`
+3. URL shows: `https://firstline.care`
 4. Login with your credentials
 5. ✅ Everything works!
 
@@ -152,24 +152,24 @@ npm run android -- --verbose
 
 ```
 👋=== LOGIN DEBUG ===👋
-Base URL: https://emr.fajr.org
+Base URL: https://firstline.care
 ✅ Login successful
 
 🔄 Environment changed to: production
-🌐 New base URL: https://emr.fajr.org
+🌐 New base URL: https://firstline.care
 
 🔍 Fetching threads...
-🌐 Current API config: { baseUrl: "https://emr.fajr.org" }
+🌐 Current API config: { baseUrl: "https://firstline.care" }
 🌐 Fetching from URLs:
-  Internal: https://emr.fajr.org/api/internal-messages
-  Messages: https://emr.fajr.org/api/messages
+  Internal: https://firstline.care/api/internal-messages
+  Messages: https://firstline.care/api/messages
 ✅ Threads loaded successfully: 5 threads
 ```
 
 ### Environment Mismatch (Problem!)
 
 ```
-Base URL: https://emr.fajr.org
+Base URL: https://firstline.care
 ✅ Login successful
 
 🔍 Fetching threads...

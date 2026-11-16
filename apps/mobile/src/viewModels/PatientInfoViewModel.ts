@@ -1,6 +1,6 @@
 // apps/mobile/src/viewModels/PatientInfoViewModel.ts
 import { Patient } from '../types/patient';
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
 
 export class PatientInfoViewModel {
     patient: Patient | null = null;

@@ -5,7 +5,7 @@ import useDashboardStore from "@/stores/useDashboardStore";
 import {
   type DashboardFilters,
   DEFAULT_DASHBOARD_FILTERS,
-} from "@fajr/shared/patient-dashboard";
+} from "@firstline/shared/patient-dashboard";
 
 /** Presets now store the shared `DashboardFilters` verbatim. `search` is
  *  deliberately excluded — a saved view shouldn't pin a search term. */

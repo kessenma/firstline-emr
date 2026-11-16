@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
     try {
       await pushNotificationService.sendNotificationToUsers(userIds, {
         title: "Account Approved!",
-        body: "Your Fajr EMR account has been approved. You can now access the app.",
+        body: "Your Firstline account has been approved. You can now access the app.",
         data: { type: "account_approved" },
       });
       console.log(`✅ Sent approval push notifications to ${userIds.length} users`);

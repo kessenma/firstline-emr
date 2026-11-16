@@ -26,7 +26,7 @@ export function useAnalyticsViewModel(): UseAnalyticsViewModelReturn {
 
   // Get analytics URL from environment or use default
   // TODO: Get from config/environment
-  const analyticsUrl = 'https://analytics.fajrmission.org/login';
+  const analyticsUrl = 'https://analytics.firstline.care/login';
 
   // Open analytics dashboard in browser
   const openAnalytics = useCallback(async () => {

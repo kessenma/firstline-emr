@@ -19,8 +19,8 @@ echo "========================================================================"
 echo ""
 
 # Configuration from environment or defaults
-ENDPOINT="${OBJECT_STORAGE_ENDPOINT:-s3.emr.fajr.org}"
-BUCKET="${OBJECT_STORAGE_BUCKET:-fajr-media}"
+ENDPOINT="${OBJECT_STORAGE_ENDPOINT:-s3.firstline.care}"
+BUCKET="${OBJECT_STORAGE_BUCKET:-firstline-media}"
 ACCESS_KEY="${OBJECT_STORAGE_KEY:-admin}"
 SECRET_KEY="${OBJECT_STORAGE_SECRET:-YourSecurePassword123!}"
 PORT="${OBJECT_STORAGE_PORT:-9100}"

@@ -3,7 +3,7 @@
 //
 // Access comes from the cookie POST ./unlock issues after the pharmacist
 // confirms the patient's last name and date of birth. It previously required a
-// MedFlow session, which no outside pharmacy has — so the QR could only be
+// Firstline session, which no outside pharmacy has — so the QR could only be
 // opened by staff, not by the pharmacist it was printed for.
 
 import { NextResponse } from "next/server";
@@ -11,7 +11,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { rxOrders } from "@/db/schema";
 import { loadGatedOrder } from "@/lib/rx-access-gate";
-import { isPrescriptionCancelled } from "@fajr/shared/medications";
+import { isPrescriptionCancelled } from "@firstline/shared/medications";
 
 export const dynamic = "force-dynamic";
 

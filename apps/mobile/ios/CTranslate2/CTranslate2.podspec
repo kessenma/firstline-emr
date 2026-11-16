@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary      = "CTranslate2 + SentencePiece for on-device translation"
   s.homepage     = "https://github.com/OpenNMT/CTranslate2"
   s.license      = { :type => "MIT" }
-  s.author       = "Fajr EMR"
+  s.author       = "Firstline"
   s.platform     = :ios, "15.1"
   s.source       = { :path => "." }
 

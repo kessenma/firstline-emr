@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { patientCareTeam } from "@/db/schema/patientCareTeam";
-import { getAutoEnrolRole, isLeadRole, type CareTeamRole } from "@fajr/shared/care-team";
+import { getAutoEnrolRole, isLeadRole, type CareTeamRole } from "@firstline/shared/care-team";
 import { syncCareTeamToPatient } from "@/lib/server/syncCareTeamToPatient";
 
 /**

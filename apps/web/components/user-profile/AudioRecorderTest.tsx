@@ -4,7 +4,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Mic, Square } from "lucide-react";
-import { formatAudioTime } from "@fajr/shared/media";
+import { formatAudioTime } from "@firstline/shared/media";
 
 export function AudioRecorderTest() {
   const [isRecording, setIsRecording] = useState(false);

@@ -12,12 +12,12 @@ import React, {
 import { useParams } from "next/navigation";
 import { PatientInfoViewModel } from "./patient-info/PatientInfoViewModel";
 import type { Patient } from "@/db/schema/patients";
-import type { ListNotesResponse, NoteBase as Note } from "@fajr/shared/patient";
+import type { ListNotesResponse, NoteBase as Note } from "@firstline/shared/patient";
 import type {
   ListRxOrdersResponse,
   MedOrder,
   RxOrder,
-} from "@fajr/shared/medications";
+} from "@firstline/shared/medications";
 
 export interface PatientInfo {
   patientName: string;

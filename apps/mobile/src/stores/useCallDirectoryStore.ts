@@ -14,7 +14,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { CallRecent, DirectoryUser } from '@fajr/shared/calls';
+import type { CallRecent, DirectoryUser } from '@firstline/shared/calls';
 import { storage } from '../utils/mmkv';
 
 /**

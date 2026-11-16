@@ -14,7 +14,7 @@ import {
   parseCallSummary,
   formatDuration,
   type CallSummaryPayload,
-} from "@fajr/shared/calls";
+} from "@firstline/shared/calls";
 import { cn } from "@/lib/utils";
 
 interface CallSummaryMessageProps {

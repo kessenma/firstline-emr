@@ -11,7 +11,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Default values
-BASE_URL="${BASE_URL:-https://emr.fajr.org}"
+BASE_URL="${BASE_URL:-https://firstline.care}"
 EMAIL="${EMAIL:-}"
 PASSWORD="${PASSWORD:-}"
 TOKEN="${TOKEN:-}"
@@ -59,7 +59,7 @@ while [[ $# -gt 0 ]]; do
             echo "Usage: $0 [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  --url URL          API base URL (default: https://emr.fajr.org)"
+            echo "  --url URL          API base URL (default: https://firstline.care)"
             echo "  --email EMAIL      User email for login"
             echo "  --password PASS    User password for login"
             echo "  --token TOKEN      JWT token to test (skips login)"
@@ -73,7 +73,7 @@ while [[ $# -gt 0 ]]; do
             echo "  $0 --token eyJhbGci..."
             echo ""
             echo "  # Use different server"
-            echo "  $0 --url https://stage.emr.fajr.org --email user@example.com --password mypassword"
+            echo "  $0 --url https://stage.firstline.care --email user@example.com --password mypassword"
             exit 0
             ;;
         *)

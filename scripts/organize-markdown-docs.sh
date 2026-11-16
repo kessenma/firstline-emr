@@ -170,7 +170,7 @@ create_docs_index() {
     cat > docs/README.md << 'EOF'
 # Documentation Index
 
-Welcome to the Fajr Mission EMR documentation!
+Welcome to the Firstline documentation!
 
 **Last Updated:** $(date +%Y-%m-%d)
 

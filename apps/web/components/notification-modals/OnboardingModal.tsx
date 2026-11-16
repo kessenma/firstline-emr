@@ -55,8 +55,8 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
         <div className="text-center space-y-2">
           <h3 className="text-xl font-semibold">Welcome, {firstName}!</h3>
           <p className="text-muted-foreground leading-relaxed max-w-md">
-            Your account has been approved. You now have full access to Fajr
-            Mission EMR. If you have any questions, feel free to reach out to
+            Your account has been approved. You now have full access to
+            Firstline. If you have any questions, feel free to reach out to
             the admin team below.
           </p>
         </div>

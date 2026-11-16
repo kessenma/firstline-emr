@@ -1,7 +1,18 @@
 // packages/shared/src/2fa/constants.ts
 // Shared 2FA constants used by both web and mobile
 
-export const TOTP_ISSUER = "Fajr Mission EMR";
+import { BRAND_NAME } from "../constants/brand";
+
+/**
+ * Label shown in the user's authenticator app. Derived from BRAND_NAME so it
+ * cannot drift from the product name — it previously existed as a second,
+ * hand-written copy in apps/web/lib/totp.ts, and two mobile screens bypassed
+ * both and hardcoded the string a third time.
+ *
+ * Changing this does not invalidate existing TOTP secrets; already-enrolled
+ * authenticators keep displaying whatever label they were enrolled with.
+ */
+export const TOTP_ISSUER = BRAND_NAME;
 export const TOTP_DIGITS = 6;
 export const TOTP_PERIOD = 30; // seconds
 export const LOGIN_TOKEN_EXPIRY_SECONDS = 300; // 5 minutes

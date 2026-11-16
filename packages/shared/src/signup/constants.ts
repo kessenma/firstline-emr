@@ -1,5 +1,5 @@
 // Re-export domain constants from their canonical location.
-// These were moved to @fajr/shared/constants — prefer importing from there directly.
+// These were moved to @firstline/shared/constants — prefer importing from there directly.
 export {
   DoctorSpecialtyList,
   DoctorSpecialties,

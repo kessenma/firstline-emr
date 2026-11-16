@@ -14,8 +14,8 @@ import {
 import { users } from "./users";
 import { missions } from "./missions";
 import { videoCallSessions } from "./videoCallSessions";
-import type { CareTeamMemberJSON } from "@fajr/shared/care-team";
-import type { RxLinkLockState, RxCancellerRole } from "@fajr/shared/medications";
+import type { CareTeamMemberJSON } from "@firstline/shared/care-team";
+import type { RxLinkLockState, RxCancellerRole } from "@firstline/shared/medications";
 
 // Enums
 export const patientGenderEnum = pgEnum("patient_gender", ["Male", "Female"]);

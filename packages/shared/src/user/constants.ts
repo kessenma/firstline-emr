@@ -1,4 +1,4 @@
-// @fajr/shared/user — Constants for profile and settings
+// @firstline/shared/user — Constants for profile and settings
 
 import type { ThemeMode, PatientChartViewMode } from './types';
 

@@ -25,7 +25,7 @@ import {
   serializePatientCard,
   getPrimarySpecialty,
   type RecipientUser,
-} from '@fajr/shared/patient-share';
+} from '@firstline/shared/patient-share';
 
 interface InternalThreadRow {
   id: string;
@@ -36,7 +36,7 @@ interface InternalThreadRow {
 }
 
 /** The patient this sheet sends — not the wire format. See `PatientCardPayload`
- *  in `@fajr/shared/patient-share` for what actually goes over the wire. */
+ *  in `@firstline/shared/patient-share` for what actually goes over the wire. */
 interface SendablePatient {
   id: string;
   patientName?: string;

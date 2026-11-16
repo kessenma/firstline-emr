@@ -85,7 +85,7 @@ echo ""
 
 # Test external HTTPS endpoint
 echo "7. Testing external HTTPS endpoint..."
-EXTERNAL_URL="https://ws.emr.fajr.org/probes/liveness"
+EXTERNAL_URL="https://ws.firstline.care/probes/liveness"
 echo "   Testing: $EXTERNAL_URL"
 HTTPS_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$EXTERNAL_URL" 2>/dev/null)
 if [ "$HTTPS_RESPONSE" = "200" ]; then
@@ -98,7 +98,7 @@ echo ""
 
 # Test WebSocket endpoint
 echo "8. Testing WebSocket endpoint..."
-WS_URL="https://ws.emr.fajr.org/sync/stream"
+WS_URL="https://ws.firstline.care/sync/stream"
 echo "   Testing: $WS_URL"
 WS_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
     -H "Connection: Upgrade" \

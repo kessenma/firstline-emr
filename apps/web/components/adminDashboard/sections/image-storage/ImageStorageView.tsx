@@ -40,7 +40,7 @@ import {
   type StorageImage,
   type StorageOwnerDetails,
   type StorageOwnerKind,
-} from '@fajr/shared/admin';
+} from '@firstline/shared/admin';
 import { MediaViewer } from '@/components/ui/MediaViewer';
 import {
   useImageStorageViewModel,

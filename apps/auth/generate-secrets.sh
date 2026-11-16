@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# Generate secrets for Fajr SSO Authentication
+# Generate secrets for Firstline SSO Authentication
 # =============================================================================
 # Run this script to generate the required secrets for .env.auth.local
 # Usage: ./apps/auth/generate-secrets.sh
@@ -9,7 +9,7 @@
 set -e
 
 echo "=================================================="
-echo "  Fajr SSO - Secret Generator"
+echo "  Firstline SSO - Secret Generator"
 echo "=================================================="
 echo ""
 
@@ -41,7 +41,7 @@ echo ""
 echo "3. Start the auth stack:"
 echo "   docker-compose -f docker-compose.auth.yml up -d"
 echo ""
-echo "4. Access Zitadel at https://identity.fajrmission.org"
+echo "4. Access Zitadel at https://identity.firstline.care"
 echo "   Login with: admin / $ADMIN_PASSWORD"
 echo ""
 echo "5. Create OIDC applications in Zitadel console and"

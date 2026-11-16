@@ -19,7 +19,7 @@ import {
   PHOTO_REMOVED_RPC,
   buildPatientIdentity,
   photoCaptureFailureFrom,
-} from '@fajr/shared/video-call';
+} from '@firstline/shared/video-call';
 import type {
   CapturedPhoto,
   PhotoCaptureRequest,
@@ -28,7 +28,7 @@ import type {
   PhotoConsentRequest,
   PhotoConsentResponse,
   PhotoRemovedNotice,
-} from '@fajr/shared/video-call';
+} from '@firstline/shared/video-call';
 import { getApiUrl } from '../../../../config';
 import { getStoredToken } from '../../../../utils/storage';
 import { getPatientPhotoSignedUrl } from '../../../../services/PatientMediaService';

@@ -8,7 +8,7 @@ version: "3.8"
 #   JWT_SECRET - JWT signing secret (must match web app)
 #
 # Optional environment variables (with defaults):
-#   NEXTAUTH_URL - Base URL for auth (default: https://fajrmission.org)
+#   NEXTAUTH_URL - Base URL for auth (default: https://firstline.care)
 #   NODE_ENV - Environment (default: production)
 #   POWERSYNC_LOG_LEVEL - Log level (default: info)
 #   POWERSYNC_PORT - PowerSync port (default: 6061)
@@ -66,9 +66,9 @@ services:
       dockerfile: Dockerfile
     restart: always
     labels:
-      # Caddy reverse proxy configuration for sync.fajrmission.org
+      # Caddy reverse proxy configuration for sync.firstline.care
       # Caddy natively handles WebSocket upgrades via reverse_proxy
-      caddy: sync.fajrmission.org
+      caddy: sync.firstline.care
       caddy.reverse_proxy: "{{upstreams 6061}}"
       # Caddy kills upgraded (WebSocket) connections on every config reload,
       # and caddy-docker-proxy reloads on any container churn (e.g. deploys).
@@ -81,7 +81,7 @@ services:
 
       # Authentication
       JWT_SECRET: ${JWT_SECRET}
-      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://fajrmission.org}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://firstline.care}
 
       # PowerSync configuration
       POWERSYNC_PORT: ${POWERSYNC_PORT:-6061}

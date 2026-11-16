@@ -9,7 +9,7 @@ import { getApiUrl } from '../config';
 import { getStoredToken } from '../utils/storage';
 import { TokenStorage } from '../services/TokenStorage';
 import { storage } from '../utils/mmkv';
-import type { PatientChartViewMode } from '@fajr/shared/user';
+import type { PatientChartViewMode } from '@firstline/shared/user';
 
 export type { PatientChartViewMode };
 

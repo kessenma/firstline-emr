@@ -1,16 +1,12 @@
 /**
  * API Configuration Constants
+ *
+ * NOTE: nothing currently imports from this file. The live base URLs come from
+ * `src/config/index.ts`, which is server-switchable at runtime. The former
+ * API_BASE_URL export here hardcoded a host that no longer resolves, so it has
+ * been removed rather than repointed — add the endpoint map's consumers or
+ * delete this file.
  */
-
-// Determine the API base URL based on environment
-// For development, use your local machine's IP or ngrok URL
-// For production, use your production API URL
-
-const DEV_API_URL = __DEV__ 
-  ? 'http://localhost:3000' // Change this to your backend URL
-  : 'https://api.fajr-medflow.com'; // Production URL
-
-export const API_BASE_URL = DEV_API_URL;
 
 /**
  * API Endpoints

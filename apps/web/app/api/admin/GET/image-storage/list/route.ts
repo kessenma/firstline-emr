@@ -20,7 +20,7 @@ import {
   type StorageCategoryGroup,
   type StorageCategoryId,
   type StorageImage,
-} from "@fajr/shared/admin";
+} from "@firstline/shared/admin";
 
 const MAX_LIMIT = 100;
 const SIGNED_URL_TTL_SECONDS = 3600;

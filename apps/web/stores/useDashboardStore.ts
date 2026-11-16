@@ -5,7 +5,7 @@ import {
     DEFAULT_DASHBOARD_FILTERS,
     reduceDashboardFilters,
     clearDashboardFilters,
-} from '@fajr/shared/patient-dashboard';
+} from '@firstline/shared/patient-dashboard';
 
 /**
  * Dashboard filter state, shaped as the shared `DashboardFilters` so web and

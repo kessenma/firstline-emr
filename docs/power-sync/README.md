@@ -2,7 +2,7 @@
 
 ## Overview
 
-PowerSync provides real-time, offline-first data synchronization between PostgreSQL and mobile SQLite databases. This guide covers setting up PowerSync for the Fajr EMR mobile app.
+PowerSync provides real-time, offline-first data synchronization between PostgreSQL and mobile SQLite databases. This guide covers setting up PowerSync for the Firstline mobile app.
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ SHOW wal_level;
 CREATE USER powersync WITH PASSWORD 'secure_password_here';
 
 -- Grant necessary permissions
-GRANT CONNECT ON DATABASE fajr_emr TO powersync;
+GRANT CONNECT ON DATABASE firstline_emr TO powersync;
 GRANT USAGE ON SCHEMA public TO powersync;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO powersync;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO powersync;
@@ -146,7 +146,7 @@ import { Sqlite } from '@powersync/react-native-op-sqlite';
 const sqlite = new Sqlite();
 export const db = new PowerSyncDatabase({
   database: sqlite,
-  serverUrl: 'https://sync.emr.fajr.org',
+  serverUrl: 'https://sync.firstline.care',
 });
 
 // Connect with JWT token
@@ -191,11 +191,11 @@ export function usePatients() {
 ```bash
 # Check replication slot
 docker compose -f docker-compose.powersync.yml exec powersync \
-  psql -U postgres -d fajr_emr -c "SELECT * FROM pg_replication_slots;"
+  psql -U postgres -d firstline_emr -c "SELECT * FROM pg_replication_slots;"
 
 # Check publication
 docker compose -f docker-compose.powersync.yml exec powersync \
-  psql -U postgres -d fajr_emr -c "SELECT * FROM pg_publication_tables;"
+  psql -U postgres -d firstline_emr -c "SELECT * FROM pg_publication_tables;"
 ```
 
 ### 2. Test Sync Rules
@@ -217,7 +217,7 @@ curl http://localhost:9090/metrics | grep powersync
 
 # Check active connections
 docker compose -f docker-compose.powersync.yml exec powersync \
-  psql -U postgres -d fajr_emr -c "SELECT * FROM pg_stat_activity WHERE application_name LIKE 'powersync%';"
+  psql -U postgres -d firstline_emr -c "SELECT * FROM pg_stat_activity WHERE application_name LIKE 'powersync%';"
 ```
 
 ## Production Deployment
@@ -248,7 +248,7 @@ POWERSYNC_INITIAL_SYNC_BATCH_SIZE=500
 # Enable dashboard (with authentication)
 docker compose -f docker-compose.powersync.yml --profile monitoring up -d
 
-# Access at https://sync-dashboard.emr.fajr.org
+# Access at https://sync-dashboard.firstline.care
 ```
 
 ### 4. Backup Strategy
@@ -338,4 +338,4 @@ curl http://localhost:8080/health
 
 ## License
 
-This configuration is part of the Fajr EMR system.
+This configuration is part of the Firstline system.

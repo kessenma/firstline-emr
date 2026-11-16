@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getApiUrl } from '../../config';
 import { TokenStorage } from '../../services/TokenStorage';
-import type { ProfileFormValuesBase } from '@fajr/shared/user';
+import type { ProfileFormValuesBase } from '@firstline/shared/user';
 
 export interface ProfileFormValues extends ProfileFormValuesBase {
   city?: string;

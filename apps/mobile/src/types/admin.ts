@@ -18,20 +18,20 @@ export type {
   StorageImage,
   ProfileUpdateRequest,
   ForgotPasswordUser,
-} from '@fajr/shared/admin';
+} from '@firstline/shared/admin';
 
 // Backward-compat alias: mobile code uses ExistingUserSummary everywhere
-import type { AdminUserSummary } from '@fajr/shared/admin';
+import type { AdminUserSummary } from '@firstline/shared/admin';
 export type ExistingUserSummary = AdminUserSummary;
 
 // ── Mobile-only response/request envelopes ──
 
 export interface AdminListResponse {
-  admins: import('@fajr/shared/admin').AdminUser[];
+  admins: import('@firstline/shared/admin').AdminUser[];
 }
 
 export interface AdminSearchResponse {
-  admins: import('@fajr/shared/admin').AdminUser[];
+  admins: import('@firstline/shared/admin').AdminUser[];
 }
 
 export interface ExistingUsersResponse {
@@ -71,7 +71,7 @@ export interface AdminMgmtRemoveRequest {
 }
 
 export interface ForgotPasswordUserSearchResponse {
-  user: import('@fajr/shared/admin').ForgotPasswordUser;
+  user: import('@firstline/shared/admin').ForgotPasswordUser;
 }
 
 export interface GenerateForgotPasswordLinkRequest {
@@ -95,7 +95,7 @@ export interface SendPasswordResetEmailRequest {
 export type NotificationType = 'message' | 'alert' | 'all';
 
 export interface UserNotificationsResponse {
-  notifications: import('@fajr/shared/admin').AdminNotification[];
+  notifications: import('@firstline/shared/admin').AdminNotification[];
   totalCount: number;
   totalPages: number;
   currentPage: number;
@@ -103,7 +103,7 @@ export interface UserNotificationsResponse {
 
 export interface PatientIntakeGetResponse {
   success: boolean;
-  patientIntakes: import('@fajr/shared/admin').PatientIntakeConfig[];
+  patientIntakes: import('@firstline/shared/admin').PatientIntakeConfig[];
 }
 
 export interface PatientIntakeUpdateRequest {
@@ -113,34 +113,34 @@ export interface PatientIntakeUpdateRequest {
 
 export interface PatientIntakeUpdateResponse {
   success: boolean;
-  patientIntake: import('@fajr/shared/admin').PatientIntakeConfig;
+  patientIntake: import('@firstline/shared/admin').PatientIntakeConfig;
 }
 
 export interface MedOrdersResponse {
-  orders: import('@fajr/shared/admin').MedOrderItem[];
+  orders: import('@firstline/shared/admin').MedOrderItem[];
   totalPages: number;
   currentPage: number;
   totalOrders: number;
 }
 
 export interface SpecialtyBreakdownResponse {
-  specialtyBreakdown: import('@fajr/shared/admin').SpecialtyBreakdownItem[];
+  specialtyBreakdown: import('@firstline/shared/admin').SpecialtyBreakdownItem[];
 }
 
 export interface StatisticsResponse {
-  statistics: import('@fajr/shared/admin').StatisticsData;
+  statistics: import('@firstline/shared/admin').StatisticsData;
 }
 
 export interface ImageStorageListResponse {
-  images: import('@fajr/shared/admin').StorageImage[];
+  images: import('@firstline/shared/admin').StorageImage[];
   totalCount: number;
   totalPages: number;
   currentPage: number;
-  stats?: import('@fajr/shared/admin').StorageStats;
+  stats?: import('@firstline/shared/admin').StorageStats;
 }
 
 export interface ImageStorageStatsResponse {
-  stats: import('@fajr/shared/admin').StorageStats;
+  stats: import('@firstline/shared/admin').StorageStats;
 }
 
 export interface DeleteImageRequest {
@@ -160,7 +160,7 @@ export interface DeleteImageResponse {
 }
 
 export interface ProfileUpdateRequestsResponse {
-  requests: import('@fajr/shared/admin').ProfileUpdateRequest[];
+  requests: import('@firstline/shared/admin').ProfileUpdateRequest[];
 }
 
 export interface ReviewProfileUpdateRequest {

@@ -11,7 +11,7 @@
 // /api/users/directory, so typing stays instant offline.
 
 import { useEffect, useMemo, useState } from 'react';
-import type { DirectoryUser } from '@fajr/shared/calls';
+import type { DirectoryUser } from '@firstline/shared/calls';
 import { usePowerSyncQuery } from '../../hooks/powersync';
 import { useCallDirectoryStore } from '../../stores/useCallDirectoryStore';
 import { useAuth } from '../../contexts/AuthContext';

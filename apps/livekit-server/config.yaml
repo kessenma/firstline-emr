@@ -84,7 +84,7 @@ turn:
   # and logs "Starting TURN server" with this key absent. It selects the
   # certificate for TURN/TLS on 5349, which is disabled below. Kept accurate
   # anyway so nobody trusts a dead hostname later.
-  domain: livekit.fajrmission.org
+  domain: livekit.firstline.care
   udp_port: 3478
 
   # Relay allocations. One port per relayed participant.

@@ -91,8 +91,8 @@ export function OnboardingSheet({ visible, onClose }: OnboardingSheetProps) {
             Welcome, {firstName}!
           </Text>
           <Text style={[styles.welcomeBody, { color: colors.textSecondary }]}>
-            Your account has been approved. You now have full access to Fajr
-            Mission EMR. If you have any questions, feel free to reach out to
+            Your account has been approved. You now have full access to
+            Firstline. If you have any questions, feel free to reach out to
             the admin team below.
           </Text>
         </View>

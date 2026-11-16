@@ -26,7 +26,7 @@ import { PresetChips } from "./filters/PresetChips";
 import { TableSkeleton } from "../ui/Table/TableSkeleton";
 import { EmptyPatientsState } from "./EmptyPatientsState";
 import { DashboardHelpDialog } from "./DashboardHelpDialog";
-import { getActiveFilterCount } from "@fajr/shared/patient-dashboard";
+import { getActiveFilterCount } from "@firstline/shared/patient-dashboard";
 import FollowUpsView from "./followUps/FollowUpsView";
 import type { PatientWithMessages } from "./viewModel/types";
 import type { ServerPatient } from "@/lib/server/patients";

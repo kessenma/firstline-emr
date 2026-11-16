@@ -23,7 +23,7 @@ import {
 import {
   describePrescriptionCancellation,
   describePrescriptionDelivery,
-} from '@fajr/shared/medications';
+} from '@firstline/shared/medications';
 
 interface MedicationCardProps {
   item: AnyMedication;

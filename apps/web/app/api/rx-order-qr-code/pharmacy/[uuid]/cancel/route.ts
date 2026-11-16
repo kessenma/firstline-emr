@@ -6,7 +6,7 @@
 // and the reason is what the patient receives on Telegram.
 //
 // Authenticated by the last-name + DOB gate cookie, not a staff session: an
-// outside pharmacy has no MedFlow account.
+// outside pharmacy has no Firstline account.
 
 import { NextRequest, NextResponse } from "next/server";
 import { loadGatedOrder } from "@/lib/rx-access-gate";

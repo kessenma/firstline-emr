@@ -1,8 +1,19 @@
 // packages/shared/src/backup/encryption.ts
-// Shared types and constants for the .fajr-backup encrypted file format.
+// Shared types and constants for the .firstline-backup encrypted file format.
 
-/** Magic bytes at the start of every .fajr-backup file (ASCII "FAJR"). */
-export const BACKUP_MAGIC = new Uint8Array([0x46, 0x41, 0x4a, 0x52]); // "FAJR"
+/** Magic bytes written at the start of every .firstline-backup file (ASCII "FLIN"). */
+export const BACKUP_MAGIC = new Uint8Array([0x46, 0x4c, 0x49, 0x4e]); // "FLIN"
+
+/**
+ * Magic bytes this reader also accepts, for files written before the rebrand
+ * (ASCII "FAJR"). Every backup exported up to that point starts with these, so
+ * dropping them would make existing archives permanently unrestorable. Writers
+ * must always emit BACKUP_MAGIC; this is a read-side allowance only.
+ */
+export const BACKUP_MAGIC_LEGACY = new Uint8Array([0x46, 0x41, 0x4a, 0x52]); // "FAJR"
+
+/** All magic byte sequences a reader will accept. */
+export const BACKUP_MAGIC_ACCEPTED = [BACKUP_MAGIC, BACKUP_MAGIC_LEGACY];
 
 /** Current file format version. */
 export const BACKUP_FORMAT_VERSION = 1;
@@ -27,7 +38,7 @@ export const BACKUP_AES = {
 };
 
 /** File extension for encrypted backups. */
-export const BACKUP_FILE_EXTENSION = '.fajr-backup';
+export const BACKUP_FILE_EXTENSION = '.firstline-backup';
 
 /** Minimum passphrase length. */
 export const BACKUP_MIN_PASSPHRASE_LENGTH = 12;

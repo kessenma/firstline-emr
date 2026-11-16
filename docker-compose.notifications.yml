@@ -133,7 +133,7 @@ services:
       - ./.env
     environment:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      MEDFLOW_KEY: ${MEDFLOW_KEY}
+      FIRSTLINE_SERVICE_KEY: ${FIRSTLINE_SERVICE_KEY}
       API_BASE_URL: http://web:${PORT_ENV:-3000}
       NOTIFICATIONS_PORT: ${NOTIFICATIONS_PORT:-8080}
       OBJECT_STORAGE_CDN_ENDPOINT: ${OBJECT_STORAGE_CDN_ENDPOINT}
@@ -147,14 +147,14 @@ services:
       GORUSH_SANDBOX_URL: http://gorush-sandbox:8088
       DATABASE_URL: ${DATABASE_URL}
       NODE_ENV: ${NODE_ENV}
-      PUBLIC_URL: ${PUBLIC_URL:-https://fajrmission.org}
+      PUBLIC_URL: ${PUBLIC_URL:-https://firstline.care}
     depends_on:
       gorush:
         condition: service_started
     networks:
       - coolify
     labels:
-      caddy: notifications.dev.emr.fajrscientific.org
+      caddy: notifications.dev.firstline.care
       caddy.encode: gzip
       caddy.handle_path./health: "reverse_proxy {{upstreams 8080}}"
     healthcheck:

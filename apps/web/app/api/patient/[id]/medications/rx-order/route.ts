@@ -10,7 +10,7 @@ import sharp from "sharp";
 import { db } from "@/db";
 import { patients, rxOrders } from "@/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
-import type { CreateRxOrderResponse } from "@fajr/shared/medications";
+import type { CreateRxOrderResponse } from "@firstline/shared/medications";
 
 // UUID validation regex
 const UUID_REGEX =

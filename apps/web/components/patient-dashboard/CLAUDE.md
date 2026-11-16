@@ -57,8 +57,8 @@ Server prefetch (fetchActivePatientsWithMessages)
 ## Conventions
 
 - Auth: `verifySessionFromRequest()` on API routes, `useSession()` on client
-- **Chart access**: every patient on the mission is listed — the dashboard hides nothing by specialty. Opening a chart is gated instead, via `evaluateChartAccess` from `@fajr/shared/care-team` (same rule as mobile). Triage open anything; a Doctor opens charts in their specialty or where they're on the care team, otherwise `RequestChartAccessModal` offers to join. The authoritative check is in `PatientViewModel` — gating the chart itself, not the links into it, so pasted `/patient/{id}` URLs and shared patient cards are covered too
+- **Chart access**: every patient on the mission is listed — the dashboard hides nothing by specialty. Opening a chart is gated instead, via `evaluateChartAccess` from `@firstline/shared/care-team` (same rule as mobile). Triage open anything; a Doctor opens charts in their specialty or where they're on the care team, otherwise `RequestChartAccessModal` offers to join. The authoritative check is in `PatientViewModel` — gating the chart itself, not the links into it, so pasted `/patient/{id}` URLs and shared patient cards are covered too
 - Editing a patient records the editor on its care team server-side (`recordPatientEditor`) for Triage/Coordinator — that row is the audit trail of who triaged them. Doctors are deliberately excluded, since they can edit from the dashboard without opening the chart
 - Care team scope: "My Cases" / "I'm Lead" / "All" — filters by `careTeam` array membership
 - Conflict detection: `useConflictCount` hook fetches patient IDs with unresolved care team conflicts
-- Shared types: `@fajr/shared/patient-dashboard` for `DashboardFilters`, view modes, care team scopes
+- Shared types: `@firstline/shared/patient-dashboard` for `DashboardFilters`, view modes, care team scopes

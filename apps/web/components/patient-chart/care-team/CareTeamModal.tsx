@@ -20,8 +20,8 @@ import {
   ROLE_LABELS,
   ROLE_DESCRIPTIONS,
   type CareTeamRole,
-} from "@fajr/shared/care-team";
-import { buildPatientCardPayload, serializePatientCard } from "@fajr/shared/patient-share";
+} from "@firstline/shared/care-team";
+import { buildPatientCardPayload, serializePatientCard } from "@firstline/shared/patient-share";
 
 interface CareTeamMember {
   id: string;

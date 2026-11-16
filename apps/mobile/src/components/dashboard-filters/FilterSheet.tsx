@@ -20,8 +20,8 @@ import {
   CARE_TEAM_SCOPES,
   DASHBOARD_PRIORITY_OPTIONS,
   shouldShowCareTeamScope,
-} from '@fajr/shared/patient-dashboard';
-import type { DashboardFilters } from '@fajr/shared/patient-dashboard';
+} from '@firstline/shared/patient-dashboard';
+import type { DashboardFilters } from '@firstline/shared/patient-dashboard';
 import type { MissionOption } from '../../hooks/useMissions';
 import type { PatientWithMessages } from '../../types/patient';
 

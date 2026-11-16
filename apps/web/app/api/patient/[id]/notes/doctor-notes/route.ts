@@ -7,7 +7,7 @@ import { verifySessionFromRequest } from "@/lib/dal";
 import { db } from "@/db";
 import { notes, noteEdits, patients } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
-import type { ListNotesResponse } from "@fajr/shared/patient";
+import type { ListNotesResponse } from "@firstline/shared/patient";
 
 // UUID validation regex
 const UUID_REGEX =

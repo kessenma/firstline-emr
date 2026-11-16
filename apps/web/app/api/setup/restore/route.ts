@@ -12,7 +12,7 @@ import { executeRestore } from "@/lib/backup/restoreService";
 import {
   CLINICAL_BACKUP_TABLES,
   FULL_MIGRATION_TABLES,
-} from "@fajr/shared/admin";
+} from "@firstline/shared/admin";
 
 export async function POST(request: Request) {
   try {

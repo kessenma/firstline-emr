@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/components/hooks/useToast";
-import type { MissionRequestRow } from "@fajr/shared/admin";
+import type { MissionRequestRow } from "@firstline/shared/admin";
 
 export type { MissionRequestRow };
 

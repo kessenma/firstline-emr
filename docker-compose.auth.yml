@@ -5,7 +5,7 @@ x-build-args: &build-args
   BUILDKIT_INLINE_CACHE: 1
 
 # =============================================================================
-# Fajr Mission SSO Authentication Stack
+# Firstline SSO Authentication Stack
 # =============================================================================
 # This compose file sets up:
 # - Zitadel: Central identity provider with passkey support
@@ -90,10 +90,10 @@ services:
       # External access configuration
       ZITADEL_EXTERNALSECURE: "true"
       ZITADEL_EXTERNALPORT: 443
-      ZITADEL_EXTERNALDOMAIN: ${ZITADEL_DOMAIN:-identity.fajrmission.org}
+      ZITADEL_EXTERNALDOMAIN: ${ZITADEL_DOMAIN:-identity.firstline.care}
 
       # Initial admin user (only used on first run)
-      ZITADEL_FIRSTINSTANCE_ORG_NAME: "Fajr Mission"
+      ZITADEL_FIRSTINSTANCE_ORG_NAME: "Firstline"
       ZITADEL_FIRSTINSTANCE_ORG_HUMAN_USERNAME: ${ZITADEL_ADMIN_USERNAME:-admin}
       ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD: ${ZITADEL_ADMIN_PASSWORD}
 
@@ -116,7 +116,7 @@ services:
       coolify.name: "Zitadel Identity"
       coolify.description: "SSO Identity Provider"
 
-      # No caddy.* labels here on purpose: identity.fajrmission.org is served
+      # No caddy.* labels here on purpose: identity.firstline.care is served
       # by the static /data/coolify/proxy/caddy/dynamic/sos-auth.caddy file on
       # the box. These labels never worked (Coolify does not interpolate
       # ${VAR} in labels, and caddy-docker-proxy >= 2.9 rejects "${" inside
@@ -145,17 +145,17 @@ services:
       - --http-address=0.0.0.0:4180
       - --upstream=http://drizzle-studio:4983
       - --provider=oidc
-      - --oidc-issuer-url=https://${ZITADEL_DOMAIN:-identity.fajrmission.org}
+      - --oidc-issuer-url=https://${ZITADEL_DOMAIN:-identity.firstline.care}
       - --client-id=${OAUTH2_PROXY_ANALYTICS_CLIENT_ID}
       - --client-secret=${OAUTH2_PROXY_ANALYTICS_CLIENT_SECRET}
       - --cookie-secret=${OAUTH2_PROXY_COOKIE_SECRET}
       - --cookie-secure=true
-      - --cookie-name=_fajr_analytics_oauth2
-      - --cookie-domain=.fajrmission.org
+      - --cookie-name=_firstline_analytics_oauth2
+      - --cookie-domain=.firstline.care
       - --email-domain=*
       - --skip-provider-button=true
-      - --redirect-url=https://analytics.fajrmission.org/oauth2/callback
-      - --whitelist-domain=.fajrmission.org
+      - --redirect-url=https://analytics.firstline.care/oauth2/callback
+      - --whitelist-domain=.firstline.care
       - --reverse-proxy=true
       - --pass-access-token=true
       - --set-xauthrequest=true
@@ -168,7 +168,7 @@ services:
       coolify.name: "OAuth2 Proxy Analytics"
       coolify.description: "SSO proxy for Drizzle Studio"
 
-      caddy: analytics.fajrmission.org
+      caddy: analytics.firstline.care
       caddy.encode: gzip
       caddy.reverse_proxy: "{{upstreams 4180}}"
       # This container sits on two networks (coolify + the app network), and
@@ -228,17 +228,17 @@ services:
       # Route through storage-auth-proxy for automatic RustFS login
       - --upstream=http://storage-auth-proxy:3001
       - --provider=oidc
-      - --oidc-issuer-url=https://${ZITADEL_DOMAIN:-identity.fajrmission.org}
+      - --oidc-issuer-url=https://${ZITADEL_DOMAIN:-identity.firstline.care}
       - --client-id=${OAUTH2_PROXY_STORAGE_CLIENT_ID}
       - --client-secret=${OAUTH2_PROXY_STORAGE_CLIENT_SECRET}
       - --cookie-secret=${OAUTH2_PROXY_COOKIE_SECRET}
       - --cookie-secure=true
-      - --cookie-name=_fajr_storage_oauth2
-      - --cookie-domain=.fajrmission.org
+      - --cookie-name=_firstline_storage_oauth2
+      - --cookie-domain=.firstline.care
       - --email-domain=*
       - --skip-provider-button=true
-      - --redirect-url=https://storage-admin.fajrmission.org/oauth2/callback
-      - --whitelist-domain=.fajrmission.org
+      - --redirect-url=https://storage-admin.firstline.care/oauth2/callback
+      - --whitelist-domain=.firstline.care
       - --reverse-proxy=true
       - --pass-access-token=true
       - --set-xauthrequest=true

@@ -71,7 +71,8 @@ export default function ClientLayout({
       className={`h-full w-full ${dmSerifText.variable} ${aleo.variable} ${figtree.variable} ${initialHtmlClass || ""}`}
     >
       <head>
-        <title>Fajr.emr</title>
+        {/* The document title comes from the metadata export in app/layout.tsx.
+            A hardcoded <title> here would silently override it. */}
         <Script id="theme-boot" strategy="beforeInteractive">
           {`(function(){
   try {

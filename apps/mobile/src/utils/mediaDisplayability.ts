@@ -12,7 +12,7 @@ import {
   resolveMediaType,
   type MediaDisplayPlatform,
   type MediaType,
-} from '@fajr/shared/media';
+} from '@firstline/shared/media';
 
 const DEVICE_PLATFORM: MediaDisplayPlatform =
   Platform.OS === 'android' ? 'android' : 'ios';

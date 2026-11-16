@@ -33,7 +33,7 @@ import {
   formatDuration,
   initialsOf,
   isMissedCall,
-} from "@fajr/shared/calls";
+} from "@firstline/shared/calls";
 import { cn } from "@/lib/utils";
 
 interface UserCallHistoryProps {

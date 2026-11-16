@@ -29,7 +29,7 @@ import {
   getPriorityColor,
   formatSpecialties,
 } from '../utils/patientUtils';
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
 import { spacing, borderRadius, typography } from '../utils/theme';
 import { useThemeColors } from '../contexts/ThemeContext';
 import { palette } from '../utils/colors';

@@ -16,7 +16,7 @@ import { spacing, borderRadius, typography } from '../../utils/theme';
 import { Badge, BadgeVariant } from '../ui/Badge';
 import { BottomSheet } from '../BottomSheet';
 import { usePowerSyncQuery } from '../../hooks/powersync';
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
 import { TABLES } from '../../db';
 
 interface PatientDetailBottomSheetProps {

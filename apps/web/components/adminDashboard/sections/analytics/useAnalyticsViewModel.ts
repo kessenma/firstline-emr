@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 export function useAnalyticsViewModel(initialUrl?: string) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const url = (process.env.NEXT_PUBLIC_ANALYTICS_URL ?? initialUrl ?? 'https://analytics.dev.emr.fajrscientific.org/login');
+  const url = (process.env.NEXT_PUBLIC_ANALYTICS_URL ?? initialUrl ?? 'https://analytics.dev.firstline.care/login');
 
   const openExternal = useCallback(() => {
     window.open(url, '_blank', 'noopener,noreferrer');

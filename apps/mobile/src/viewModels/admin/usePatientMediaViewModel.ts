@@ -8,7 +8,7 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import { usePowerSyncPagedList } from '../../hooks/powersync';
-import { resolveMediaType, type MediaType } from '@fajr/shared/media';
+import { resolveMediaType, type MediaType } from '@firstline/shared/media';
 
 export type PatientMediaFilter = 'all' | 'images' | 'pdf';
 

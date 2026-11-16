@@ -6,7 +6,7 @@
 - **Main component**: `components/admin/AdminDashboardView.tsx` — accordion-based dashboard with search, refresh, help
 - **Navigation**: `navigation/AdminStackNavigator.tsx` — stack with `AdminDashboard` and `PowerSyncTest` (dev-only) screens
 - **Role gate**: `AdminStackNavigator` checks `user.isAdmin` before rendering; shows access-denied screen otherwise
-- **Shared types/constants**: Import from `@fajr/shared/admin`
+- **Shared types/constants**: Import from `@firstline/shared/admin`
 
 ## Section Pattern (MVVM)
 

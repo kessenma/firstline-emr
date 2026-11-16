@@ -22,7 +22,7 @@ Add to your `.env` file:
 WEBSOCKET_PORT=3001
 
 # Client-side WebSocket URL (what the browser connects to)
-NEXT_PUBLIC_WEBSOCKET_URL=https://ws.dev.emr.fajrscientific.org  # Production
+NEXT_PUBLIC_WEBSOCKET_URL=https://ws.dev.firstline.care  # Production
 # NEXT_PUBLIC_WEBSOCKET_URL=http://localhost:3001                # Development
 
 # Enable WebSockets (optional, defaults to false)
@@ -36,7 +36,7 @@ NEXT_PUBLIC_ENABLE_WEBSOCKETS=true
 docker-compose -f docker-compose.web.yml up -d --build
 
 # Verify WebSocket server is running
-curl https://ws.dev.emr.fajrscientific.org/health
+curl https://ws.dev.firstline.care/health
 # Should return: "WebSocket server is running"
 ```
 
@@ -44,7 +44,7 @@ curl https://ws.dev.emr.fajrscientific.org/health
 
 Open your browser console and check for:
 ```
-[SocketService] Connecting to WebSocket server at: https://ws.dev.emr.fajrscientific.org
+[SocketService] Connecting to WebSocket server at: https://ws.dev.firstline.care
 Connected to WebSocket server with ID: abc123
 ```
 
@@ -81,7 +81,7 @@ WebSocket Server (Port 3001)
 
 | Variable | Used By | Purpose | Example |
 |----------|---------|---------|---------|
-| `NEXT_PUBLIC_WEBSOCKET_URL` | Browser | Client connects to WS server | `https://ws.dev.emr.fajrscientific.org` |
+| `NEXT_PUBLIC_WEBSOCKET_URL` | Browser | Client connects to WS server | `https://ws.dev.firstline.care` |
 | `WEBSOCKET_SERVER_URL` | Next.js Server | Server-to-server communication | `http://websocket-server:3001` |
 
 ## Common Issues
@@ -92,7 +92,7 @@ WebSocket Server (Port 3001)
 
 ```bash
 # Test from your local machine
-curl https://ws.dev.emr.fajrscientific.org/health
+curl https://ws.dev.firstline.care/health
 ```
 
 ### "Messages not appearing in real-time"
@@ -111,7 +111,7 @@ NEXT_PUBLIC_ENABLE_WEBSOCKETS=true
 
 - [ ] `.env` has `NEXT_PUBLIC_WEBSOCKET_URL` set
 - [ ] `.env` has `NEXT_PUBLIC_ENABLE_WEBSOCKETS=true`
-- [ ] Health endpoint responds: `curl https://ws.dev.emr.fajrscientific.org/health`
+- [ ] Health endpoint responds: `curl https://ws.dev.firstline.care/health`
 - [ ] Browser console shows "Connected to WebSocket server"
 - [ ] Sending a message shows real-time updates in other browser tabs
 - [ ] Both Telegram and Internal messages work with WebSocket

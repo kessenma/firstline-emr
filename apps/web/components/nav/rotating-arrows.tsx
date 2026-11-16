@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRightLeft } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { getRoleCssVar } from "@fajr/shared/theme";
+import { getRoleCssVar } from "@firstline/shared/theme";
 
 interface RotatingArrowsProps {
   isRotating?: boolean;

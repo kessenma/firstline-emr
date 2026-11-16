@@ -74,7 +74,7 @@ const ConfirmationContent = ({
             {submittingFromNoSession ? (
                 <div className="flex flex-col h-full">
                     <div className="flex justify-center p-4">
-                        <Image src="/assets/images/fajr-logo.svg" alt="MENA Health Logo" width={150} height={48} priority />
+                        <Image src="/assets/images/logo.svg" alt="Firstline" width={64} height={64} priority />
                     </div>
 
                     <div className="px-6 py-4 bg-muted">

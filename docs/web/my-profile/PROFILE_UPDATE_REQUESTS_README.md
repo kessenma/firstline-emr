@@ -441,7 +441,7 @@ User's profile reflects change automatically
 
 ## 📄 License
 
-This is part of the Fajr Mission EMR system.
+This is part of the Firstline system.
 
 ## 🤝 Contributing
 

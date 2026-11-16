@@ -1,5 +1,8 @@
 // utils/emails/new-user-admin-email.ts
 import { sendEmail } from './resend-config';
+import { BRAND_NAME, BRAND_DOMAIN } from '@firstline/shared/constants';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? `https://${BRAND_DOMAIN}`;
 
 const getEnvironmentLabel = () => {
     const env = process.env.NODE_ENV || 'production';
@@ -51,9 +54,9 @@ export const sendNewUserEmail = async ({
             ? `This account was created by ${adminSender.firstName} ${adminSender.lastName} (${adminSender.email}) from the admin dashboard.`
             : 'This account was created by an administrator.';
 
-        const subject = environmentLabel ? `[${environmentLabel}] Welcome to Fajr MedFlow - Complete Your Account Setup` : 'Welcome to Fajr MedFlow - Complete Your Account Setup';
+        const subject = environmentLabel ? `[${environmentLabel}] Welcome to ${BRAND_NAME} - Complete Your Account Setup` : `Welcome to ${BRAND_NAME} - Complete Your Account Setup`;
         const verifyUrl = process.env.NODE_ENV === 'production'
-            ? `https://fajrmission.org/admin-signup/verify?email=${encodeURIComponent(email)}`
+            ? `${SITE_URL}/admin-signup/verify?email=${encodeURIComponent(email)}`
             : `http://localhost:3000/admin-signup/verify?email=${encodeURIComponent(email)}`;
 
         await sendEmail({
@@ -65,7 +68,7 @@ export const sendNewUserEmail = async ({
             ${greeting}
           </h3>
           <p style="font-size: 16px; line-height: 1.6; color: #120f0b;">
-            Welcome to Fajr MedFlow! Your ${accountType} account has been created.
+            Welcome to ${BRAND_NAME}! Your ${accountType} account has been created.
           </p>
           <p style="font-size: 14px; line-height: 1.6; color: #120f0b;">
             ${senderInfo}
@@ -98,12 +101,12 @@ export const sendNewUserEmail = async ({
           <div style="background-color: #1f1f1f; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #333;">
             <h4 style="color: #ff5722; margin-top: 0;">Download the Mobile App (Beta)</h4>
             <p style="color: #cccccc; font-size: 14px; line-height: 1.6;">
-              The Fajr EMR mobile app is currently in beta testing via Apple TestFlight.
+              The ${BRAND_NAME} mobile app is currently in beta testing via Apple TestFlight.
             </p>
             <ol style="color: #cccccc; font-size: 14px; line-height: 1.8;">
               <li>Install <a href="https://apps.apple.com/us/app/testflight/id899247664" style="color: #ff5722;">TestFlight</a> from the App Store</li>
               <li>Open <a href="https://testflight.apple.com/join/Arz6Fn8F" style="color: #ff5722;">this TestFlight invite link</a> to join the beta</li>
-              <li>Install the Fajr EMR app from TestFlight</li>
+              <li>Install the ${BRAND_NAME} app from TestFlight</li>
             </ol>
             <p style="color: #999999; font-size: 12px;">
               Android version coming soon. iOS only for now.
@@ -115,7 +118,7 @@ export const sendNewUserEmail = async ({
           </p>
           <hr style="border: none; border-top: 1px solid #333; margin: 20px 0;">
           <p style="font-size: 12px; color: #999999;">
-            This email was sent from Fajr MedFlow. Please do not reply to this email.
+            This email was sent from ${BRAND_NAME}. Please do not reply to this email.
           </p>
         </div>
       `

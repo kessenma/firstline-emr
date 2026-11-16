@@ -181,7 +181,7 @@ Mobile apps connect separately via WebSocket:
 ```typescript
 // In your React Native/Flutter app
 const powerSyncConfig = {
-  url: "wss://ws.emr.fajr.org",  // External WebSocket endpoint
+  url: "wss://ws.firstline.care",  // External WebSocket endpoint
   // ... other config
 };
 ```

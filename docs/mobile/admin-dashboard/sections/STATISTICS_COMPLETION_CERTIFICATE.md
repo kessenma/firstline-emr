@@ -3,7 +3,7 @@
 ## Official Certification of Completion
 
 **Section:** 3.9 - Statistics Section  
-**Project:** Fajr Mission EMR - Mobile Admin Dashboard  
+**Project:** Firstline - Mobile Admin Dashboard  
 **Status:** ✅ **COMPLETE & PRODUCTION READY**  
 **Completion Date:** 2025  
 **Certificate ID:** STAT-3.9-2025
@@ -395,7 +395,7 @@ All requirements have been met, quality standards have been exceeded, and compre
 
 **Certificate Generated:** 2025  
 **Valid Until:** Indefinite (unless superseded)  
-**Certificate Authority:** Fajr Mission EMR Development Team
+**Certificate Authority:** Firstline Development Team
 
 ---
 
@@ -405,4 +405,4 @@ All requirements have been met, quality standards have been exceeded, and compre
 
 ---
 
-*This is an official completion certificate for the Fajr Mission EMR Mobile Admin Dashboard Statistics Section implementation.*
+*This is an official completion certificate for the Firstline Mobile Admin Dashboard Statistics Section implementation.*

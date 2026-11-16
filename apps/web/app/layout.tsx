@@ -8,9 +8,15 @@ import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// metadataBase is required for the Open Graph image to resolve to an absolute
+// URL. Next picks up app/icon.png, app/apple-icon.png and app/opengraph-image.png
+// automatically by file convention, so they are deliberately not listed here.
 export const metadata: Metadata = {
-  title: "Fajr.EMR",
-  description: "Fajr Global electronic medical records",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://firstline.care",
+  ),
+  title: "Firstline",
+  description: "Offline-first electronic medical records for field clinical work",
 };
 
 export default async function RootLayout({

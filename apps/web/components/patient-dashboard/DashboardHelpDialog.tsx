@@ -14,7 +14,7 @@ import {
   getDashboardHelpSections,
   getDashboardHelpTitle,
   type DashboardHelpView,
-} from "@fajr/shared/patient-dashboard";
+} from "@firstline/shared/patient-dashboard";
 
 interface DashboardHelpDialogProps {
   accountType?: string;
@@ -24,7 +24,7 @@ interface DashboardHelpDialogProps {
 
 /**
  * The "how does this work" explainer. Content is shared with mobile via
- * `@fajr/shared/patient-dashboard` so the two cannot drift.
+ * `@firstline/shared/patient-dashboard` so the two cannot drift.
  */
 export function DashboardHelpDialog({
   accountType,

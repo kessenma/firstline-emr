@@ -26,7 +26,7 @@ import {
   type AnyMedication,
   type Medication,
   type RxOrder,
-} from "@fajr/shared/medications";
+} from "@firstline/shared/medications";
 
 interface PreviousMedicationsViewProps {
   patientId: string;

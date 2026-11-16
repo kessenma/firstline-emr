@@ -8,7 +8,7 @@ import type {
   RestoreTableResult,
   BackupMode,
   BackupAuthMeta,
-} from "@fajr/shared/admin";
+} from "@firstline/shared/admin";
 
 /** Result of GET /backups/[id]/auth-preflight. */
 export interface AuthPreflightResult {
@@ -377,7 +377,7 @@ export function useDatabaseBackupsViewModel() {
         const contentDisposition = response.headers.get("Content-Disposition");
         const fileName =
           contentDisposition?.match(/filename="(.+)"/)?.[1] ||
-          "backup.fajr-backup";
+          "backup.firstline-backup";
 
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");

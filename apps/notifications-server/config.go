@@ -7,7 +7,7 @@ import (
 
 type Config struct {
 	TelegramToken    string
-	MedFlowKey       string
+	ServiceKey       string
 	APIBaseURL       string
 	PublicURL        string
 	Port             string
@@ -25,7 +25,7 @@ type Config struct {
 func LoadConfig() (*Config, error) {
 	cfg := &Config{
 		TelegramToken:   os.Getenv("TELEGRAM_BOT_TOKEN"),
-		MedFlowKey:      os.Getenv("MEDFLOW_KEY"),
+		ServiceKey:      os.Getenv("FIRSTLINE_SERVICE_KEY"),
 		APIBaseURL:      os.Getenv("API_BASE_URL"),
 		PublicURL:       os.Getenv("PUBLIC_URL"),
 		Port:            os.Getenv("NOTIFICATIONS_PORT"),
@@ -61,8 +61,8 @@ func LoadConfig() (*Config, error) {
 	if cfg.TelegramToken == "" {
 		return nil, fmt.Errorf("TELEGRAM_BOT_TOKEN is required")
 	}
-	if cfg.MedFlowKey == "" {
-		return nil, fmt.Errorf("MEDFLOW_KEY is required")
+	if cfg.ServiceKey == "" {
+		return nil, fmt.Errorf("FIRSTLINE_SERVICE_KEY is required")
 	}
 	if cfg.APIBaseURL == "" {
 		return nil, fmt.Errorf("API_BASE_URL is required")

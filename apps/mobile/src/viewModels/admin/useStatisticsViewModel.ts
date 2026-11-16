@@ -420,7 +420,7 @@ function formatStatisticsForExport(
   const { userCounts, specialtyBreakdown, activityMetrics, lastUpdated } =
     statistics;
 
-  let text = '=== Fajr Mission EMR STATISTICS ===\n\n';
+  let text = '=== Firstline STATISTICS ===\n\n';
   text += `Generated: ${new Date(lastUpdated).toLocaleString()}\n\n`;
 
   // User Counts Section

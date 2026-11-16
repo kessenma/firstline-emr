@@ -1,6 +1,6 @@
 # TestFlight Deployment Setup Guide
 
-This guide will help you set up automated TestFlight deployment for the Fajr EMR mobile app.
+This guide will help you set up automated TestFlight deployment for the Firstline mobile app.
 
 ## Prerequisites
 

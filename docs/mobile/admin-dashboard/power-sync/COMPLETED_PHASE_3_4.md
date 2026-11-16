@@ -13,7 +13,7 @@ We've successfully implemented PowerSync initialization and converted the first 
 
 ### Phase 3: PowerSync Initialization ✅
 1. **Auto-initialization on Admin Login** - PowerSync starts automatically when admin users log in
-2. **Live Server Connection** - Mobile app connects to `https://ws.emr.fajr.org`
+2. **Live Server Connection** - Mobile app connects to `https://ws.firstline.care`
 3. **Graceful Cleanup** - PowerSync disconnects on logout
 4. **Session Restoration** - Re-initializes PowerSync when admin session is restored
 
@@ -36,7 +36,7 @@ We've successfully implemented PowerSync initialization and converted the first 
    - Graceful error handling (doesn't block login if PowerSync fails)
 
 2. **`apps/mobile/src/config/index.ts`**
-   - Updated `PROD.POWERSYNC_URL` to `https://ws.emr.fajr.org`
+   - Updated `PROD.POWERSYNC_URL` to `https://ws.firstline.care`
    - Mobile app now connects to your live PowerSync server
 
 3. **`apps/mobile/src/contexts/DatabaseContext.tsx`**
@@ -69,7 +69,7 @@ AuthContext detects isAdmin = true
     ↓
 Initialize PowerSync
     ↓
-Connect to: https://ws.emr.fajr.org
+Connect to: https://ws.firstline.care
     ↓
 Schema: powerSyncSchema (patients + admin tables)
     ↓
@@ -124,7 +124,7 @@ Make sure you login with a user that has `isAdmin: true` flag.
 
 **If PowerSync fails to initialize:**
 - Check console for detailed error message
-- Verify server is running: `curl https://ws.emr.fajr.org/probes/liveness`
+- Verify server is running: `curl https://ws.firstline.care/probes/liveness`
 - Check network connectivity
 - Verify JWT token is valid
 
@@ -180,7 +180,7 @@ Make sure you login with a user that has `isAdmin: true` flag.
 ```typescript
 // From AuthContext.tsx
 await powerSync.initialize({
-  serverUrl: 'https://ws.emr.fajr.org',
+  serverUrl: 'https://ws.firstline.care',
   schema: powerSyncSchema,
   authToken: token,
 });
@@ -223,7 +223,7 @@ const dbUsers = await powerSync.query(
 **Solutions:**
 1. Ensure you're logged in as an admin user
 2. Check console for initialization errors
-3. Verify server is accessible: `curl https://ws.emr.fajr.org/probes/liveness`
+3. Verify server is accessible: `curl https://ws.firstline.care/probes/liveness`
 4. Logout and login again
 
 ### Issue: No data syncing
@@ -314,7 +314,7 @@ npm run type-check
 
 ### Phase 3 - Initialization
 - [x] PowerSync initializes on admin login
-- [x] Connects to live server (ws.emr.fajr.org)
+- [x] Connects to live server (ws.firstline.care)
 - [x] Uses JWT token for authentication
 - [x] Disconnects on logout
 - [x] Restores session on app restart
@@ -345,7 +345,7 @@ if (userData.isAdmin) {
     const powerSync = PowerSyncService.getInstance();
 
     await powerSync.initialize({
-      serverUrl: API_CONFIG.current.POWERSYNC_URL, // https://ws.emr.fajr.org
+      serverUrl: API_CONFIG.current.POWERSYNC_URL, // https://ws.firstline.care
       schema: powerSyncSchema,
       authToken: token,
     });

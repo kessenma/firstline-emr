@@ -2,7 +2,7 @@
  * Generates CSS @theme variables from the shared palette.
  * Output: apps/web/styles/generated-palette.css
  *
- * Run: pnpm --filter @fajr/shared generate:css
+ * Run: pnpm --filter @firstline/shared generate:css
  * Turbo caches this — only re-runs when packages/shared/src/theme/** changes.
  */
 
@@ -39,9 +39,9 @@ const roleShadeMap: Record<string, string> = {
 
 function generateCSS(): string {
   const lines: string[] = [
-    '/* AUTO-GENERATED from @fajr/shared/theme — do not edit manually */',
+    '/* AUTO-GENERATED from @firstline/shared/theme — do not edit manually */',
     '/* Source: packages/shared/src/theme/palette.ts */',
-    '/* Run: pnpm --filter @fajr/shared generate:css */',
+    '/* Run: pnpm --filter @firstline/shared generate:css */',
     '',
     '@theme {',
   ];

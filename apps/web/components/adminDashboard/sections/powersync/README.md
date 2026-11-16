@@ -21,10 +21,10 @@ This admin dashboard section provides monitoring and status tracking capabilitie
 
 ### 🔧 Details Tab
 - **Service Configuration**: Internal URL and endpoint details
-- **WebSocket Endpoint**: External WebSocket URL for mobile clients (`wss://ws.emr.fajr.org`)
+- **WebSocket Endpoint**: External WebSocket URL for mobile clients (`wss://ws.firstline.care`)
 - **Health Check Endpoint**: API route for health monitoring (`/api/powersync/health`)
 - **Token Endpoints**: Web (`/api/auth/powersync-token`) and Mobile (`/api/auth/mobile-login`)
-- **JWT Configuration**: Key ID (`fajr-emr-key`), Algorithm (HS256)
+- **JWT Configuration**: Key ID (`firstline-emr-key`), Algorithm (HS256)
 - **Advanced Information**: Raw health response JSON
 - **Troubleshooting Guide**: Common issues and solutions including JWT authentication errors
 
@@ -174,7 +174,7 @@ JWT tokens not including the `kid` (key ID) header that PowerSync uses to identi
    ```typescript
    jwt.sign(payload, JWT_SECRET, {
      header: {
-       kid: "fajr-emr-key",
+       kid: "firstline-emr-key",
        alg: "HS256",
      },
    });
@@ -290,7 +290,7 @@ POWERSYNC_PORT=6061
 | `/api/auth/powersync-token` | GET | Generate JWT token for web client authentication |
 | `/api/auth/mobile-login` | POST | Mobile login + JWT token generation |
 | `http://powersync:6061/probes/liveness` | GET | PowerSync native health endpoint (internal) |
-| `wss://ws.emr.fajr.org` | WebSocket | PowerSync WebSocket endpoint (external) |
+| `wss://ws.firstline.care` | WebSocket | PowerSync WebSocket endpoint (external) |
 
 ## Integration
 
@@ -300,13 +300,13 @@ Mobile apps should connect to PowerSync via WebSocket:
 ```typescript
 // Mobile app configuration (apps/mobile/src/config/index.ts)
 PROD: {
-  BASE_URL: 'https://emr.fajr.org',
-  API_URL: 'https://emr.fajr.org/api',
-  POWERSYNC_URL: 'https://ws.emr.fajr.org',  // SDK converts to wss://
+  BASE_URL: 'https://firstline.care',
+  API_URL: 'https://firstline.care/api',
+  POWERSYNC_URL: 'https://ws.firstline.care',  // SDK converts to wss://
 }
 
 // PowerSync connection
-const powerSyncUrl = "https://ws.emr.fajr.org";
+const powerSyncUrl = "https://ws.firstline.care";
 const connector = new PowerSyncDatabase({
   database: db,
   schema: AppSchema,
@@ -331,7 +331,7 @@ All JWT tokens must include:
 **Header:**
 ```json
 {
-  "kid": "fajr-emr-key",
+  "kid": "firstline-emr-key",
   "alg": "HS256",
   "typ": "JWT"
 }
@@ -387,7 +387,7 @@ export default function AdminDashboard() {
 
 ```typescript
 export const JWT_CONFIG = {
-  KID: "fajr-emr-key",
+  KID: "firstline-emr-key",
   ALG: "HS256" as const,
   MOBILE_TOKEN_EXPIRY: "14d",
 } as const;
@@ -400,12 +400,12 @@ export const JWT_CONFIG = {
 client_auth:
   jwks:
     keys:
-      - kid: "fajr-emr-key"
+      - kid: "firstline-emr-key"
         kty: oct
         k: <REDACTED-generate-with-openssl-rand-base64-64>
         alg: HS256
   audience: ["powersync", "powersync-dev"]
-  issuer: https://emr.fajr.org
+  issuer: https://firstline.care
 ```
 
 **Key Points:**
@@ -449,7 +449,7 @@ Mobile App Login
 POST /api/auth/mobile-login
     ↓
 Generate JWT with:
-    - kid: "fajr-emr-key" ✅
+    - kid: "firstline-emr-key" ✅
     - Signed with decoded JWT_SECRET ✅
     - sub: user.id ✅
     - 14-day expiry ✅
@@ -460,7 +460,7 @@ Mobile app stores token in MMKV
     ↓
 PowerSync fetchCredentials() retrieves token
     ↓
-Connect to wss://ws.emr.fajr.org/
+Connect to wss://ws.firstline.care/
     ↓
 PowerSync validates JWT:
     - Finds key using 'kid' ✅
@@ -485,7 +485,7 @@ echo "$TOKEN" | cut -d. -f1 | base64 -d | jq
 
 # Expected output:
 # {
-#   "kid": "fajr-emr-key",
+#   "kid": "firstline-emr-key",
 #   "alg": "HS256",
 #   "typ": "JWT"
 # }
@@ -524,4 +524,4 @@ echo "$TOKEN" | cut -d. -f2 | base64 -d | jq
 
 ## License
 
-Part of the Fajr EMR project.
+Part of the Firstline project.

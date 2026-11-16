@@ -400,7 +400,7 @@ POST-MIGRATION
 
 ## 🤔 Final Recommendation
 
-### For Fajr.EMR Specifically:
+### For Firstline Specifically:
 
 Based on analysis of your codebase:
 - **631 TS/TSX files** to potentially modify

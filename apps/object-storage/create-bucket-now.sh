@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 🪣 Create RustFS Bucket - Simple Script
-# Run this ONCE to create the fajr-media bucket
+# Run this ONCE to create the firstline-media bucket
 
 echo ""
 echo "========================================"
@@ -24,8 +24,8 @@ echo "✅ MinIO Client found"
 echo ""
 
 # Configuration
-ENDPOINT="https://s3.emr.fajr.org"
-BUCKET="fajr-media"
+ENDPOINT="https://s3.firstline.care"
+BUCKET="firstline-media"
 ACCESS_KEY="admin"
 SECRET_KEY="YourSecurePassword123!"
 

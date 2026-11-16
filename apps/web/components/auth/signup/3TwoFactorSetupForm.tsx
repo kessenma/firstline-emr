@@ -8,7 +8,7 @@ import { ShieldCheck, Fingerprint, Loader2, Check, Smartphone, ExternalLink } fr
 import { usePasskey } from "@/hooks/usePasskey";
 import Image from "next/image";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { AUTHENTICATOR_APPS, HIPAA_2FA_NOTICE, TOTP_ISSUER, TOTP_MANUAL_SETUP_STEPS } from "@fajr/shared/2fa";
+import { AUTHENTICATOR_APPS, HIPAA_2FA_NOTICE, TOTP_ISSUER, TOTP_MANUAL_SETUP_STEPS } from "@firstline/shared/2fa";
 
 const TwoFactorSetupForm: React.FC = () => {
   const { formData, setFormData, setTwoFactorSetupCompleted, updateAnsweredQuestions } =

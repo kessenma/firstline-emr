@@ -15,7 +15,7 @@ import {
 } from "@livekit/components-react";
 import { ConnectionState, Track } from "livekit-client";
 import { Camera, CameraOff, Loader2 } from "lucide-react";
-import { isPatientIdentity } from "@fajr/shared/video-call";
+import { isPatientIdentity } from "@firstline/shared/video-call";
 import type { PhotoCaptureController } from "./usePhotoCapture";
 
 interface PhotoCaptureButtonProps {

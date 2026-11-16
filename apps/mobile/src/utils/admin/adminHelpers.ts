@@ -1,9 +1,9 @@
 // apps/mobile/src/utils/admin/adminHelpers.ts
 // Re-exports shared utils + mobile-only normalizer.
 
-export { buildQueryParams, validatePagination, formatFullName, isValidEmail } from '@fajr/shared/admin';
+export { buildQueryParams, validatePagination, formatFullName, isValidEmail } from '@firstline/shared/admin';
 
-import type { AdminUser } from '@fajr/shared/admin';
+import type { AdminUser } from '@firstline/shared/admin';
 
 /** Normalize a raw API response row (snake_case or camelCase) into an AdminUser. */
 export function normalizeAdmin(admin: any): AdminUser {

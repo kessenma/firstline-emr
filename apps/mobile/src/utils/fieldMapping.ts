@@ -1,13 +1,13 @@
 // apps/mobile/src/utils/fieldMapping.ts
 // Field mapping utilities for MongoDB ↔ PostgreSQL compatibility during Phase 2.2
-// Generic case conversion utilities are in @fajr/shared/field-mapping
+// Generic case conversion utilities are in @firstline/shared/field-mapping
 
 import { isValidUUID, generateUUID } from './uuid';
 import {
   camelToSnake,
   keysToSnakeCase,
   keysToCamelCase,
-} from '@fajr/shared/field-mapping';
+} from '@firstline/shared/field-mapping';
 
 // Re-export shared utilities for existing consumers
 export {
@@ -15,7 +15,7 @@ export {
   snakeToCamel,
   keysToSnakeCase,
   keysToCamelCase,
-} from '@fajr/shared/field-mapping';
+} from '@firstline/shared/field-mapping';
 
 // ============================================================================
 // PART 2: Database Row Types (snake_case for PostgreSQL/PowerSync)
@@ -114,7 +114,7 @@ export interface ThreadRow {
 }
 
 // ============================================================================
-// PART 3: Type Conversion Utilities (re-exported from @fajr/shared/field-mapping)
+// PART 3: Type Conversion Utilities (re-exported from @firstline/shared/field-mapping)
 // ============================================================================
 
 export {
@@ -122,7 +122,7 @@ export {
   entityToRow,
   rowsToEntities,
   entitiesToRows,
-} from '@fajr/shared/field-mapping';
+} from '@firstline/shared/field-mapping';
 
 // ============================================================================
 // PART 4: PowerSync Query Helpers

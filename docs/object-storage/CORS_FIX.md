@@ -5,7 +5,7 @@
 Audio files from RustFS object storage were failing to load in the frontend with the error:
 
 ```
-Access to fetch at 'https://s3.emr.fajr.org/fajr-media/prod/audio/...' from origin 'http://localhost:3000' 
+Access to fetch at 'https://s3.firstline.care/firstline-media/prod/audio/...' from origin 'http://localhost:3000' 
 has been blocked by CORS policy: The 'Access-Control-Allow-Origin' header contains multiple values '*, *', 
 but only one is allowed.
 ```
@@ -32,7 +32,7 @@ Added a `proxy=true` query parameter option that streams files through the Next.
 ```typescript
 // For images (works fine with signed URLs)
 GET /api/telegram-thread/get-media?filePath=prod/images/123/photo.jpg
-Response: { signedUrl: "https://s3.emr.fajr.org/..." }
+Response: { signedUrl: "https://s3.firstline.care/..." }
 
 // For audio (proxied through backend to avoid CORS)
 GET /api/telegram-thread/get-media?filePath=prod/audio/123/voice.ogg&proxy=true
@@ -126,7 +126,7 @@ docker-compose -f docker-compose.object-storage.yml up -d
 If using a Caddyfile instead of labels:
 
 ```caddyfile
-s3.emr.fajr.org {
+s3.firstline.care {
     reverse_proxy rustfs-server:9100 {
         # Strip all CORS headers from upstream
         header_down -Access-Control-Allow-Origin
@@ -149,7 +149,7 @@ After applying changes on production:
 
 ```bash
 # Test CORS headers
-curl -I "https://s3.emr.fajr.org/fajr-media/prod/audio/test-file" \
+curl -I "https://s3.firstline.care/firstline-media/prod/audio/test-file" \
   -H "Origin: http://localhost:3000"
 
 # Should see ONLY ONE Access-Control-Allow-Origin header:

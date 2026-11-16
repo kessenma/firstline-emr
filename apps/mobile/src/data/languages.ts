@@ -18,5 +18,5 @@ export {
   RTL_LANGUAGES,
   isRtlLanguage,
   normalizeLanguage,
-} from '@fajr/shared/constants';
-export type { SupportedLanguage } from '@fajr/shared/constants';
+} from '@firstline/shared/constants';
+export type { SupportedLanguage } from '@firstline/shared/constants';

@@ -13,8 +13,8 @@ import {
   FULL_MIGRATION_TABLES,
   type BackupTableManifest,
   type BackupMode,
-} from "@fajr/shared/admin";
-import { BACKUP_MIN_PASSPHRASE_LENGTH } from "@fajr/shared/backup";
+} from "@firstline/shared/admin";
+import { BACKUP_MIN_PASSPHRASE_LENGTH } from "@firstline/shared/backup";
 
 export async function POST(request: Request) {
   try {

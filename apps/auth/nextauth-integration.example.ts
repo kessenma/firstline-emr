@@ -4,7 +4,7 @@
  * This file shows how to add Zitadel as an OIDC provider to your existing
  * NextAuth configuration in apps/web/lib/auth.ts
  *
- * After setting up Zitadel and creating an application for MedFlow EMR,
+ * After setting up Zitadel and creating an application for Firstline,
  * add this provider alongside your existing CredentialsProvider.
  */
 
@@ -13,11 +13,11 @@ import type { NextAuthConfig } from "next-auth";
 // Add this to your existing providers array in auth.ts
 export const zitadelProvider = {
   id: "zitadel",
-  name: "Fajr SSO",
+  name: "Firstline SSO",
   type: "oidc" as const,
 
   // Zitadel OIDC configuration
-  issuer: process.env.ZITADEL_ISSUER || "https://identity.fajrmission.org",
+  issuer: process.env.ZITADEL_ISSUER || "https://identity.firstline.care",
   clientId: process.env.ZITADEL_CLIENT_ID!,
   clientSecret: process.env.ZITADEL_CLIENT_SECRET!,
 
@@ -138,7 +138,7 @@ export const ssoCallbackExample = {
  *     // Add Zitadel SSO
  *     {
  *       id: "zitadel",
- *       name: "Fajr SSO",
+ *       name: "Firstline SSO",
  *       type: "oidc",
  *       issuer: process.env.ZITADEL_ISSUER,
  *       clientId: process.env.ZITADEL_CLIENT_ID!,

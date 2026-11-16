@@ -36,7 +36,7 @@ client_auth:
   # In production: set JWT_SECRET env var - entrypoint.sh will base64url encode it
   jwks:
     keys:
-      - kid: "fajr-emr-key"
+      - kid: "firstline-emr-key"
         kty: oct
         k: ${JWT_SECRET_BASE64URL}
         alg: HS256
@@ -45,7 +45,7 @@ client_auth:
   audience: ["powersync", "powersync-dev"]
 
   # JWT issuer
-  issuer: https://fajrmission.org
+  issuer: https://firstline.care
 
 # Settings for telemetry reporting
 telemetry:

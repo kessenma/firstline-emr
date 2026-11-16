@@ -21,7 +21,7 @@ import {
 } from 'react-native';
 import { Search, X, Filter, MessageSquare, UserPlus } from 'lucide-react-native';
 import { useThemeColors } from '../../contexts/ThemeContext';
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
 import { spacing, borderRadius, typography } from '../../utils/theme';
 import { Badge } from '../ui/Badge';
 import {

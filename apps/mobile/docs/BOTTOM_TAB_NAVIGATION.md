@@ -1,6 +1,6 @@
 # Bottom Tab Navigation
 
-This document describes the bottom tab navigation implementation in the Fajr Mobile EMR app.
+This document describes the bottom tab navigation implementation in the Firstline Mobile EMR app.
 
 ## Overview
 

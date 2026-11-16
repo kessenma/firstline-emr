@@ -72,7 +72,7 @@ GET /api/auth/session
 ```
 ┌─────────────────────────┐
 │         🏥              │
-│    Fajr EMR            │
+│    Firstline            │
 │  Restoring session...   │  ← Brief splash (< 1 second)
 └─────────────────────────┘
          ↓

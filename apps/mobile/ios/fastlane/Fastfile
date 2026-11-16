@@ -389,7 +389,7 @@ def export_options_with_resolved_identity(source_path = EXPORT_OPTIONS_PATH)
 
   options["signingCertificate"] = distribution_signing_identity!
 
-  rendered = File.join(Dir.mktmpdir("fajr-export-options"), "ExportOptions.plist")
+  rendered = File.join(Dir.mktmpdir("firstline-export-options"), "ExportOptions.plist")
   File.write(rendered, options.to_plist)
   rendered
 end

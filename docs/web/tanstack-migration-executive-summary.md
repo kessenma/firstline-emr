@@ -1,11 +1,11 @@
 # TanStack Start Migration - Executive Summary
-**One-Page Decision Brief for Fajr.EMR**
+**One-Page Decision Brief for Firstline**
 
 ---
 
 ## 📋 What Is Being Proposed?
 
-Migrate the Fajr.EMR web application from **Next.js 16** to **TanStack Start** (a new full-stack React framework).
+Migrate the Firstline web application from **Next.js 16** to **TanStack Start** (a new full-stack React framework).
 
 ---
 

@@ -3,7 +3,7 @@
 // Pure computation — no additional queries needed.
 
 import { useMemo } from 'react';
-import { summarizeCallHistory } from '@fajr/shared/video-call';
+import { summarizeCallHistory } from '@firstline/shared/video-call';
 import { usePatientChart } from '../PatientChartContext';
 
 export interface SectionSummaries {

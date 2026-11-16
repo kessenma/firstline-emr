@@ -4,7 +4,7 @@
 import { Modal } from "@/components/ui/modal";
 import { ChatThreadView } from "@/components/messages/ChatThreadView";
 import type { PatientWithMessages } from "./types/patient-table-types";
-import { getAnonymizedName } from "@fajr/shared/patient-utils";
+import { getAnonymizedName } from "@firstline/shared/patient-utils";
 
 interface ChatThreadModalProps {
   isOpen: boolean;

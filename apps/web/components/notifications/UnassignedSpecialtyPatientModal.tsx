@@ -17,7 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import TelegramMessagesDoctorView from "@/components/patient-chart/telegram-messages/TelegramMessagesDoctorView";
 import { useSession } from "next-auth/react";
 import { Card, CardContent } from "@/components/ui/card";
-import { getAnonymizedName } from "@fajr/shared/patient-utils";
+import { getAnonymizedName } from "@firstline/shared/patient-utils";
 import ReadOnlyField from "@/components/form/ReadOnlyField";
 import type { Patient } from "@/db/schema/patients";
 import { format } from "date-fns";

@@ -1,6 +1,6 @@
 // apps/web/components/patient-chart/patient-dashboard/PatientInfoViewModel.tsx
 import { Patient } from '@/db/schema/patients';
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
 
 export class PatientInfoViewModel {
     patient: Patient | null = null;

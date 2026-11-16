@@ -1,17 +1,18 @@
 import { LegalDocument } from './types';
+import { BRAND_NAME, CONTACT_EMAIL } from '../constants/brand';
 
 export const termsOfService: LegalDocument = {
-  title: 'FAJR.EMR TERMS OF SERVICE',
+  title: `${BRAND_NAME.toUpperCase()} TERMS OF SERVICE`,
   lastUpdated: 'March 16, 2026',
   intro:
-    'Welcome to Fajr Mission EMR! By accessing or using our platform, you agree to comply with and be bound by these Terms of Service. If you do not agree, please do not use our services.',
+    `Welcome to ${BRAND_NAME}! By accessing or using our platform, you agree to comply with and be bound by these Terms of Service. If you do not agree, please do not use our services.`,
   sections: [
     {
       title: '1. Acceptance of Terms',
       content: [
         {
           type: 'paragraph',
-          text: 'By using Fajr Mission EMR, you acknowledge that you have read, understood, and agree to be bound by these terms. If you do not agree, you must refrain from using our platform.',
+          text: `By using ${BRAND_NAME}, you acknowledge that you have read, understood, and agree to be bound by these terms. If you do not agree, you must refrain from using our platform.`,
         },
       ],
     },
@@ -20,7 +21,7 @@ export const termsOfService: LegalDocument = {
       content: [
         {
           type: 'paragraph',
-          text: 'Fajr Mission EMR provides tools and resources for healthcare professionals to manage patient interactions. These services are intended only for approved use cases and are subject to these terms.',
+          text: `${BRAND_NAME} provides tools and resources for healthcare professionals to manage patient interactions. These services are intended only for approved use cases and are subject to these terms.`,
         },
       ],
     },
@@ -43,7 +44,7 @@ export const termsOfService: LegalDocument = {
       content: [
         {
           type: 'paragraph',
-          text: 'All content, trademarks, and tools on the platform are the property of Fajr Mission EMR. Users are prohibited from reproducing, distributing, or modifying any materials without explicit written consent.',
+          text: `All content, trademarks, and tools on the platform are the property of ${BRAND_NAME}. Users are prohibited from reproducing, distributing, or modifying any materials without explicit written consent.`,
         },
       ],
     },
@@ -52,7 +53,7 @@ export const termsOfService: LegalDocument = {
       content: [
         {
           type: 'paragraph',
-          text: 'Fajr Mission EMR is provided on an "as-is" and "as-available" basis. We are not liable for any errors, interruptions, or losses resulting from the use of the platform. Fajr Mission EMR disclaims all warranties, including those of merchantability or fitness for a particular purpose.',
+          text: `${BRAND_NAME} is provided on an "as-is" and "as-available" basis. We are not liable for any errors, interruptions, or losses resulting from the use of the platform. ${BRAND_NAME} disclaims all warranties, including those of merchantability or fitness for a particular purpose.`,
         },
       ],
     },
@@ -61,7 +62,7 @@ export const termsOfService: LegalDocument = {
       content: [
         {
           type: 'paragraph',
-          text: 'Fajr Mission EMR is a healthcare management tool and does not provide medical advice. Users are solely responsible for clinical decisions and patient care. Always consult a licensed medical professional for medical guidance.',
+          text: `${BRAND_NAME} is a healthcare management tool and does not provide medical advice. Users are solely responsible for clinical decisions and patient care. Always consult a licensed medical professional for medical guidance.`,
         },
       ],
     },
@@ -70,7 +71,7 @@ export const termsOfService: LegalDocument = {
       content: [
         {
           type: 'paragraph',
-          text: 'Users agree to indemnify and hold Fajr Mission EMR harmless from any claims, damages, or liabilities arising out of their misuse of the platform, breach of these terms, or violation of applicable laws.',
+          text: `Users agree to indemnify and hold ${BRAND_NAME} harmless from any claims, damages, or liabilities arising out of their misuse of the platform, breach of these terms, or violation of applicable laws.`,
         },
       ],
     },
@@ -106,10 +107,10 @@ export const termsOfService: LegalDocument = {
       content: [
         {
           type: 'paragraph',
-          text: 'Fajr Mission EMR is not liable for delays or failures caused by events beyond our control, including natural disasters, technical failures, or acts of government.',
+          text: `${BRAND_NAME} is not liable for delays or failures caused by events beyond our control, including natural disasters, technical failures, or acts of government.`,
         },
       ],
     },
   ],
-  contactEmail: 'info@fajr.org',
+  contactEmail: CONTACT_EMAIL,
 };

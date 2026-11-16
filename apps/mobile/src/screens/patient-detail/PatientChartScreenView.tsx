@@ -29,7 +29,7 @@ import {
 } from '../../utils/theme';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { palette } from '../../utils/colors';
-import { getNotePreview } from '@fajr/shared/patient-utils';
+import { getNotePreview } from '@firstline/shared/patient-utils';
 
 interface PatientChartScreenViewProps {
   patientId: string;

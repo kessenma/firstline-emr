@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Fajr-EMR mobile app now authenticates against your existing Next.js backend using NextAuth. This provides a unified authentication system across web and mobile platforms.
+The Firstline-EMR mobile app now authenticates against your existing Next.js backend using NextAuth. This provides a unified authentication system across web and mobile platforms.
 
 ## Architecture
 

@@ -171,7 +171,7 @@ export default function NewPatientTimeline({ initialLanguage = 'english' }: NewP
                 >
                     <div className="relative z-10 p-6 bg-opacity-80 rounded-lg">
                         <Image
-                            src="/assets/images/fajr-telegram-bot.svg"
+                            src="/assets/images/firstline-telegram-bot.svg"
                             alt="Telegram Chat"
                             width={600}
                             height={600}

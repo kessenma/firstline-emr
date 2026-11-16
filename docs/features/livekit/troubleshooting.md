@@ -7,7 +7,7 @@
 
 # LiveKit Troubleshooting Guide
 
-Common issues and solutions for LiveKit video calling in MedFlow EMR.
+Common issues and solutions for LiveKit video calling in Firstline.
 
 ## Connection Issues
 
@@ -46,7 +46,7 @@ cat .env | grep LIVEKIT
 
 3. **Check WebSocket URL:**
 - Local: `ws://localhost:7880`
-- Production: `wss://call.dev.emr.fajrscientific.org`
+- Production: `wss://call.dev.firstline.care`
 - Must use `wss://` (not `ws://`) in production
 
 4. **Verify firewall rules:**
@@ -136,7 +136,7 @@ sudo iptables -L | grep 50000
 # In config.yaml
 turn:
   enabled: true
-  domain: call.dev.emr.fajrscientific.org
+  domain: call.dev.firstline.care
   tls_port: 443
 ```
 
@@ -186,7 +186,7 @@ docker stats livekit-server
 4. **Check for packet loss:**
 ```bash
 # Ping LiveKit server
-ping call.dev.emr.fajrscientific.org
+ping call.dev.firstline.care
 
 # Should have < 1% packet loss
 ```
@@ -244,7 +244,7 @@ docker-compose -f docker-compose.video.yml up -d --build
 1. **Verify SSL certificate:**
 ```bash
 # Check certificate
-openssl s_client -connect call.dev.emr.fajrscientific.org:443
+openssl s_client -connect call.dev.firstline.care:443
 
 # Should show valid certificate chain
 ```
@@ -272,7 +272,7 @@ openssl s_client -connect call.dev.emr.fajrscientific.org:443
 # In config.yaml
 turn:
   enabled: true
-  domain: call.dev.emr.fajrscientific.org
+  domain: call.dev.firstline.care
   tls_port: 443
   udp_port: 3478
 ```
@@ -280,7 +280,7 @@ turn:
 2. **Check TURN port:**
 ```bash
 # Verify port 443 is open
-telnet call.dev.emr.fajrscientific.org 443
+telnet call.dev.firstline.care 443
 ```
 
 3. **Test TURN server:**

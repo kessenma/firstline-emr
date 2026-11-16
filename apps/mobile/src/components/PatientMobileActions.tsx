@@ -32,7 +32,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useThemeColors } from '../contexts/ThemeContext';
 import { useAvailableSpecialties } from '../hooks/useAvailableSpecialties';
 import { useMissions } from '../hooks/useMissions';
-import { getRolesForAccountType, ROLE_LABELS, ROLE_DESCRIPTIONS, ROLE_BADGE_COLORS } from '@fajr/shared/care-team';
+import { getRolesForAccountType, ROLE_LABELS, ROLE_DESCRIPTIONS, ROLE_BADGE_COLORS } from '@firstline/shared/care-team';
 
 // Match web status/priority values
 const STATUS_OPTIONS = [

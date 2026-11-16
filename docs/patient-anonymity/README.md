@@ -21,7 +21,7 @@ All anonymization goes through a single shared utility:
 
 ```typescript
 // packages/shared/src/patient-utils/formatting.ts
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
 
 getAnonymizedName("John", "Smith"); // "J.S."
 ```

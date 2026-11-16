@@ -31,10 +31,10 @@ export default function AnimatedLogo() {
                 transition={{ duration: 0.3 }}
             >
                 <Image
-                    src="/assets/images/fajr-logo.svg"
-                    alt="FAJR logo"
-                    width={192}
-                    height={48}
+                    src="/assets/images/logo.svg"
+                    alt="Firstline"
+                    width={96}
+                    height={96}
                     className="relative z-10 mt-16 mb-12"
                     priority
                 />

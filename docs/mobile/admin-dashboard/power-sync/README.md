@@ -1,6 +1,6 @@
 # PowerSync Integration for Admin Dashboard
 
-Welcome to the PowerSync integration documentation for the Fajr.EMR mobile admin dashboard. This directory contains everything you need to add offline-first functionality to your admin features.
+Welcome to the PowerSync integration documentation for the Firstline mobile admin dashboard. This directory contains everything you need to add offline-first functionality to your admin features.
 
 ---
 
@@ -432,7 +432,7 @@ You'll know the integration is successful when:
 
 **Version:** 1.0  
 **Last Updated:** December 2024  
-**Maintained By:** Fajr.EMR Development Team  
+**Maintained By:** Firstline Development Team  
 **Status:** Ready for Implementation
 
 **Good luck! You've got everything you need to succeed. 🚀**

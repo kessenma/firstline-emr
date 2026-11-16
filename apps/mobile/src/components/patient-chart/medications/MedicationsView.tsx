@@ -24,7 +24,7 @@ import {
   isRxOrder,
   type AnyMedication,
 } from './medicationUtils';
-import type { RxOrderBase } from '@fajr/shared/patient';
+import type { RxOrderBase } from '@firstline/shared/patient';
 
 const styles = StyleSheet.create({
   container: {

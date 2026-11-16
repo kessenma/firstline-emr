@@ -13,8 +13,8 @@ Pure React Native components — no Radix UI, no Tailwind, no web dependencies.
 
 ## Media components
 
-- Types come from `@fajr/shared/media` (`MediaItem`, `MediaType`) — do not duplicate locally
-- `MediaThumbnailItem` is deprecated — use `MediaItem` from `@fajr/shared/media`
+- Types come from `@firstline/shared/media` (`MediaItem`, `MediaType`) — do not duplicate locally
+- `MediaThumbnailItem` is deprecated — use `MediaItem` from `@firstline/shared/media`
 - MediaGrid uses FlatList (supports swapping to BottomSheetFlatList via `FlatListComponent` prop)
 - FullScreenMediaViewer supports images, video, and PDF (via `react-native-pdf`)
 

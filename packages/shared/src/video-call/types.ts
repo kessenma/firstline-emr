@@ -39,7 +39,7 @@ export interface VideoCallSession {
 export interface StartCallResponse {
   sessionId: string;
   roomName: string;
-  /** LiveKit SFU websocket URL, e.g. wss://livekit.fajrmission.org */
+  /** LiveKit SFU websocket URL, e.g. wss://livekit.firstline.care */
   serverUrl: string;
   /** Staff access token — publish + subscribe. */
   token: string;

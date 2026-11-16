@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the architecture and implementation of the Push Devices Management system in the Fajr Mission EMR application. The system allows administrators to monitor, manage, and troubleshoot push notification device registrations.
+This document describes the architecture and implementation of the Push Devices Management system in the Firstline application. The system allows administrators to monitor, manage, and troubleshoot push notification device registrations.
 
 ## Architecture Layers
 
@@ -376,4 +376,4 @@ export interface DeviceStats {
 ---
 
 **Last Updated**: January 2025
-**Maintained By**: Fajr MedFlow Development Team
+**Maintained By**: Firstline Development Team

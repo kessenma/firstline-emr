@@ -21,7 +21,7 @@ import { getApiUrl } from '../../config';
 import { storageUtils } from '../../utils/storage';
 import type { Notification } from '../../viewModels/NotificationsViewModel';
 import type { NotificationRoute } from '../../utils/notificationRouting';
-import type { MediaItem } from '@fajr/shared/media';
+import type { MediaItem } from '@firstline/shared/media';
 
 interface AdminNotificationSheetProps {
   visible: boolean;

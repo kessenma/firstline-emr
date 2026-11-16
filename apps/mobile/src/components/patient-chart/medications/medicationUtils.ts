@@ -1,6 +1,6 @@
 // apps/mobile/src/components/patient-chart/medications/medicationUtils.ts
 //
-// Thin re-export. The implementations live in `@fajr/shared/medications` so
+// Thin re-export. The implementations live in `@firstline/shared/medications` so
 // mobile and web sort, format and narrow medication orders identically.
 
 export {
@@ -16,7 +16,7 @@ export {
   buildPrescriptionMessage,
   buildPrescriptionSummary,
   toDate,
-} from '@fajr/shared/medications';
+} from '@firstline/shared/medications';
 
 export type {
   AnyMedication,
@@ -24,4 +24,4 @@ export type {
   MedOrder,
   Prescription,
   RxOrder,
-} from '@fajr/shared/medications';
+} from '@firstline/shared/medications';

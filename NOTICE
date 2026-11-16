@@ -16,9 +16,12 @@ limitations under the License.
 --------------------------------------------------------------------------
 
 This software originated as the MedFlow EMR built for Fajr Mission's
-field clinical operations. Some patient-facing strings, legal copy, and
-branding assets still reference Fajr and are retained for attribution.
-They are not part of the trademark grant (see section 6 of the License).
+field clinical operations, and was later developed for MENA Health and
+Fajr Scientific. It has since been renamed Firstline; the patient-facing
+strings, legal copy, and branding assets that carried those earlier names
+have been replaced. The names are recorded here as attribution for the
+project's origin only, and no mark of any of those organisations is part
+of the trademark grant (see section 6 of the License).
 
 Third-party dependencies are licensed under their own terms; see the
 respective package manifests (package.json, go.mod, Podfile, Gemfile).

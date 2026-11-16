@@ -39,7 +39,7 @@ import {
   isDisplayableInBrowser,
   getFileExtension,
   type MediaType,
-} from "@fajr/shared/media";
+} from "@firstline/shared/media";
 import PdfViewer from "./pdfViewer";
 import { Button } from "./button";
 

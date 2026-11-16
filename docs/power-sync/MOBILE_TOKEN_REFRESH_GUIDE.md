@@ -670,5 +670,5 @@ const token = await TokenStorage.getAuthToken();
 ---
 
 **Last Updated:** January 1, 2026  
-**Author:** Fajr EMR Engineering Team  
+**Author:** Firstline Engineering Team  
 **Status:** Ready for mobile app integration

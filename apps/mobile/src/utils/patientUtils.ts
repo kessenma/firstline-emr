@@ -8,7 +8,7 @@ export {
   getFullName,
   truncateText,
   formatSpecialties,
-} from '@fajr/shared/patient-utils';
+} from '@firstline/shared/patient-utils';
 
 // Re-export color utilities (now using DB-canonical priority values)
-export { getStatusColor, getPriorityColor } from '@fajr/shared/patient-utils';
+export { getStatusColor, getPriorityColor } from '@firstline/shared/patient-utils';

@@ -32,10 +32,10 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // If using a bearer token, verify it matches the MEDFLOW_KEY (for system integrations)
+    // If using a bearer token, verify it matches the FIRSTLINE_SERVICE_KEY (for system integrations)
     if (hasBearerToken && !hasSession && !hasMobileUser) {
       const token = authHeader.substring(7);
-      if (token !== process.env.MEDFLOW_KEY) {
+      if (token !== process.env.FIRSTLINE_SERVICE_KEY) {
         return NextResponse.json({ error: "Invalid token" }, { status: 401 });
       }
     }

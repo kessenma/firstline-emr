@@ -8,7 +8,7 @@
 // has the script.
 
 import { useCallback, useState } from 'react';
-import type { PrescriptionSendFailureReason } from '@fajr/shared/medications';
+import type { PrescriptionSendFailureReason } from '@firstline/shared/medications';
 import { getApiUrl } from '../../../config';
 import { getStoredToken } from '../../../utils/storage';
 

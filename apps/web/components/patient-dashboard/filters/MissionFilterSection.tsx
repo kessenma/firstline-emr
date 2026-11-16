@@ -12,7 +12,7 @@ import {
 import { X } from "lucide-react";
 import { useMissions, type MissionOption } from "@/hooks/useMissions";
 import useDashboardStore from "@/stores/useDashboardStore";
-import { classifyMissionStatus } from "@fajr/shared/patient-dashboard";
+import { classifyMissionStatus } from "@firstline/shared/patient-dashboard";
 import type { PatientWithMessages } from "../viewModel/types";
 
 interface Props {

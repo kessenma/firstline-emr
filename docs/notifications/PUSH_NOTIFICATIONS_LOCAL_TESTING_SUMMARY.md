@@ -215,7 +215,7 @@ curl -X POST http://localhost:8080/api/push/send \
 
 **Root `.env`:**
 ```bash
-DATABASE_URL=postgresql://user:password@localhost:5432/medflow
+DATABASE_URL=postgresql://user:password@localhost:5432/firstline
 APNS_KEY_BASE64=<your_base64_encoded_key>
 NOTIFICATIONS_PORT=8080
 ```
@@ -229,7 +229,7 @@ NOTIFICATIONS_SERVER_URL=http://localhost:8080
 
 ```bash
 TELEGRAM_BOT_TOKEN=<token>
-MEDFLOW_KEY=<key>
+FIRSTLINE_SERVICE_KEY=<key>
 PORT_ENV=3000
 NODE_ENV=development
 ```
@@ -287,9 +287,9 @@ NODE_ENV=development
 
 | Container | Name | Network |
 |-----------|------|---------|
-| Notifications Server | `notifications-server-local` | `medflow-local` |
-| Gorush | `gorush-local` | `medflow-local` |
-| Init (APNs key) | `gorush-init` | `medflow-local` |
+| Notifications Server | `notifications-server-local` | `firstline-local` |
+| Gorush | `gorush-local` | `firstline-local` |
+| Init (APNs key) | `gorush-init` | `firstline-local` |
 
 ## Logs
 

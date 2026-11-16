@@ -65,7 +65,7 @@
 
   ✓ TRANSLATION_API_KEY must be identical in both web app and service
   ✓ Generate strong random key (32+ characters)
-  ✓ Works like MEDFLOW_KEY - only authorized clients can access
+  ✓ Works like FIRSTLINE_SERVICE_KEY - only authorized clients can access
   ✓ Service runs on internal Docker network only (no external exposure)
 
 ─────────────────────────────────────────────────────────────────────────────

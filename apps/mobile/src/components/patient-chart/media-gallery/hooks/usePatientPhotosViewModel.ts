@@ -10,7 +10,7 @@ import {
 } from '../../../../services/PatientMediaService';
 import { getCachedMedia } from '../../../../services/TelegramMediaCacheService';
 import type { MediaThumbnailItem } from '../../../ui/MediaThumbnail';
-import { inferMediaTypeFromUrl } from '@fajr/shared/media';
+import { inferMediaTypeFromUrl } from '@firstline/shared/media';
 
 function inferMediaType(photo: { url: string; type?: string }): 'image' | 'pdf' {
   if (photo.type === 'pdf') return 'pdf';

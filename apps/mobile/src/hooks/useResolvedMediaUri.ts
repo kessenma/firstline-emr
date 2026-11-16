@@ -7,7 +7,7 @@
 // concurrent lookups and applies a failure cooldown, so remounts stay cheap.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { MediaType } from '@fajr/shared/media';
+import type { MediaType } from '@firstline/shared/media';
 import { usePowerSync, useSyncConnection } from './powersync';
 import { getCachedMedia, getSignedUrl } from '../services/MediaService';
 

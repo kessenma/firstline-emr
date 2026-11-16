@@ -47,7 +47,7 @@ export function isPatientIdentity(identity: string): boolean {
 
 /**
  * Fully-qualified join link for the patient.
- * `baseUrl` is the web app origin, e.g. https://fajrmission.org
+ * `baseUrl` is the web app origin, e.g. https://firstline.care
  *
  * `language` is carried in the URL rather than left to the join response
  * because the page renders its connecting and error states *before* it has

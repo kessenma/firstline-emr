@@ -17,8 +17,8 @@ import {
   type BackupMode,
   type BackupSummary,
   type BackupTableManifest,
-} from '@fajr/shared/admin';
-import { BACKUP_FILE_EXTENSION } from '@fajr/shared/backup';
+} from '@firstline/shared/admin';
+import { BACKUP_FILE_EXTENSION } from '@firstline/shared/backup';
 
 // Simple SHA-256 is not available in Hermes — use a checksum placeholder
 // or skip checksum on mobile (server will accept without one)
@@ -327,7 +327,7 @@ export function useBackupViewModel() {
     setExportBackupId(null);
   }, []);
 
-  // Export a backup as encrypted .fajr-backup file via share sheet.
+  // Export a backup as encrypted .firstline-backup file via share sheet.
   // Uses the server's download-encrypted endpoint — no local crypto needed.
   const exportToFile = useCallback(async (passphrase: string) => {
     if (!exportBackupId) return;

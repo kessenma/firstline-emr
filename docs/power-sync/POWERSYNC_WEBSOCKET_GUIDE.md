@@ -4,12 +4,12 @@
 
 PowerSync uses **WebSocket (RSocket protocol)** for sync connections, NOT HTTP REST endpoints.
 
-**Correct Connection URL:** `wss://ws.emr.fajr.org` (root path, WebSocket upgrade)
+**Correct Connection URL:** `wss://ws.firstline.care` (root path, WebSocket upgrade)
 
 **Incorrect URLs:** 
-- ❌ `wss://ws.emr.fajr.org/sync` (doesn't exist)
-- ❌ `wss://ws.emr.fajr.org/sync/stream` (doesn't exist)
-- ❌ `https://ws.emr.fajr.org/api/sync` (doesn't exist)
+- ❌ `wss://ws.firstline.care/sync` (doesn't exist)
+- ❌ `wss://ws.firstline.care/sync/stream` (doesn't exist)
+- ❌ `https://ws.firstline.care/api/sync` (doesn't exist)
 
 ---
 
@@ -41,7 +41,7 @@ PowerSync uses **WebSocket (RSocket protocol)** for sync connections, NOT HTTP R
 ```
 Mobile App
     ↓
-WebSocket Connection (wss://ws.emr.fajr.org)
+WebSocket Connection (wss://ws.firstline.care)
     ↓
 Caddy Proxy (SSL termination)
     ↓
@@ -54,7 +54,7 @@ PostgreSQL (replication)
 
 PowerSync uses **RSocket over WebSocket**, not traditional HTTP REST:
 
-1. Client opens WebSocket connection to `wss://ws.emr.fajr.org`
+1. Client opens WebSocket connection to `wss://ws.firstline.care`
 2. Client sends JWT token in WebSocket handshake (Authorization header or query param)
 3. PowerSync verifies JWT (checks signature, `kid`, expiration, issuer, audience)
 4. If valid, establishes RSocket bi-directional streaming connection
@@ -85,7 +85,7 @@ These paths only exist if you run PowerSync in "API-only" mode with separate ser
    {
      "alg": "HS256",
      "typ": "JWT",
-     "kid": "fajr-emr-key"  ← REQUIRED!
+     "kid": "firstline-emr-key"  ← REQUIRED!
    }
    ```
 
@@ -111,7 +111,7 @@ The `kid` (Key ID) tells PowerSync which key to use for verification when you ha
 client_auth:
   jwks:
     keys:
-      - kid: "fajr-emr-key"  # ← Must match JWT header
+      - kid: "firstline-emr-key"  # ← Must match JWT header
         kty: oct
         k: <base64-encoded-secret>
         alg: HS256
@@ -159,12 +159,12 @@ client_auth:
   supabase: false
   jwks:
     keys:
-      - kid: "fajr-emr-key"  # ← Matches JWT_CONFIG.KID
+      - kid: "firstline-emr-key"  # ← Matches JWT_CONFIG.KID
         kty: oct
         k: <base64-encoded-NEXTAUTH_SECRET>
         alg: HS256
   audience: ["powersync", "powersync-dev"]
-  issuer: https://emr.fajr.org
+  issuer: https://firstline.care
 
 # Sync rules
 sync_rules:
@@ -176,7 +176,7 @@ sync_rules:
 **File:** `data/coolify/proxy/caddy/dynamic/powersync.wss.caddy`
 
 ```caddy
-ws.emr.fajr.org {
+ws.firstline.care {
     reverse_proxy powersync:6061 {
         # Enable WebSocket support
         header_up Upgrade {http.request.header.Upgrade}
@@ -207,7 +207,7 @@ chmod +x test-powersync-connection.sh
 
 1. **Test Health Endpoint:**
    ```bash
-   curl https://ws.emr.fajr.org/probes/liveness
+   curl https://ws.firstline.care/probes/liveness
    # Expected: {"ready":true,"started":true,"touched_at":"..."}
    ```
 
@@ -218,18 +218,18 @@ chmod +x test-powersync-connection.sh
      -H "Upgrade: websocket" \
      -H "Sec-WebSocket-Version: 13" \
      -H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" \
-     https://ws.emr.fajr.org/
+     https://ws.firstline.care/
    ```
    Expected: `HTTP/2 401` (requires auth) or `HTTP/2 101` (upgrade successful)
 
 3. **Generate JWT Token:**
    ```bash
-   # Log in to https://emr.fajr.org
+   # Log in to https://firstline.care
    # Get session token from DevTools > Application > Local Storage
    # Copy 'next-auth.session-token'
    
    curl -H "Cookie: next-auth.session-token=YOUR_TOKEN" \
-     https://emr.fajr.org/api/auth/powersync-token
+     https://firstline.care/api/auth/powersync-token
    ```
 
 4. **Test Authenticated WebSocket:**
@@ -242,7 +242,7 @@ chmod +x test-powersync-connection.sh
      -H "Sec-WebSocket-Version: 13" \
      -H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" \
      -H "Authorization: Bearer $JWT_TOKEN" \
-     https://ws.emr.fajr.org/
+     https://ws.firstline.care/
    ```
    Expected: `HTTP/2 101` (upgrade successful)
 
@@ -256,7 +256,7 @@ JWT_TOKEN="your-token-here"
 echo "$JWT_TOKEN" | cut -d. -f1 | base64 -d
 
 # Should show:
-# {"alg":"HS256","typ":"JWT","kid":"fajr-emr-key"}
+# {"alg":"HS256","typ":"JWT","kid":"firstline-emr-key"}
 ```
 
 ---
@@ -277,17 +277,17 @@ const powerSync = new PowerSyncDatabase({
 
 await powerSync.connect({
   // ✅ CORRECT: Root path, WebSocket protocol
-  endpoint: 'https://ws.emr.fajr.org',
+  endpoint: 'https://ws.firstline.care',
   
   // ❌ WRONG: Don't add /sync or /sync/stream
-  // endpoint: 'https://ws.emr.fajr.org/sync',
+  // endpoint: 'https://ws.firstline.care/sync',
   
   fetchCredentials: async () => {
     // Get JWT token from your auth system
     const token = await getAuthToken();
     
     return {
-      endpoint: 'https://ws.emr.fajr.org',
+      endpoint: 'https://ws.firstline.care',
       token: token,
     };
   },
@@ -303,12 +303,12 @@ await powerSync.connect({
 
 1. **Use HTTPS URL** (not WSS)
    - PowerSync client converts to WebSocket automatically
-   - Use: `https://ws.emr.fajr.org`
-   - NOT: `wss://ws.emr.fajr.org` (client handles protocol upgrade)
+   - Use: `https://ws.firstline.care`
+   - NOT: `wss://ws.firstline.care` (client handles protocol upgrade)
 
 2. **Use Root Path**
-   - Use: `https://ws.emr.fajr.org` (no trailing slash)
-   - NOT: `https://ws.emr.fajr.org/sync`
+   - Use: `https://ws.firstline.care` (no trailing slash)
+   - NOT: `https://ws.firstline.care/sync`
 
 3. **Token in `fetchCredentials`**
    - Return JWT token from your login endpoint
@@ -333,7 +333,7 @@ await powerSync.connect({
 **Cause:** Trying to access HTTP REST endpoint that doesn't exist
 
 **Fix:** 
-- Use root path for WebSocket connection: `wss://ws.emr.fajr.org`
+- Use root path for WebSocket connection: `wss://ws.firstline.care`
 - Don't try to access `/sync`, `/api/sync`, etc.
 
 ### Issue: 401 Unauthorized
@@ -360,7 +360,7 @@ await powerSync.connect({
 **Fix:**
 1. Check Caddy config exists: `data/coolify/proxy/caddy/dynamic/powersync.wss.caddy`
 2. Verify PowerSync container running: `docker ps | grep powersync`
-3. Use root path: `wss://ws.emr.fajr.org`
+3. Use root path: `wss://ws.firstline.care`
 
 ### Issue: WebSocket connection drops immediately
 
@@ -383,10 +383,10 @@ Before deploying:
 - [ ] PowerSync config uses base64-encoded `NEXTAUTH_SECRET`
 - [ ] Caddy reverse_proxy configured with WebSocket support
 - [ ] Caddy has `flush_interval -1` to prevent buffering
-- [ ] Domain registered in DNS: `ws.emr.fajr.org`
-- [ ] SSL certificate valid for `ws.emr.fajr.org`
+- [ ] Domain registered in DNS: `ws.firstline.care`
+- [ ] SSL certificate valid for `ws.firstline.care`
 - [ ] PowerSync container running and healthy
-- [ ] Mobile app uses correct URL: `https://ws.emr.fajr.org` (no /sync)
+- [ ] Mobile app uses correct URL: `https://ws.firstline.care` (no /sync)
 
 After deploying:
 
@@ -429,7 +429,7 @@ After deploying:
 ## 🎓 Key Takeaways
 
 1. **PowerSync uses WebSocket, not HTTP REST**
-   - Connect to root path: `wss://ws.emr.fajr.org`
+   - Connect to root path: `wss://ws.firstline.care`
    - Don't look for `/sync` or `/api/sync` endpoints
 
 2. **JWT must include `kid` header**
@@ -446,7 +446,7 @@ After deploying:
 
 5. **Use HTTPS URL in client config**
    - PowerSync client converts to WebSocket automatically
-   - Use: `https://ws.emr.fajr.org` not `wss://`
+   - Use: `https://ws.firstline.care` not `wss://`
 
 ---
 

@@ -1,8 +1,8 @@
-# Fajr Mobile EMR - Architecture Documentation
+# Firstline Mobile EMR - Architecture Documentation
 
 ## Overview
 
-The Fajr Mobile EMR app follows the **MVVM (Model-View-ViewModel)** architecture pattern with a comprehensive theming system that supports both light and dark modes. This document outlines the architecture, design patterns, and best practices used throughout the application.
+The Firstline Mobile EMR app follows the **MVVM (Model-View-ViewModel)** architecture pattern with a comprehensive theming system that supports both light and dark modes. This document outlines the architecture, design patterns, and best practices used throughout the application.
 
 ## Table of Contents
 

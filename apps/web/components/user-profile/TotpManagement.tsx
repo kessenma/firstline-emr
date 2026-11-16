@@ -7,7 +7,7 @@ import { Smartphone, Plus, Trash2, AlertCircle, Loader2, Check, ShieldCheck, Ext
 import { AlertDialog } from "@/components/ui/alert-dialog"
 import { CopyButton } from "@/components/ui/CopyButton"
 import Image from "next/image"
-import { AUTHENTICATOR_APPS, HIPAA_2FA_NOTICE, TOTP_ISSUER, TOTP_MANUAL_SETUP_STEPS } from "@fajr/shared/2fa"
+import { AUTHENTICATOR_APPS, HIPAA_2FA_NOTICE, TOTP_ISSUER, TOTP_MANUAL_SETUP_STEPS } from "@firstline/shared/2fa"
 
 interface TotpManagementProps {
     userEmail: string

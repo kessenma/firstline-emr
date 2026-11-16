@@ -7,7 +7,7 @@ import {
   VIDEO_CALL_STATUS_LABELS,
   formatCallDuration,
   type VideoCallSession,
-} from "@fajr/shared/video-call";
+} from "@firstline/shared/video-call";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 

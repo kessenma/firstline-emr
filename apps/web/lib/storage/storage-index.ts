@@ -18,7 +18,7 @@ import {
   type StorageCategoryId,
   type StorageCategoryStats,
   type StorageStats,
-} from "@fajr/shared/admin";
+} from "@firstline/shared/admin";
 import { storageService } from "./storage-service";
 import { THUMBS_SEGMENT } from "./thumbnails";
 

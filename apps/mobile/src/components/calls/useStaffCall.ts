@@ -23,7 +23,7 @@ import type {
   DirectoryUser,
   PlaceCallResponse,
   QuietHoursCallee,
-} from '@fajr/shared/calls';
+} from '@firstline/shared/calls';
 import { getApiUrl } from '../../config';
 import { getStoredToken } from '../../utils/storage';
 import { useCallPermissions } from '../patient-chart/video-call/hooks/useCallPermissions';

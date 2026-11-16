@@ -16,7 +16,7 @@ import {
   MACHINE_TRANSCRIPT_DISCLAIMER,
   UNSUPPORTED_LANGUAGE_DISCLAIMER,
   type PatientCallNoteContent,
-} from "@fajr/shared/patient";
+} from "@firstline/shared/patient";
 
 interface TranscriptBlockProps {
   content: PatientCallNoteContent;

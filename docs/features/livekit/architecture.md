@@ -5,13 +5,13 @@
 
 ---
 
-# LiveKit Architecture for MedFlow EMR
+# LiveKit Architecture for Firstline
 
 ## System Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                          MedFlow EMR System                              │
+│                          Firstline System                              │
 └─────────────────────────────────────────────────────────────────────────┘
 
 ┌──────────────┐         ┌──────────────┐         ┌──────────────┐

@@ -8,7 +8,7 @@ import { usePatientChart } from '../PatientChartContext';
 import type {
   CreateRxOrderPayload,
   Prescription,
-} from '@fajr/shared/medications';
+} from '@firstline/shared/medications';
 
 interface RxOrderFormState {
   doctorSpecialty: string;

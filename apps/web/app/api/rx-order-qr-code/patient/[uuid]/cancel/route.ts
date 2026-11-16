@@ -13,7 +13,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { loadGatedOrder } from "@/lib/rx-access-gate";
 import { cancelPrescription } from "@/lib/rx-cancellation";
-import { isPatientCancellationReasonCode } from "@fajr/shared/medications";
+import { isPatientCancellationReasonCode } from "@firstline/shared/medications";
 
 export const dynamic = "force-dynamic";
 

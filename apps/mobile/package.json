@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@dr.pogodin/react-native-fs": "^2.36.2",
-    "@fajr/shared": "workspace:*",
+    "@firstline/shared": "workspace:*",
     "@gorhom/bottom-sheet": "^5.2.8",
     "@huggingface/jinja": "^0.5.0",
     "@jest/globals": "^30.2.0",

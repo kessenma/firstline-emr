@@ -2,7 +2,7 @@
 
 ## Context
 
-This feature provides backup and restore capabilities for the Fajr MedFlow EMR database. Backups can be created from two sources:
+This feature provides backup and restore capabilities for the Firstline database. Backups can be created from two sources:
 
 1. **Mobile (PowerSync)** — Admin exports local SQLite data from their phone and uploads to the server
 2. **Server (PostgreSQL)** — Admin triggers a direct database export from the web admin dashboard
@@ -41,18 +41,18 @@ All clinical tables PLUS: users, admins, user_settings, user_profile_logs, teleg
 1. Open Admin Dashboard > Database Backups
 2. Tap "Export Encrypted" on any available backup
 3. Enter a passphrase (min 12 characters) and confirm it
-4. The backup is encrypted (AES-256-GCM) and saved as a `.fajr-backup` file
+4. The backup is encrypted (AES-256-GCM) and saved as a `.firstline-backup` file
 5. Share sheet opens — save to Files, AirDrop, email, etc.
 
 ### From Web Admin Dashboard
 1. Open Admin Dashboard > Database Backups
 2. Expand a backup > click "Download Encrypted"
 3. Enter a passphrase (min 12 characters)
-4. The encrypted `.fajr-backup` file downloads to your browser
+4. The encrypted `.firstline-backup` file downloads to your browser
 
 ### Importing an Encrypted Backup
 1. Open Admin Dashboard > Database Backups
-2. In the "Import Encrypted Backup" card, select a `.fajr-backup` file
+2. In the "Import Encrypted Backup" card, select a `.firstline-backup` file
 3. Enter the passphrase used to encrypt it
 4. Click "Decrypt & Import" — the file is decrypted server-side and stored in S3
 5. The backup appears in the list and can be restored normally
@@ -93,7 +93,7 @@ For replacing all data on an existing server (e.g., syncing from a different env
 1. Deploy the web app on the new server
 2. Navigate to the app — you'll be redirected to `/setup` (empty database detected)
 3. Choose "Import Existing Database"
-4. Upload a `.fajr-backup` file (exported from mobile or downloaded from old server)
+4. Upload a `.firstline-backup` file (exported from mobile or downloaded from old server)
 5. Enter the passphrase used to encrypt it
 6. Review the preview (table counts, user accounts, admin list)
 7. Optionally toggle "Require password reset for all imported users"
@@ -158,8 +158,8 @@ If S3 is not shared and the setup wizard is not suitable:
 
 Backup files are encrypted using **AES-256-GCM** with **PBKDF2** key derivation (SHA-256, 600k iterations).
 
-- File extension: `.fajr-backup`
-- Binary format: `FAJR` magic bytes + version + algo + salt + IV + auth tag + ciphertext
+- File extension: `.firstline-backup`
+- Binary format: `Firstline` magic bytes + version + algo + salt + IV + auth tag + ciphertext
 - Passphrase minimum: 12 characters
 - Passphrase is never stored — used only transiently for encrypt/decrypt
 - Server uses Node.js `crypto` module; mobile uses `react-native-quick-crypto`
@@ -172,9 +172,9 @@ Setup routes are unauthenticated but guarded by empty-DB check.
 | Route | Method | Auth | Purpose |
 |-------|--------|------|---------|
 | `/api/admin/POST/backups/upload` | POST | Admin | Upload backup JSON (FormData: file, tables, totalRecords, backupMode, deviceInfo, checksum) |
-| `/api/admin/POST/backups/upload-encrypted` | POST | Admin | Upload encrypted .fajr-backup file (FormData: file, passphrase) |
+| `/api/admin/POST/backups/upload-encrypted` | POST | Admin | Upload encrypted .firstline-backup file (FormData: file, passphrase) |
 | `/api/admin/POST/backups/create-server` | POST | Admin | Create backup from server DB (JSON: backupMode, selectedTables?) |
-| `/api/admin/POST/backups/[id]/download-encrypted` | POST | Admin | Download backup as encrypted .fajr-backup (JSON: passphrase) |
+| `/api/admin/POST/backups/[id]/download-encrypted` | POST | Admin | Download backup as encrypted .firstline-backup (JSON: passphrase) |
 | `/api/admin/POST/backups/[id]/delete` | POST | Admin | Delete backup (S3 file + DB record) |
 | `/api/admin/POST/backups/restore` | POST | Admin | Execute restore (JSON: backupId, selectedTables, conflictStrategy, destructive?, confirmationPhrase?) |
 | `/api/admin/GET/backups` | GET | Admin | List backups (query: page, limit, status, mode) |

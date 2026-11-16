@@ -22,5 +22,5 @@ Central types, constants, and utilities for media storage and audio recording/pl
 
 1. If pure (no React/platform deps) → add to this package
 2. Export from `index.ts`
-3. Import as `@fajr/shared/media` in consumers
+3. Import as `@firstline/shared/media` in consumers
 4. If platform-specific → keep in the respective app, import shared types only

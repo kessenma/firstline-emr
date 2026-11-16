@@ -1,6 +1,6 @@
 // apps/web/components/ui/Table/filters.ts
 
-import { PATIENT_STATUS_VALUES, PATIENT_PRIORITY_VALUES } from '@fajr/shared/patient';
+import { PATIENT_STATUS_VALUES, PATIENT_PRIORITY_VALUES } from '@firstline/shared/patient';
 
 export const PRIORITIES = PATIENT_PRIORITY_VALUES as readonly string[];
 

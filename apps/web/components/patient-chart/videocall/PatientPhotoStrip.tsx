@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getVideoCallTranslation } from "./video-call-patient-translations";
-import type { CapturedPhoto } from "@fajr/shared/video-call";
+import type { CapturedPhoto } from "@firstline/shared/video-call";
 
 interface PatientPhotoStripProps {
   inviteToken: string;

@@ -8,7 +8,7 @@ import { eq } from "drizzle-orm";
 import { verifySessionFromRequest } from "@/lib/dal";
 import { storageService } from "@/lib/storage";
 import { encryptBackup } from "@/lib/backup/encryptionService";
-import { BACKUP_MIN_PASSPHRASE_LENGTH, BACKUP_FILE_EXTENSION } from "@fajr/shared/backup";
+import { BACKUP_MIN_PASSPHRASE_LENGTH, BACKUP_FILE_EXTENSION } from "@firstline/shared/backup";
 
 export async function POST(
   request: Request,

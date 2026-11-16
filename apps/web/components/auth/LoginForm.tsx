@@ -16,7 +16,7 @@ import { useToast } from "@/components/hooks/useToast";
 import { Eye, EyeOff, Fingerprint, KeyRound, ShieldCheck, ArrowLeft } from "lucide-react";
 import { usePasskey } from "@/hooks/usePasskey";
 import Link from "next/link";
-import type { TwoFactorMethod } from "@fajr/shared/2fa";
+import type { TwoFactorMethod } from "@firstline/shared/2fa";
 
 const loginSchema = z.object({
   email: z

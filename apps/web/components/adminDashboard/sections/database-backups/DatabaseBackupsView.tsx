@@ -38,7 +38,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { useDatabaseBackupsViewModel } from "./DatabaseBackupsViewModel";
-import type { ConflictStrategy } from "@fajr/shared/admin";
+import type { ConflictStrategy } from "@firstline/shared/admin";
 
 function formatFileSize(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -754,13 +754,13 @@ export default function DatabaseBackupsView({
           </h3>
         </div>
         <p className="text-xs text-muted-foreground mb-4">
-          Upload a .fajr-backup file exported from another device or server.
+          Upload a .firstline-backup file exported from another device or server.
         </p>
         <div className="flex items-center gap-3">
           <input
             ref={uploadInputRef}
             type="file"
-            accept=".fajr-backup"
+            accept=".firstline-backup"
             className="hidden"
             onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
           />
@@ -770,7 +770,7 @@ export default function DatabaseBackupsView({
             onClick={() => uploadInputRef.current?.click()}
             disabled={vm.isUploadingEncrypted}
           >
-            {uploadFile ? uploadFile.name : "Select .fajr-backup file"}
+            {uploadFile ? uploadFile.name : "Select .firstline-backup file"}
           </Button>
           {uploadFile && (
             <>

@@ -35,7 +35,7 @@ class NativeCallTranscription: RCTEventEmitter, @unchecked Sendable {
   private var statsTimer: DispatchSourceTimer?
   private var hasListeners = false
   private var activeJobs: [String: Task<Void, Never>] = [:]
-  private let queue = DispatchQueue(label: "org.fajrmission.emr.callTranscription")
+  private let queue = DispatchQueue(label: "care.firstline.emr.callTranscription")
 
   override init() {
     super.init()

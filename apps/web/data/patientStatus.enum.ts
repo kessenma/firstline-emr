@@ -1,5 +1,5 @@
 // data/patientStatus.enum.ts
-import { PATIENT_STATUS_VALUES } from '@fajr/shared/patient';
+import { PATIENT_STATUS_VALUES } from '@firstline/shared/patient';
 
 export enum PatientStatusList {
     PRE_OP_NOT_CLEARED = 'Pre-Op / Not Cleared',

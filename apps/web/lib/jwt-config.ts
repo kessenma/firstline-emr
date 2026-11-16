@@ -14,7 +14,7 @@ export const JWT_CONFIG = {
    * Key ID for JWT tokens
    * This MUST match the `kid` in apps/powersync-server/config/powersync.yaml
    */
-  KID: "fajr-emr-key",
+  KID: "firstline-emr-key",
 
   /**
    * Algorithm for JWT signing
@@ -53,5 +53,5 @@ export const JWT_CONFIG = {
    * This MUST match the `issuer` in apps/powersync-server/config/powersync.yaml
    * PowerSync validates that the JWT's iss claim matches this value
    */
-  ISSUER: "https://fajrmission.org",
+  ISSUER: "https://firstline.care",
 } as const;

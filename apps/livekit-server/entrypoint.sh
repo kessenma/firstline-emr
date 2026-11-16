@@ -18,7 +18,7 @@ set -eu
 # Origin the SFU posts call-log webhooks back to. Defaults to production so an
 # unset value cannot silently drop the audit trail; override it per environment
 # so a dev SFU does not write into prod's call log.
-WEBHOOK_BASE="${LIVEKIT_WEBHOOK_BASE_URL:-https://fajrmission.org}"
+WEBHOOK_BASE="${LIVEKIT_WEBHOOK_BASE_URL:-https://firstline.care}"
 
 # A trailing slash here would render as a double slash in the webhook URLs.
 WEBHOOK_BASE="${WEBHOOK_BASE%/}"

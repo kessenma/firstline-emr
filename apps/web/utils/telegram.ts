@@ -4,10 +4,11 @@
 
 /**
  * Gets the telegram bot name from environment variables
- * Falls back to the live production bot ('fajr_mission_bot') if not set
+ * Falls back to the Firstline bot handle if not set. NOTE: this bot must be
+ * created in BotFather before it resolves -- the old handle is retired.
  */
 export function getTelegramBotName(): string {
-  return process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || 'fajr_mission_bot';
+  return process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || 'firstline_care_bot';
 }
 
 /**

@@ -81,16 +81,16 @@ openssl rand -base64 32
 
 1. Create new app
 2. Set Docker Compose file: `docker-compose.video.yml`
-3. Configure domain: `call.dev.emr.fajrscientific.org`
+3. Configure domain: `call.dev.firstline.care`
 4. Add environment variables:
 
 ```bash
-LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org
-NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org
+LIVEKIT_URL=wss://call.dev.firstline.care
+NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.firstline.care
 LIVEKIT_API_KEY=<your_generated_key>
 LIVEKIT_API_SECRET=<your_generated_secret>
 LIVEKIT_PORT=7880
-LIVEKIT_TURN_DOMAIN=call.dev.emr.fajrscientific.org
+LIVEKIT_TURN_DOMAIN=call.dev.firstline.care
 NODE_ENV=production
 ```
 

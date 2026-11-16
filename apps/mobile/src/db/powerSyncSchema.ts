@@ -412,7 +412,7 @@ const rx_orders = new Table(
     // mobile could not see 'partially filled' or 'declined' at all.
     rx_status: column.text,
     // Cancellation — a separate axis from rx_status, read together via
-    // describePrescriptionCancellation() in @fajr/shared/medications.
+    // describePrescriptionCancellation() in @firstline/shared/medications.
     cancelled_at: column.text, // ISO timestamp
     cancelled_by_role: column.text, // 'doctor' | 'pharmacist' | 'patient'
     cancelled_by_user_id: column.text, // null when the patient cancelled

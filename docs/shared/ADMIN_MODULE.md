@@ -1,4 +1,4 @@
-# @fajr/shared/admin
+# @firstline/shared/admin
 
 Shared types, constants, and utilities for the admin dashboard across web and mobile.
 
@@ -54,14 +54,14 @@ Utilities: `PaginationParams`, `DateRange`
 Mobile uses `ExistingUserSummary` as an alias for `AdminUserSummary`:
 ```ts
 // apps/mobile/src/types/admin.ts
-import type { AdminUserSummary } from '@fajr/shared/admin';
+import type { AdminUserSummary } from '@firstline/shared/admin';
 export type ExistingUserSummary = AdminUserSummary;
 ```
 
 Web keeps `SectionCategory` as a deprecated alias:
 ```ts
 // apps/web/components/adminDashboard/sectionRegistry.ts
-import type { AdminSectionCategory } from '@fajr/shared/admin';
+import type { AdminSectionCategory } from '@firstline/shared/admin';
 export type SectionCategory = AdminSectionCategory;
 ```
 

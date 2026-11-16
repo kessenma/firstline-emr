@@ -23,7 +23,7 @@ import {
 import { CachesDirectoryPath, writeFile } from '@dr.pogodin/react-native-fs';
 import { useThemeColors } from '../../../../contexts/ThemeContext';
 import { spacing, borderRadius, typography } from '../../../../utils/theme';
-import { generateWaveform, formatAudioTime, DEFAULT_WAVEFORM_BARS } from '@fajr/shared/media';
+import { generateWaveform, formatAudioTime, DEFAULT_WAVEFORM_BARS } from '@firstline/shared/media';
 
 interface InlineAudioPlayerProps {
   /** Ready-to-use URL (signed URL, data URI, or file:// path) */

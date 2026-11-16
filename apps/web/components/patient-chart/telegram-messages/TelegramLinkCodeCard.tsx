@@ -12,7 +12,7 @@ import {
   Languages,
   LanguagesList,
   isRtlLanguage,
-} from "@fajr/shared/constants/languages";
+} from "@firstline/shared/constants/languages";
 
 // Native language labels for the selector
 const nativeLabels: Record<Languages, string> = {
@@ -51,7 +51,7 @@ export default function TelegramLinkCodeCard({
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
 
   const botUsername =
-    process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || "fajr_mission_bot";
+    process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || "firstline_care_bot";
   const isRtl = isRtlLanguage(selectedLanguage);
 
   const generateCode = useCallback(async () => {

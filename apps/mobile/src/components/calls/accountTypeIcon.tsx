@@ -1,7 +1,7 @@
 // apps/mobile/src/components/calls/accountTypeIcon.tsx
 //
 // Resolves the shared ACCOUNT_TYPE_ICONS names to lucide-react-native
-// components. The names live in @fajr/shared/patient because web needs the same
+// components. The names live in @firstline/shared/patient because web needs the same
 // mapping, but the components can't be shared — web imports lucide-react and
 // the two packages' types are incompatible.
 
@@ -18,7 +18,7 @@ import {
   ACCOUNT_TYPE_ICONS,
   ACCOUNT_TYPE_LABELS,
   isValidAccountType,
-} from '@fajr/shared/patient';
+} from '@firstline/shared/patient';
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
   Stethoscope,

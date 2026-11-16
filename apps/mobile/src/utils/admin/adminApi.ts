@@ -40,7 +40,7 @@ import {
 import type {
   StorageCategoryId,
   StorageCategoryGroup,
-} from '@fajr/shared/admin';
+} from '@firstline/shared/admin';
 
 class AdminApiClient {
   private getAuthHeaders(): Record<string, string> {

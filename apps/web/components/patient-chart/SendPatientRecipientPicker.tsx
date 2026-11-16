@@ -11,7 +11,7 @@ import {
   filterRecipients,
   type RecipientTabId,
   type RecipientUser,
-} from "@fajr/shared/patient-share";
+} from "@firstline/shared/patient-share";
 
 interface Props {
   /** The patient being shared — drives the specialty tab's label and filter. */

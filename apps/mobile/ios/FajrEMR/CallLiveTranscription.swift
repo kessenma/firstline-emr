@@ -58,7 +58,7 @@ final class CallLiveTranscription {
   }
 
   private let capture = CallAudioCapture.shared
-  private let queue = DispatchQueue(label: "org.fajrmission.emr.liveTranscription")
+  private let queue = DispatchQueue(label: "care.firstline.emr.liveTranscription")
   private var streams: [CallAudioStream: Stream] = [:]
   private var drainTimer: DispatchSourceTimer?
   private var onSegment: ((LiveSegment) -> Void)?

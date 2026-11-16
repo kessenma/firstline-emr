@@ -1,4 +1,4 @@
-// fajr-medflow-emr/apps/web/app/api/user/device-token/route.ts
+// apps/web/app/api/user/device-token/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { verifySessionFromRequest } from "@/lib/dal";
 import { db } from "@/db";

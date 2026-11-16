@@ -88,7 +88,7 @@ Prerequisites:
 
 📁 FILE STRUCTURE:
 
-fajr-medflow-emr/
+firstline-emr/
 ├── .env.powersync                          ← Configuration
 ├── docker-compose.powersync.yml            ← Docker setup
 ├── POWERSYNC_PHASE_0.1_READY.md           ← Summary

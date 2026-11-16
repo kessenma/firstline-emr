@@ -1,4 +1,4 @@
-import type { CareTeamRole } from '@fajr/shared/care-team';
+import type { CareTeamRole } from '@firstline/shared/care-team';
 
 export const ROLE_BADGE_TAILWIND: Record<CareTeamRole, string> = {
   surgeon: 'bg-blue-100 text-blue-800',

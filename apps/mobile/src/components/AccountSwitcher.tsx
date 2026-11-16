@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Check, Wifi, WifiOff } from 'lucide-react-native';
-import { getRoleTheme, getRoleColor } from '@fajr/shared/theme';
+import { getRoleTheme, getRoleColor } from '@firstline/shared/theme';
 import { useThemeColors } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { TokenStorage } from '../services/TokenStorage';

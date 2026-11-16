@@ -11,6 +11,7 @@ import { UserDrawer } from "@/components/ui/userDrawer";
 import { BottomMenu } from "@/components/ui/bottom-menu";
 import ChangeAccountTypeView from "@/components/adminDashboard/sections/ChangeAccountTypeView";
 import { RotatingArrows } from "@/components/nav/rotating-arrows";
+import { FirstlineMark } from "@/components/icons/FirstlineMark";
 import { SaveButton } from "@/components/nav/save-button";
 import { NotificationToast } from "../notifications/NotificationToast";
 import { motion, useMotionValue, useTransform } from "framer-motion";
@@ -118,19 +119,13 @@ const LoggedInNav: React.FC<LoggedInNavProps> = ({ className }) => {
                     isPulsing ? "pulse-on-click" : "hover:scale-150"
                   }`}
                 >
-                  <Image
-                    src="/assets/images/logo.svg"
-                    alt="MedFlow logo"
-                    width={30}
-                    height={30}
-                    className="object-contain"
-                  />
+                  <FirstlineMark className="h-[30px] w-[30px] text-foreground" />
                 </div>
                 <span
                   className="text-xl font-bold cursor-pointer text-foreground"
                   onClick={handleLogoClick}
                 >
-                  Fajr.EMR
+                  Firstline
                 </span>
               </Link>
             </div>

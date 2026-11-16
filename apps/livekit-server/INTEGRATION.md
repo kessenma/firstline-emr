@@ -1,8 +1,8 @@
-# LiveKit Integration with MedFlow EMR
+# LiveKit Integration with Firstline
 
 ## How It Works
 
-This document explains how LiveKit integrates with your existing MedFlow EMR application.
+This document explains how LiveKit integrates with your existing Firstline application.
 
 ## Component Integration
 
@@ -334,7 +334,7 @@ await sendTelegramMessage(
 │   Container  │ │   Container  │ │   Container  │
 │              │ │              │ │              │
 │ web.dev.emr  │ │livekit.dev   │ │ ws.dev.emr   │
-│ .fajr...org  │ │.emr.fajr...  │ │ .fajr...org  │
+│ .firstline...org  │ │.emr.firstline...  │ │ .firstline...org  │
 └──────────────┘ └──────────────┘ └──────────────┘
 ```
 
@@ -473,7 +473,7 @@ interface CallHistory {
 
 ## Summary
 
-LiveKit is now fully integrated with your MedFlow EMR application:
+LiveKit is now fully integrated with your Firstline application:
 
 ✅ **Dockerized** - Runs in its own container
 ✅ **Isolated** - Separate docker-compose file

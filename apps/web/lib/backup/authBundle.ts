@@ -11,7 +11,7 @@
 // lives only inside the encrypted ciphertext. The DB-facing AuthBundleMeta is a
 // non-secret subset (fingerprints + counts) safe to store on the backups row.
 
-import type { ConflictStrategy, RestoreTableResult } from "@fajr/shared/admin";
+import type { ConflictStrategy, RestoreTableResult } from "@firstline/shared/admin";
 import { collectTablesData } from "./backupGenerator";
 import { executeRestore } from "./restoreService";
 import {

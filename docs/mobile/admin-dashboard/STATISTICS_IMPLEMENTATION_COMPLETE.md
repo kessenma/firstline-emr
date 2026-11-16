@@ -554,7 +554,7 @@ Ready to proceed with **Section 3.10 (Analytics Dashboard)** which will build up
 
 **Section 3.9 - Statistics Section**  
 of the  
-**Fajr Mission EMR Mobile Admin Dashboard**
+**Firstline Mobile Admin Dashboard**
 
 Has been successfully implemented, tested, documented, and integrated according to all specifications and quality standards.
 

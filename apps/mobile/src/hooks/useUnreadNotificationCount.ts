@@ -1,4 +1,4 @@
-// fajr-medflow-emr/apps/mobile/src/hooks/useUnreadNotificationCount.ts
+// apps/mobile/src/hooks/useUnreadNotificationCount.ts
 'use client';
 
 import { useQuery } from '@tanstack/react-query';

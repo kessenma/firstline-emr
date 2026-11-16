@@ -1,6 +1,6 @@
 # Translation Service Quick Start Guide
 
-This guide will help you deploy and troubleshoot the translation service for the Fajr Mission EMR system.
+This guide will help you deploy and troubleshoot the translation service for the Firstline system.
 
 ## 🚀 Quick Start
 

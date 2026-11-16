@@ -10,8 +10,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { videoCallSessions, userSettings } from "@/db/schema";
-import { isInviteExpired, staffDisplayName } from "@fajr/shared/video-call";
-import { normalizeLanguage } from "@fajr/shared/constants/languages";
+import { isInviteExpired, staffDisplayName } from "@firstline/shared/video-call";
+import { normalizeLanguage } from "@firstline/shared/constants/languages";
 import { getLiveKitConfig, mintPatientToken } from "@/lib/server/videoCall";
 
 export async function POST(request: NextRequest) {

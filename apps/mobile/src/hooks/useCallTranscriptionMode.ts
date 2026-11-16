@@ -17,7 +17,7 @@ import { storage } from '../utils/mmkv';
 import {
   isCallTranscriptionMode,
   type CallTranscriptionMode,
-} from '@fajr/shared/user';
+} from '@firstline/shared/user';
 
 export const CALL_TRANSCRIPTION_MODE_KEY = 'call_transcription_mode';
 

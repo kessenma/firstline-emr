@@ -1,6 +1,6 @@
 # PostgreSQL Database Setup with Drizzle ORM
 
-This directory contains the PostgreSQL database schema and migration setup for the Fajr Medical Flow EMR application.
+This directory contains the PostgreSQL database schema and migration setup for the Firstline application.
 
 ## 📁 Directory Structure
 

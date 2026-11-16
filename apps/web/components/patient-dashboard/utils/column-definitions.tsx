@@ -14,7 +14,7 @@ import { HospitalCell } from "../cells/HospitalCell";
 import { PatientIdCell } from "../cells/PatientIdCell";
 import { PatientNameCell } from "../cells/PatientNameCell";
 import { formatLocation, getInitials, dobToAge } from "@/utils/patientUtils";
-import type { CareTeamRole } from "@fajr/shared/care-team";
+import type { CareTeamRole } from "@firstline/shared/care-team";
 import type { TableColumn } from "@/components/ui/Table/types";
 import type { PatientWithMessages } from "../viewModel/types";
 import type { Patient } from "@/db/schema/patients";

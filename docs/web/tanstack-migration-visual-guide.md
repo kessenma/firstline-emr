@@ -7,7 +7,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                      FAJR.EMR MIGRATION JOURNEY                     │
+│                      Firstline MIGRATION JOURNEY                     │
 │                     Next.js 16 → TanStack Start                     │
 └─────────────────────────────────────────────────────────────────────┘
 
@@ -519,7 +519,7 @@ Pattern Learning Required:
 ---
 
 **Created:** 2024  
-**For:** Fajr.EMR Team  
+**For:** Firstline Team  
 **Status:** Decision Pending
 
 **Full Documentation:**

@@ -1,14 +1,15 @@
 // apps/web/lib/backup/encryptionService.ts
-// Server-side AES-256-GCM encryption/decryption for .fajr-backup files.
+// Server-side AES-256-GCM encryption/decryption for .firstline-backup files.
 
 import crypto from 'crypto';
 import {
   BACKUP_MAGIC,
+  BACKUP_MAGIC_ACCEPTED,
   BACKUP_FORMAT_VERSION,
   BACKUP_ENCRYPTION_ALGO,
   BACKUP_KDF,
   BACKUP_AES,
-} from '@fajr/shared/backup';
+} from '@firstline/shared/backup';
 
 /**
  * Derive a 256-bit key from a passphrase using PBKDF2.
@@ -36,7 +37,7 @@ function readUint32(buf: Buffer, offset: number): number {
 }
 
 /**
- * Encrypt a JSON backup payload into the .fajr-backup binary format.
+ * Encrypt a JSON backup payload into the .firstline-backup binary format.
  *
  * Layout:
  *   magic(4) | version(1) | algo(1)
@@ -69,7 +70,7 @@ export function encryptBackup(jsonPayload: Buffer, passphrase: string): Buffer {
 }
 
 /**
- * Decrypt a .fajr-backup binary file back to the JSON payload.
+ * Decrypt a .firstline-backup binary file back to the JSON payload.
  * Throws on wrong passphrase, corrupt file, or unsupported format.
  */
 export function decryptBackup(encryptedData: Buffer, passphrase: string): Buffer {
@@ -78,8 +79,13 @@ export function decryptBackup(encryptedData: Buffer, passphrase: string): Buffer
   // Validate magic bytes
   const magic = encryptedData.subarray(offset, offset + BACKUP_MAGIC.length);
   offset += BACKUP_MAGIC.length;
-  if (!magic.every((b, i) => b === BACKUP_MAGIC[i])) {
-    throw new Error('Invalid file: not a .fajr-backup file');
+  // Accept the pre-rebrand magic too, so archives exported under the old
+  // branding still restore. New files are always written with BACKUP_MAGIC.
+  const magicRecognised = BACKUP_MAGIC_ACCEPTED.some((candidate) =>
+    magic.every((b, i) => b === candidate[i]),
+  );
+  if (!magicRecognised) {
+    throw new Error('Invalid file: not a .firstline-backup file');
   }
 
   // Version

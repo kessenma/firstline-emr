@@ -44,7 +44,7 @@ import {
   type ViewerMediaItem,
 } from '../../../ui/FullScreenMediaViewer';
 import { adminApi } from '../../../../utils/admin/adminApi';
-import { resolveMediaType } from '@fajr/shared/media';
+import { resolveMediaType } from '@firstline/shared/media';
 import type { StorageImage } from '../../../../types/admin';
 import {
   STORAGE_CATEGORIES,
@@ -52,7 +52,7 @@ import {
   STORAGE_GROUP_ORDER,
   type StorageCategoryId,
   type StorageCategoryGroup,
-} from '@fajr/shared/admin';
+} from '@firstline/shared/admin';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const GRID_COLUMNS = 3;

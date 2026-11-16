@@ -1,9 +1,9 @@
 // apps/mobile/src/hooks/useChartAccess.ts
 // Evaluates whether the current user may open a patient chart, using the same
-// shared rule the web app applies. See @fajr/shared/care-team/chart-access.
+// shared rule the web app applies. See @firstline/shared/care-team/chart-access.
 
 import { useCallback } from 'react';
-import { evaluateChartAccess, type ChartAccessResult } from '@fajr/shared/care-team';
+import { evaluateChartAccess, type ChartAccessResult } from '@firstline/shared/care-team';
 import { useAuth } from '../contexts/AuthContext';
 import type { PatientWithMessages } from '../types/patient';
 

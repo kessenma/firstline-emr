@@ -3,7 +3,7 @@
 
 import { useState, useCallback, useEffect } from "react"
 import { usePasskey } from "@/hooks/usePasskey"
-import type { PasskeyCredentialDisplay } from '@fajr/shared/user'
+import type { PasskeyCredentialDisplay } from '@firstline/shared/user'
 
 export type PasskeyCredential = PasskeyCredentialDisplay
 

@@ -58,7 +58,7 @@ The PowerSync Admin Dashboard provides real-time monitoring and management capab
 │                    PowerSync Service (Docker)                    │
 │                                                                   │
 │  Internal: http://powersync:6061                                │
-│  External: wss://ws.emr.fajr.org                                │
+│  External: wss://ws.firstline.care                                │
 │                                                                   │
 │  ┌───────────────────────────────────────────────────────────┐  │
 │  │  /probes/liveness                                         │  │
@@ -68,7 +68,7 @@ The PowerSync Admin Dashboard provides real-time monitoring and management capab
 │                                                                   │
 │  ┌───────────────────────────────────────────────────────────┐  │
 │  │  JWT Authentication (JWKS)                                │  │
-│  │  - kid: "fajr-emr-key"                                    │  │
+│  │  - kid: "firstline-emr-key"                                    │  │
 │  │  - alg: HS256                                             │  │
 │  │  - Validates sub, iat, exp claims                         │  │
 │  └───────────────────────────────────────────────────────────┘  │
@@ -190,7 +190,7 @@ PowerSync uses JWT (JSON Web Tokens) for authentication. Recent fixes (January 1
 **Header:**
 ```json
 {
-  "kid": "fajr-emr-key",
+  "kid": "firstline-emr-key",
   "alg": "HS256",
   "typ": "JWT"
 }
@@ -229,7 +229,7 @@ PowerSync uses JWT (JSON Web Tokens) for authentication. Recent fixes (January 1
 
 ```typescript
 export const JWT_CONFIG = {
-  KID: "fajr-emr-key",
+  KID: "firstline-emr-key",
   ALG: "HS256" as const,
   MOBILE_TOKEN_EXPIRY: "14d",
 } as const;
@@ -243,12 +243,12 @@ export const JWT_CONFIG = {
 client_auth:
   jwks:
     keys:
-      - kid: "fajr-emr-key"        # Must match JWT header
+      - kid: "firstline-emr-key"        # Must match JWT header
         kty: oct                    # Symmetric key
         k: 5lhohZ8w...ktuDQ==      # Base64-encoded secret
         alg: HS256                  # Algorithm
   audience: ["powersync", "powersync-dev"]
-  issuer: https://emr.fajr.org
+  issuer: https://firstline.care
 ```
 
 ### Token Generation (Correct Implementation)
@@ -276,7 +276,7 @@ const token = jwt.sign(
   {
     expiresIn: "14d",
     header: {
-      kid: "fajr-emr-key",     // ✅ Required 'kid' header
+      kid: "firstline-emr-key",     // ✅ Required 'kid' header
       alg: "HS256",
     },
   }
@@ -383,10 +383,10 @@ POWERSYNC_PORT=6061
 ```typescript
 export const config = {
   PROD: {
-    BASE_URL: 'https://emr.fajr.org',
-    API_URL: 'https://emr.fajr.org/api',
-    WS_URL: 'wss://emr.fajr.org',
-    POWERSYNC_URL: 'https://ws.emr.fajr.org',  // SDK converts to wss://
+    BASE_URL: 'https://firstline.care',
+    API_URL: 'https://firstline.care/api',
+    WS_URL: 'wss://firstline.care',
+    POWERSYNC_URL: 'https://ws.firstline.care',  // SDK converts to wss://
   },
   DEV: {
     BASE_URL: 'http://localhost:3000',
@@ -478,7 +478,7 @@ JWT header missing `kid` (Key ID) field.
 **Solution:**
 1. ✅ **Fix Applied:** Both endpoints now include `kid` header:
    ```typescript
-   header: { kid: "fajr-emr-key", alg: "HS256" }
+   header: { kid: "firstline-emr-key", alg: "HS256" }
    ```
 2. Verify JWT_CONFIG.KID matches PowerSync JWKS
 3. Users must log out and back in
@@ -543,7 +543,7 @@ docker exec <postgres-container> psql -U postgres -d postgres -c "
    echo "$TOKEN" | cut -d. -f1 | base64 -d | jq
    
    # Should show:
-   # { "kid": "fajr-emr-key", "alg": "HS256", "typ": "JWT" }
+   # { "kid": "firstline-emr-key", "alg": "HS256", "typ": "JWT" }
    
    # Decode payload
    echo "$TOKEN" | cut -d. -f2 | base64 -d | jq
@@ -555,7 +555,7 @@ docker exec <postgres-container> psql -U postgres -d postgres -c "
 2. **Verify Mobile App Config:**
    ```typescript
    // Should be:
-   POWERSYNC_URL: 'https://ws.emr.fajr.org'
+   POWERSYNC_URL: 'https://ws.firstline.care'
    
    // NOT:
    POWERSYNC_URL: 'ws://...'  // Wrong protocol
@@ -565,7 +565,7 @@ docker exec <postgres-container> psql -U postgres -d postgres -c "
 3. **Test PowerSync WebSocket:**
    ```bash
    # From your machine
-   wscat -c wss://ws.emr.fajr.org
+   wscat -c wss://ws.firstline.care
    
    # Should connect successfully (will close without auth)
    ```
@@ -579,7 +579,7 @@ docker exec <postgres-container> psql -U postgres -d postgres -c "
 #### Fix 1: Missing `kid` Header
 - **Commit:** `5aab81ab`
 - **File:** `apps/web/app/api/auth/powersync-token/route.ts`
-- **Change:** Added `kid: "fajr-emr-key"` to JWT header
+- **Change:** Added `kid: "firstline-emr-key"` to JWT header
 - **Impact:** PowerSync can now identify which key to use for verification
 
 #### Fix 2: Base64 Secret Decoding
@@ -656,5 +656,5 @@ docker exec <postgres-container> psql -U postgres -d postgres -c "
 ---
 
 **Last Reviewed:** January 1, 2026  
-**Maintainer:** Fajr EMR Engineering Team  
-**License:** Part of the Fajr EMR project
+**Maintainer:** Firstline Engineering Team  
+**License:** Part of the Firstline project

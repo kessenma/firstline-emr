@@ -250,7 +250,7 @@ export const DeviceRegistration: React.FC = () => {
       debugLog.push('Checking backend APNs configuration...');
       try {
         const configCheckResponse = await fetch(
-          'https://fajrmission.org/api/admin/notifications/validate-apns',
+          'https://firstline.care/api/admin/notifications/validate-apns',
         );
         if (configCheckResponse.ok) {
           const configData = await configCheckResponse.json();

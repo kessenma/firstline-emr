@@ -15,5 +15,5 @@ export {
   LanguagesListSpanish,
   LanguagesFrench,
   LanguagesListFrench,
-} from '@fajr/shared/constants';
-export type { SupportedLanguage } from '@fajr/shared/constants';
+} from '@firstline/shared/constants';
+export type { SupportedLanguage } from '@firstline/shared/constants';

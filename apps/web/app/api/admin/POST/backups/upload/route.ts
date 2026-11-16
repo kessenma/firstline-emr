@@ -14,8 +14,8 @@ import {
   type BackupTableManifest,
   type BackupDeviceInfo,
   type BackupMode,
-} from "@fajr/shared/admin";
-import { BACKUP_MIN_PASSPHRASE_LENGTH } from "@fajr/shared/backup";
+} from "@firstline/shared/admin";
+import { BACKUP_MIN_PASSPHRASE_LENGTH } from "@firstline/shared/backup";
 
 export async function POST(request: Request) {
   try {
@@ -114,7 +114,7 @@ export async function POST(request: Request) {
       ? encryptBackup(fileBuffer, passphrase!)
       : fileBuffer;
     const uploadFileName = shouldEncrypt
-      ? (file.name || `backup-${Date.now()}`).replace(/\.json$/i, "") + ".fajr-backup"
+      ? (file.name || `backup-${Date.now()}`).replace(/\.json$/i, "") + ".firstline-backup"
       : file.name || `backup-${Date.now()}.json`;
     const uploadContentType = shouldEncrypt
       ? "application/octet-stream"

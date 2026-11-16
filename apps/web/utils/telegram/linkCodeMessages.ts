@@ -1,7 +1,7 @@
 // apps/web/utils/telegram/linkCodeMessages.ts
 // Multi-language messages for Telegram link code feature
 
-import { Languages, normalizeLanguage } from "@fajr/shared/constants/languages";
+import { Languages, normalizeLanguage } from "@firstline/shared/constants/languages";
 
 interface LinkCodeMessages {
   /** Bot sends this when link succeeds */
@@ -107,7 +107,7 @@ const messages: Record<Languages, LinkCodeMessages> = {
   },
 };
 
-// `normalizeLanguage` now lives in @fajr/shared/constants/languages — it is
+// `normalizeLanguage` now lives in @firstline/shared/constants/languages — it is
 // needed by video consults and by mobile too, none of which should be reaching
 // into a Telegram module for it. Re-exported here so existing imports keep
 // working.

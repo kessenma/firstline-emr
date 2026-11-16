@@ -17,4 +17,4 @@ export {
   CountriesListFrench,
   CountryCodes,
   CountryCodesList,
-} from '@fajr/shared/constants';
+} from '@firstline/shared/constants';

@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  transpilePackages: ["@fajr/shared"],
+  transpilePackages: ["@firstline/shared"],
   reactStrictMode: false, // Disabled to prevent excessive reloads when switching tabs
   skipTrailingSlashRedirect: true,
   skipProxyUrlNormalize: true,
@@ -42,7 +42,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "storage.fajrmission.org",
+        hostname: "storage.firstline.care",
         port: "",
         pathname: "/**",
       },

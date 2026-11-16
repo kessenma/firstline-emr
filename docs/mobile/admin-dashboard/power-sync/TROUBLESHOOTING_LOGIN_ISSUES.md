@@ -32,7 +32,7 @@
 ### 2. PowerSync WebSocket Connection Failed ✅ PARTIALLY FIXED
 **Symptoms:**
 ```
-Failed to create websocket connection to wss://ws.emr.fajr.org/sync/stream
+Failed to create websocket connection to wss://ws.firstline.care/sync/stream
 ```
 
 **Root Cause:**
@@ -114,7 +114,7 @@ npm run ios
 1. **Open the app**
 2. **Ensure device has internet** (check WiFi/cellular)
 3. **Select environment:**
-   - Toggle to "Production" (should show: https://emr.fajr.org)
+   - Toggle to "Production" (should show: https://firstline.care)
 4. **Enter credentials** and tap "Sign In"
 
 **What to Look For:**
@@ -157,7 +157,7 @@ If login succeeds:
 ```
 [AuthContext] User is admin, initializing PowerSync...
 🔌 Attempting to connect to PowerSync...
-🌐 Server URL: https://ws.emr.fajr.org
+🌐 Server URL: https://ws.firstline.care
 🔐 PowerSync fetchCredentials called
 🔗 Connected to PowerSync server
 ✅ PowerSync initialized successfully for admin
@@ -180,14 +180,14 @@ If login succeeds:
 **Check Device Internet:**
 ```bash
 # From device, open browser and try:
-https://emr.fajr.org
+https://firstline.care
 
 # Should load the web app
 ```
 
 **Check from Development Machine:**
 ```bash
-curl https://emr.fajr.org/api/auth/mobile-login
+curl https://firstline.care/api/auth/mobile-login
 
 # Should return 401 (expected without credentials)
 ```
@@ -251,10 +251,10 @@ curl https://emr.fajr.org/api/auth/mobile-login
    - WebSocket upgrade requests
 
 2. **Test WebSocket from Browser:**
-   - Open browser console on https://emr.fajr.org
+   - Open browser console on https://firstline.care
    - Try WebSocket connection:
    ```javascript
-   const ws = new WebSocket('wss://ws.emr.fajr.org/sync/stream');
+   const ws = new WebSocket('wss://ws.firstline.care/sync/stream');
    ws.onopen = () => console.log('Connected!');
    ws.onerror = (e) => console.error('Error:', e);
    ```
@@ -332,10 +332,10 @@ curl https://emr.fajr.org/api/auth/mobile-login
 
 ```bash
 # From development machine
-curl -v https://emr.fajr.org/api/auth/mobile-login
+curl -v https://firstline.care/api/auth/mobile-login
 # Should return 401 (good)
 
-curl -v https://ws.emr.fajr.org/probes/liveness
+curl -v https://ws.firstline.care/probes/liveness
 # Should return 200 (good)
 ```
 
@@ -368,7 +368,7 @@ Mobile auth response status: [status]
 ```
 [AuthContext] User is admin, initializing PowerSync...
 🔌 Attempting to connect to PowerSync...
-🌐 Server URL: https://ws.emr.fajr.org
+🌐 Server URL: https://ws.firstline.care
 🔐 PowerSync fetchCredentials called
 ```
 

@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { Mic, Square, Trash2 } from 'lucide-react-native';
-import { formatAudioTime } from '@fajr/shared/media';
+import { formatAudioTime } from '@firstline/shared/media';
 import { BottomSheet } from '../../../components/BottomSheet';
 import { InlineAudioPlayer } from '../../../components/patient-chart/messaging/components/InlineAudioPlayer';
 import { useAudioRecorder } from '../../../components/patient-chart/notes/voice-dictation/useAudioRecorder';

@@ -1,6 +1,6 @@
 # Firstline EMR
 
-Monorepo: `apps/web` (Next.js), `apps/mobile` (React Native), `apps/notifications-server` (Go), `apps/powersync-server`, `packages/shared`
+Monorepo: `apps/web` (Next.js), `apps/mobile` (React Native), `apps/docs` (Fumadocs, docs.firstline.care), `apps/notifications-server` (Go), `apps/powersync-server`, `packages/shared`
 
 ## Area Guides
 
@@ -15,6 +15,7 @@ Monorepo: `apps/web` (Next.js), `apps/mobile` (React Native), `apps/notification
 | Notifications Server | [apps/notifications-server/](apps/notifications-server/CLAUDE.md) | Go microservice, Gorush, APNs, Docker setup |
 | Shared Media & Audio | [packages/shared/src/media/](packages/shared/src/media/CLAUDE.md) | Types, constants, audio utils, waveform generation |
 | PowerSync Offline Sync | [apps/mobile/src/services/powersync/](apps/mobile/src/services/powersync/CLAUDE.md) | Two-token auth, sync rules, schema, upload pipeline, encryption, gotchas |
+| Self-hosting Docs Site | [apps/docs/](apps/docs/CLAUDE.md) | Fumadocs static export for IT managers, MDX + meta.json sidebar, theme, static-only rules |
 
 The cross-cutting systems (Notifications, Media & Audio, Telegram) are documented below since they span the entire monorepo. PowerSync is documented in the mobile app since that's its primary consumer.
 
@@ -173,7 +174,7 @@ Patient ↔ Telegram ↔ Go Bot (polling) ↔ Web API routes ↔ PostgreSQL
 ```
 
 - **Go bot** (`apps/notifications-server/`): `main.go` runs Telegram polling + health server. `handlers.go` dispatches text/photo/video/audio. `api.go` calls web backend. `storage.go` uploads media to S3
-- **Bot auth**: `MEDFLOW_KEY` bearer token for Go → web backend calls
+- **Bot auth**: `FIRSTLINE_SERVICE_KEY` bearer token for Go → web backend calls
 - **Doctor auth**: NextAuth (web) or JWT (mobile) for doctor → web backend calls
 
 ### Patient Intake Flow
@@ -196,7 +197,7 @@ Token table: `telegram_intake_tokens` (token, patientId, telegramChatId, isValid
 
 **Patient → Doctor**:
 ```
-Telegram message → Go bot → PATCH /telegram-thread/{chatId}/save-message (MEDFLOW_KEY)
+Telegram message → Go bot → PATCH /telegram-thread/{chatId}/save-message (FIRSTLINE_SERVICE_KEY)
   → INSERT telegram_messages + append to telegram_threads.messages JSON
   → INCREMENT unread_count → PostgreSQL NOTIFY → SSE to web doctors
 ```
@@ -254,13 +255,13 @@ Message types: text, image, video, file, reply, forward, audio
 | Route | Method | Auth | Purpose |
 |-------|--------|------|---------|
 | `/{chatId}/send-text` | POST | NextAuth/JWT | Doctor sends text to patient |
-| `/{chatId}/save-message` | PATCH | MEDFLOW_KEY | Bot saves incoming patient message |
+| `/{chatId}/save-message` | PATCH | FIRSTLINE_SERVICE_KEY | Bot saves incoming patient message |
 | `/{chatId}/get` | GET | NextAuth | Fetch thread + messages |
-| `/{chatId}/get-intake-url` | GET | MEDFLOW_KEY | Generate intake token for /url command |
+| `/{chatId}/get-intake-url` | GET | FIRSTLINE_SERVICE_KEY | Generate intake token for /url command |
 | `/{chatId}/send-photo` | POST | NextAuth/JWT | Send photo to patient |
 | `/{chatId}/upload-audio` | POST | NextAuth/JWT | Upload + send audio |
 | `/{chatId}/update-translations` | PATCH | NextAuth | Translate messages |
 | `/{chatId}/reset-unread-count` | POST | NextAuth | Mark as read |
 | `/realtime` | GET | JWT | SSE for real-time updates |
 | `/save-follow-up` | POST | NextAuth | Create scheduled follow-up |
-| `/CRON/v1-chat-follow-up` | POST | MEDFLOW_KEY | Cron job for follow-ups |
+| `/CRON/v1-chat-follow-up` | POST | FIRSTLINE_SERVICE_KEY | Cron job for follow-ups |

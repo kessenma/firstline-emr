@@ -7,13 +7,29 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
-const (
-	// APNs topic for normal alert pushes — the app's bundle identifier.
-	bundleTopic = "com.fajr.emr"
-)
+// defaultBundleTopic is the APNs topic for normal alert pushes — the app's
+// bundle identifier. It still carries the pre-rebrand identifier because a
+// published app's bundle ID cannot be changed; the rebranded app ships as a
+// new App Store listing under a new ID.
+//
+// It is read from APNS_BUNDLE_TOPIC so that switchover is a configuration
+// change rather than a code change. The value must byte-match the shipped
+// app's bundle identifier or every iOS push and VoIP call silently fails.
+// See docs/rebrand/native-identity-migration.md.
+const defaultBundleTopic = "com.fajr.emr"
+
+var bundleTopic = resolveBundleTopic()
+
+func resolveBundleTopic() string {
+	if topic := os.Getenv("APNS_BUNDLE_TOPIC"); topic != "" {
+		return topic
+	}
+	return defaultBundleTopic
+}
 
 // GorushNotification represents a notification to be sent via gorush API
 type GorushNotification struct {

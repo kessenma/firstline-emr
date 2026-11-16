@@ -5,7 +5,7 @@ import { useCallback, useState, useRef, useEffect } from "react";
 import { internalMessageCache } from "@/lib/messageCache";
 import { useMediaHandling } from "./useMediaHandling";
 import { useInternalMediaManager } from "./useInternalMediaManager";
-import { buildPatientCardPayload, serializePatientCard } from "@fajr/shared/patient-share";
+import { buildPatientCardPayload, serializePatientCard } from "@firstline/shared/patient-share";
 
 interface Message {
   _id: string;

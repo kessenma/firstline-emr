@@ -28,7 +28,7 @@ import {
   type PatientMediaFilter,
   type PatientMediaListItem,
 } from '../../../../viewModels/admin/usePatientMediaViewModel';
-import type { MediaItem } from '@fajr/shared/media';
+import type { MediaItem } from '@firstline/shared/media';
 
 const EMPTY_TEXT: Record<PatientMediaFilter, string> = {
   all: 'No patient media synced yet',

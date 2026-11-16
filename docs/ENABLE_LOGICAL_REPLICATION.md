@@ -231,7 +231,7 @@ From your local machine:
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 
 # Run the verification script
-cd ~/ws/fajr-medflow-emr
+cd ~/ws/firstline-emr
 ./scripts/test-postgres-connection.sh
 ```
 

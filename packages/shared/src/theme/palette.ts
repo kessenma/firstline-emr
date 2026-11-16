@@ -1,5 +1,5 @@
 // Single source of truth for all color hex values across web and mobile.
-// Web CSS is auto-generated from this file via `pnpm --filter @fajr/shared generate:css`
+// Web CSS is auto-generated from this file via `pnpm --filter @firstline/shared generate:css`
 
 export const palette = {
   // Custom Teal palette (Breaker Bay) - Global brand

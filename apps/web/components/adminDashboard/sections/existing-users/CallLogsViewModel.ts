@@ -5,7 +5,7 @@ import { useState, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { CallStatus } from "@fajr/shared/calls";
+import type { CallStatus } from "@firstline/shared/calls";
 
 export interface AdminCallParticipant {
   id: string;

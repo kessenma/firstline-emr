@@ -6,7 +6,7 @@ Complete guide for setting up React Native Reanimated with Rock + Repack bundler
 
 ## Overview
 
-This document covers the complete setup of `react-native-reanimated` v4.x in the Fajr Mission EMR mobile app, including:
+This document covers the complete setup of `react-native-reanimated` v4.x in the Firstline mobile app, including:
 - Installing dependencies
 - Configuring Babel
 - Configuring Rspack

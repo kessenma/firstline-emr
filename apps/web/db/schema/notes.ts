@@ -12,7 +12,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { patients } from "./patients";
 import { users } from "./users";
-import type { NoteContent as SharedNoteContent } from "@fajr/shared/patient";
+import type { NoteContent as SharedNoteContent } from "@firstline/shared/patient";
 
 // Enums
 export const noteTypeEnum = pgEnum("note_type", [
@@ -169,7 +169,7 @@ export type NewNote = typeof notes.$inferInsert;
 export type NoteEdit = typeof noteEdits.$inferSelect;
 export type NewNoteEdit = typeof noteEdits.$inferInsert;
 
-// Note content types are defined once in `@fajr/shared/patient` and shared with
+// Note content types are defined once in `@firstline/shared/patient` and shared with
 // mobile. They were previously re-declared here by hand, which is drift waiting
 // to happen — a field added to a note on mobile would not have reached web.
 // Re-exported so the existing `@/db/schema/notes` import path keeps working.
@@ -181,4 +181,4 @@ export type {
   BlankNoteContent,
   TriageNoteContent,
   PatientCallNoteContent,
-} from "@fajr/shared/patient";
+} from "@firstline/shared/patient";

@@ -98,7 +98,7 @@
 **IMPORTANT:** The sync rules changes require a PowerSync restart to take effect.
 
 ```bash
-cd /Users/ke/ws/fajr-medflow-emr
+cd /Users/ke/ws/firstline-emr
 
 # Stop PowerSync
 docker-compose -f docker-compose.powersync.yml stop powersync
@@ -297,7 +297,7 @@ docker-compose -f docker-compose.powersync.yml logs -f powersync
 
 ### Check Database
 ```bash
-docker-compose exec postgres psql -U fajr_admin -d fajr_emr
+docker-compose exec postgres psql -U firstline_admin -d firstline_emr
 ```
 
 ### Run Mobile App

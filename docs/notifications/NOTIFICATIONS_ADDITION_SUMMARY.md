@@ -176,7 +176,7 @@ npm run db:migrate
 
 ### 1. Run Database Migration
 ```bash
-cd fajr-medflow-emr
+cd firstline-emr
 npm run db:generate
 npm run db:migrate
 ```

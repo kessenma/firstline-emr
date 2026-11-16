@@ -1,5 +1,5 @@
 #!/bin/bash
-# filepath: /Users/ke/ws/fajr-medflow-emr/apps/web/scripts/find-model-imports.sh
+# filepath: apps/web/scripts/find-model-imports.sh
 
 echo "🔍 Searching for remaining @/models imports..."
 echo ""

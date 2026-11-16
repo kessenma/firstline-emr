@@ -112,6 +112,11 @@ cypress.json
 
 # Build artifacts that shouldn't be in context
 apps/web/.next/
+apps/docs/.next/
+apps/docs/out/
+apps/docs/.source/
+apps/site/.next/
+apps/site/out/
 apps/web/out/
 apps/web/dist/
 apps/mobile/build/
@@ -149,7 +154,10 @@ apps/telegram-bot/
 apps/translation-service/
 apps/websocket-server/
 apps/0-examples/
-apps/Fajr-mobile-certs/
+apps/*-mobile-certs/
 
 # Scripts that aren't needed
 scripts/
+
+# Brand design sources (generated rasters live in the apps)
+brand/

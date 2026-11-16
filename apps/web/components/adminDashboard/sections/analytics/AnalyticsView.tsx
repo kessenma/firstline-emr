@@ -23,7 +23,7 @@ const AnalyticsView: React.FC<Props> = () => {
     <div className="space-y-3">
       <div className="text-sm font-medium">Analytics Login</div>
       <div className="text-xs text-muted-foreground">
-        Use your MedFlow account credentials (same login as the app).
+        Use your Firstline account credentials (same login as the app).
       </div>
       {analyticsPassphrase && (
         <div className="space-y-2">

@@ -74,13 +74,13 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // 2. Handle special telegram API routes with MEDFLOW_KEY
+  // 2. Handle special telegram API routes with FIRSTLINE_SERVICE_KEY
   const isTelegramApiRoute = pathname.startsWith("/api/telegram-thread");
   if (isTelegramApiRoute) {
     const authHeader = req.headers.get("authorization");
     if (authHeader?.startsWith("Bearer ")) {
       const providedKey = authHeader.substring(7);
-      if (providedKey === process.env.MEDFLOW_KEY) {
+      if (providedKey === process.env.FIRSTLINE_SERVICE_KEY) {
         return NextResponse.next();
       }
     }

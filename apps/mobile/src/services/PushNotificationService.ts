@@ -1,4 +1,4 @@
-// fajr-medflow-emr/apps/mobile/src/services/PushNotificationService.ts
+// apps/mobile/src/services/PushNotificationService.ts
 // Pure APNs implementation - no Firebase, no PushNotificationIOS dependency
 // Uses notifee for permissions + our native APNsDiagnostics module for APNs registration
 import notifee, {

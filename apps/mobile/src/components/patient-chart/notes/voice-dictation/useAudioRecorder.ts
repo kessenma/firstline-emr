@@ -6,8 +6,8 @@
 import { useState, useCallback, useRef } from 'react';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { AudioManager, AudioRecorder } from 'react-native-audio-api';
-import { AUDIO_SAMPLE_RATE } from '@fajr/shared/media';
-import type { AudioRecorderConfig } from '@fajr/shared/media';
+import { AUDIO_SAMPLE_RATE } from '@firstline/shared/media';
+import type { AudioRecorderConfig } from '@firstline/shared/media';
 
 const SAMPLE_RATE = AUDIO_SAMPLE_RATE;
 const BUFFER_LENGTH = 1600; // matches react-native-audio-api examples
@@ -23,8 +23,8 @@ const DEBUG_PREFIX = '[VoiceDictation:Recorder]';
 const STOP_FLUSH_DELAY_MS = 200;
 const LEVEL_EMA_ALPHA = 0.35;
 
-// AudioRecorderConfig is imported from @fajr/shared/media
-export type { AudioRecorderConfig } from '@fajr/shared/media';
+// AudioRecorderConfig is imported from @firstline/shared/media
+export type { AudioRecorderConfig } from '@firstline/shared/media';
 
 export interface UseAudioRecorderReturn {
   isRecording: boolean;

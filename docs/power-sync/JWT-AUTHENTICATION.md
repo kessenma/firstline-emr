@@ -2,7 +2,7 @@
 
 ## Overview
 
-PowerSync uses JWT (JSON Web Tokens) for authenticating client connections. This document explains how JWT authentication is configured in the Fajr EMR system.
+PowerSync uses JWT (JSON Web Tokens) for authenticating client connections. This document explains how JWT authentication is configured in the Firstline system.
 
 ## Security Model
 
@@ -13,7 +13,7 @@ PowerSync JWT authentication ensures that:
 1. ✅ **Only valid users can connect** - JWT must be signed with the correct secret
 2. ✅ **Tokens cannot be forged** - Signature verification prevents tampering
 3. ✅ **Tokens expire** - 14-day expiration prevents indefinite access
-4. ✅ **Issuer is verified** - Only tokens from `https://emr.fajr.org` are accepted
+4. ✅ **Issuer is verified** - Only tokens from `https://firstline.care` are accepted
 5. ✅ **Audience is verified** - Tokens must be intended for PowerSync
 
 ### What is NOT Authentication?
@@ -28,13 +28,13 @@ The `kid` (Key ID) field is **NOT** for authentication. It's simply an identifie
 client_auth:
   jwks:
     keys:
-      - kid: "fajr-emr-key"  # Key identifier
+      - kid: "firstline-emr-key"  # Key identifier
         kty: oct              # Key type: octet (symmetric)
         k: <base64-secret>    # The actual secret (HS256)
         alg: HS256            # Algorithm
 
   audience: ["powersync", "powersync-dev"]
-  issuer: https://emr.fajr.org
+  issuer: https://firstline.care
 ```
 
 **Important:** The `kid` must match the one in your JWT tokens!
@@ -43,7 +43,7 @@ client_auth:
 
 ```typescript
 export const JWT_CONFIG = {
-  KID: "fajr-emr-key",           // Must match PowerSync config
+  KID: "firstline-emr-key",           // Must match PowerSync config
   MOBILE_TOKEN_EXPIRY: "14d",    // Token expiration
 } as const;
 ```
@@ -77,7 +77,7 @@ This produces a JWT with:
 {
   "alg": "HS256",
   "typ": "JWT",
-  "kid": "fajr-emr-key"
+  "kid": "firstline-emr-key"
 }
 ```
 

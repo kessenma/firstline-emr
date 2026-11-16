@@ -12,7 +12,7 @@ import {
   parsePatientCard,
   serializePatientCard,
   summarizePatientCardText,
-} from "@fajr/shared/patient-share";
+} from "@firstline/shared/patient-share";
 
 // UUID validation regex
 const UUID_REGEX =

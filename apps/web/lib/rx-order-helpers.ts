@@ -2,7 +2,7 @@
 import { db } from "@/db";
 import { patients, rxOrders, type Patient, type RxOrder } from "@/db/schema";
 import { eq, like, or } from "drizzle-orm";
-import type { PatientRxPublicView } from "@fajr/shared/medications";
+import type { PatientRxPublicView } from "@firstline/shared/medications";
 
 /**
  * Find patient and RX order by the UUID embedded in the patient/pharmacy URL.

@@ -483,8 +483,8 @@ export default function AdminDashboardView({
             <Text
               style={[styles.helpParagraph, { color: colors.textSecondary }]}
             >
-              This dashboard allows you to manage various aspects of the Fajr
-              MedFlow EMR system. Tap on any section below to expand it and
+              This dashboard allows you to manage various aspects of
+              Firstline. Tap on any section below to expand it and
               access its features.
             </Text>
 

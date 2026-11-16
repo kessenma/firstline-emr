@@ -8,7 +8,7 @@ import { eq, ne } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getBatchUnreadCounts } from "@/lib/telegram-db-helpers";
-import type { CareTeamMemberJSON } from "@fajr/shared/care-team";
+import type { CareTeamMemberJSON } from "@firstline/shared/care-team";
 
 export type ServerPatient = {
   id: string;

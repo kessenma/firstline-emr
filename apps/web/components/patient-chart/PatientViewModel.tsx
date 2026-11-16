@@ -16,7 +16,7 @@ import { CareTeamSection } from './care-team/CareTeamSection';
 import { CareTeamModal } from './care-team/CareTeamModal';
 import { RequestChartAccessModal } from './care-team/RequestChartAccessModal';
 import { useSession } from 'next-auth/react';
-import { evaluateChartAccess } from '@fajr/shared/care-team';
+import { evaluateChartAccess } from '@firstline/shared/care-team';
 
 import { TelegramIcon } from "@/components/icons/TelegramIcon";
 import VideoCallView from './videocall/VideoCallView';
@@ -26,8 +26,8 @@ import { RadioCard } from '@/components/ui/radio-card';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/hooks/useToast';
 import AdvancedExportOptions from './export/AdvancedExportOptions';
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
-import { buildPatientCardPayload, serializePatientCard, getPrimarySpecialty, type RecipientUser } from '@fajr/shared/patient-share';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
+import { buildPatientCardPayload, serializePatientCard, getPrimarySpecialty, type RecipientUser } from '@firstline/shared/patient-share';
 import { SendPatientRecipientPicker } from './SendPatientRecipientPicker';
 
 type InternalThreadOption = {

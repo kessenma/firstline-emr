@@ -15,8 +15,8 @@ import {
   getPatientCancellationReasons,
   type PatientCancellationReasonCode,
   type PatientRxTranslationKey,
-} from '@fajr/shared/medications';
-import type { Languages } from '@fajr/shared/constants/languages';
+} from '@firstline/shared/medications';
+import type { Languages } from '@firstline/shared/constants/languages';
 
 interface PatientCancelSectionProps {
   t: (key: PatientRxTranslationKey) => string;

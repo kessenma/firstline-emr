@@ -23,7 +23,7 @@ import { Ban, Loader2 } from "lucide-react";
 import {
   isCancellationReasonRequired,
   type RxCancellerRole,
-} from "@fajr/shared/medications";
+} from "@firstline/shared/medications";
 
 interface CancelPrescriptionDialogProps {
   open: boolean;

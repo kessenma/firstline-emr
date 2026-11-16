@@ -1,5 +1,5 @@
 // apps/mobile/src/components/ui/RoleIcon.tsx
-// Resolves the shared role → icon mapping (@fajr/shared/theme) to
+// Resolves the shared role → icon mapping (@firstline/shared/theme) to
 // lucide-react-native components. Web has the mirror of this file at
 // apps/web/components/ui/RoleIcon.tsx.
 
@@ -19,7 +19,7 @@ import {
   getRoleColor,
   type RoleColorShade,
   type RoleIconName,
-} from '@fajr/shared/theme';
+} from '@firstline/shared/theme';
 
 const ROLE_ICON_COMPONENTS: Record<RoleIconName, LucideIcon> = {
   Stethoscope,

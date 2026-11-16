@@ -1,5 +1,13 @@
 // utils/emails/user-signup.ts
 import { sendEmail } from './resend-config';
+import { BRAND_NAME } from '@firstline/shared/constants';
+
+// Points at the currently published listing. The rebranded app ships under a new
+// bundle identifier and therefore a new App Store listing (see
+// docs/rebrand/native-identity-migration.md); set APP_STORE_URL when that is live.
+const APP_STORE_URL =
+    process.env.APP_STORE_URL ??
+    'https://apps.apple.com/us/app/fajr-mission-emr/id6755454120';
 
 const getEnvironmentLabel = () => {
     const env = process.env.NODE_ENV || 'production';
@@ -25,7 +33,7 @@ export const sendWelcomeEmail = async (email: string, firstName: string, lastNam
             greeting = `Hello ${firstName},`;
         }
 
-        const subject = environmentLabel ? `[${environmentLabel}] Welcome to Fajr MedFlow` : 'Welcome to Fajr MedFlow';
+        const subject = environmentLabel ? `[${environmentLabel}] Welcome to ${BRAND_NAME}` : `Welcome to ${BRAND_NAME}`;
 
         await sendEmail({
             to: email,
@@ -36,7 +44,7 @@ export const sendWelcomeEmail = async (email: string, firstName: string, lastNam
             ${greeting}
           </h3>
           <p style="color: #ffffff; font-size: 16px; line-height: 1.6;">
-            Thank you for signing up for Fajr MedFlow!<br><br>
+            Thank you for signing up for ${BRAND_NAME}!<br><br>
             We're excited to have you on board. Your account has been created successfully.<br><br>
             Your account is pending administrator approval. You will receive a notification once you've been authorized.
           </p>
@@ -44,13 +52,13 @@ export const sendWelcomeEmail = async (email: string, firstName: string, lastNam
           <div style="background-color: #1f1f1f; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #333;">
             <h4 style="color: #ff5722; margin-top: 0;">Download the Mobile App:</h4>
             <p style="color: #cccccc; font-size: 14px; line-height: 1.6;">
-              The Fajr Mission EMR mobile app is currently on the Apple App Store and available via an APK file for Android.
+              The ${BRAND_NAME} mobile app is currently on the Apple App Store and available via an APK file for Android.
             </p>
             <p style="color: #cccccc; font-size: 14px; line-height: 1.6;">
               <strong>To get started:</strong>
             </p>
             <ol style="color: #cccccc; font-size: 14px; line-height: 1.8;">
-              <li>Apple App Store link <a href="https://apps.apple.com/us/app/fajr-mission-emr/id6755454120" style="color: #ff5722;">Fajr Mission EMR</a> (if you don't have it already)</li>
+              <li>Apple App Store link <a href="${APP_STORE_URL}" style="color: #ff5722;">${BRAND_NAME}</a> (if you don't have it already)</li>
               <li>For Android, please reach out to an admin for the latest apk file</li>
             </ol>
             <p style="color: #cccccc; font-size: 14px; line-height: 1.6;">
@@ -59,7 +67,7 @@ export const sendWelcomeEmail = async (email: string, firstName: string, lastNam
 
           <p style="color: #ffffff; font-size: 16px; line-height: 1.6;">
             <strong>Best regards,</strong><br>
-            <strong>The Fajr EMR Mission Team</strong>
+            <strong>The ${BRAND_NAME} Team</strong>
           </p>
           ${environmentLabel ? `<p style="color: gray; font-size: 0.9em;">This email was sent from the ${environmentLabel}.</p>` : ''}
         </div>

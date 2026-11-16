@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSignupContext } from './container/SignupContext';
 import { motion, AnimatePresence } from "framer-motion";
 import { FileText } from "lucide-react";
-import { getRoleCssVar } from "@fajr/shared/theme";
+import { getRoleCssVar } from "@firstline/shared/theme";
 import { RoleIcon } from "@/components/ui/RoleIcon";
 
 interface UserTypeFormProps {

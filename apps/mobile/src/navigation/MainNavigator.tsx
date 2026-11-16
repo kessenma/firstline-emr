@@ -16,8 +16,8 @@ import {
   User,
   Shield,
 } from 'lucide-react-native';
-import { View, ActivityIndicator, StyleSheet, Image } from 'react-native';
-import { getRoleColor } from '@fajr/shared/theme';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { getRoleColor } from '@firstline/shared/theme';
 
 import { NavigationBar } from '../components/NavigationBar';
 import { ConnectionStatusOverlay } from '../components/ConnectionStatusOverlay';
@@ -33,6 +33,7 @@ import { setNavigationRef } from '../services/PushNotificationService';
 import { useSafeUnreadCount } from '../hooks/useSafeUnreadCount';
 import { useVoipRegistration } from '../hooks/useVoipRegistration';
 import { IncomingCallHost } from '../components/calls/IncomingCallHost';
+import { FirstlineMark } from '../components/icons/FirstlineMark';
 
 
 
@@ -171,11 +172,7 @@ export const MainNavigator: React.FC<MainNavigatorProps> = ({
   if (!isReady) {
     return (
       <View style={styles.loadingContainer}>
-        <Image
-          source={require('../assets/fajr-triage-logo.png')}
-          style={styles.logoImage}
-          resizeMode="contain"
-        />
+        <FirstlineMark style={styles.logoImage} />
         <ActivityIndicator
           size="large"
           color="#007AFF"
@@ -197,7 +194,7 @@ export const MainNavigator: React.FC<MainNavigatorProps> = ({
         <NavigationContainer
           ref={navigationRef}
           linking={{
-            prefixes: ['fajrmission://', 'https://fajrmission.org'],
+            prefixes: ['firstline://', 'https://firstline.care'],
             config: {
               screens: {
                 Home: 'home',

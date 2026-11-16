@@ -45,7 +45,7 @@ if ! lsof -ti:8081 > /dev/null 2>&1; then
     print_error "Metro bundler is NOT running!"
     print_info ""
     print_info "Please start Metro in another terminal:"
-    print_info "  cd /Users/ke/ws/fajr-medflow-emr/apps/mobile"
+    print_info "  cd <repo>/apps/mobile"
     print_info "  pnpm start"
     print_info ""
     exit 1

@@ -15,7 +15,7 @@ Next.js components using Tailwind CSS, Radix UI primitives, and shadcn patterns.
 
 ## Media components
 
-- Types come from `@fajr/shared/media` (`MediaItem`, `MediaType`) — do not duplicate locally
+- Types come from `@firstline/shared/media` (`MediaItem`, `MediaType`) — do not duplicate locally
 - MediaGrid uses CSS grid (responsive columns via Tailwind)
 - MediaThumbnail uses Next.js `Image` component with `fill` layout
 

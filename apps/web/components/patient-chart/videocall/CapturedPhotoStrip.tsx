@@ -11,7 +11,7 @@
 import React, { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { MediaViewer } from "@/components/ui/MediaViewer";
-import type { CapturedPhoto } from "@fajr/shared/video-call";
+import type { CapturedPhoto } from "@firstline/shared/video-call";
 
 interface CapturedPhotoStripProps {
   photos: CapturedPhoto[];

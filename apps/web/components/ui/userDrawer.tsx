@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/accordion";
 import { Label } from "@radix-ui/react-label";
 import { RoleIcon, getRoleButtonVariant } from "@/components/ui/RoleIcon";
-import { getRoleCssVar } from "@fajr/shared/theme";
+import { getRoleCssVar } from "@firstline/shared/theme";
 import { useGlobalContext } from "../globalContext/GlobalContext";
 
 interface UserDrawerProps {

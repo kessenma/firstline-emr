@@ -14,8 +14,8 @@ import {
   prescriptionSendToast,
   type PrescriptionSendFailureReason,
   type RxOrder,
-} from "@fajr/shared/medications";
-import { getPatientChannel } from "@fajr/shared/messaging";
+} from "@firstline/shared/medications";
+import { getPatientChannel } from "@firstline/shared/messaging";
 import { useToast } from "@/components/hooks/useToast";
 
 export type RxSendState = "idle" | "sending" | "sent" | "failed";

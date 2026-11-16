@@ -4,8 +4,8 @@
 import { useEffect, useState } from "react";
 import { usePatientDashboard } from "../PatientViewModelContext";
 import { getMediaUrl, getMediaUrls, invalidateMediaUrl } from "@/lib/media";
-import { inferMediaTypeFromUrl, inferMediaTypeFromMime } from "@fajr/shared/media";
-import type { MediaType } from "@fajr/shared/media";
+import { inferMediaTypeFromUrl, inferMediaTypeFromMime } from "@firstline/shared/media";
+import type { MediaType } from "@firstline/shared/media";
 
 export interface PatientImageGalleryViewModelProps {
     patientId: string;

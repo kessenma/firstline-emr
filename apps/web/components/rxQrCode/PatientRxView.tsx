@@ -13,8 +13,8 @@ import {
     getPatientRxTranslator,
     isRtlLanguage,
     type PatientRxTranslationKey,
-} from '@fajr/shared/medications';
-import { Languages, LanguagesList, normalizeLanguage } from '@fajr/shared/constants/languages';
+} from '@firstline/shared/medications';
+import { Languages, LanguagesList, normalizeLanguage } from '@firstline/shared/constants/languages';
 import {
     Card,
     CardContent,
@@ -144,8 +144,8 @@ const PatientRxView: React.FC<QRCodeDisplayProps> = ({ uuid }) => {
                 </DropdownMenu>
                 <div className="flex items-center space-x-4">
                     <Image
-                        src="/assets/images/fajr-logo.svg"
-                        alt="Mena Health Logo"
+                        src="/assets/images/logo.svg"
+                        alt="Firstline Logo"
                         width={80}
                         height={80}
                         className=""

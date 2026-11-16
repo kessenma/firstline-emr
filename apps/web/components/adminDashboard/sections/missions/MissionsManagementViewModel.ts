@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useToast } from "@/components/hooks/useToast";
 import type { Mission, MissionUrl, MissionHospital, MissionHospitalImage } from "@/db/schema/missions";
 import type { MissionAttachment } from "@/db/schema/missionAttachments";
-import type { MissionMember } from "@fajr/shared/admin";
+import type { MissionMember } from "@firstline/shared/admin";
 
 export type { MissionUrl, MissionHospital, MissionHospitalImage, MissionMember };
 

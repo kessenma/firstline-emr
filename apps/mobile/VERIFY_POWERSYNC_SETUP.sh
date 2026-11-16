@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # PowerSync Server Verification Script
-# This script tests connectivity to your PowerSync server at sync.emr.fajr.org
+# This script tests connectivity to your PowerSync server at sync.firstline.care
 
 set -e
 
-POWERSYNC_URL="https://sync.emr.fajr.org"
+POWERSYNC_URL="https://sync.firstline.care"
 HEALTH_ENDPOINT="${POWERSYNC_URL}/health"
 MAIN_ENDPOINT="${POWERSYNC_URL}"
 
@@ -24,8 +24,8 @@ NC='\033[0m' # No Color
 # Test 1: DNS Resolution
 echo "📡 Test 1: DNS Resolution"
 echo "-------------------------"
-if host sync.emr.fajr.org > /dev/null 2>&1; then
-    IP=$(host sync.emr.fajr.org | grep "has address" | awk '{print $4}' | head -n 1)
+if host sync.firstline.care > /dev/null 2>&1; then
+    IP=$(host sync.firstline.care | grep "has address" | awk '{print $4}' | head -n 1)
     echo -e "${GREEN}✅ DNS resolves to: ${IP}${NC}"
 else
     echo -e "${RED}❌ DNS resolution failed${NC}"
@@ -36,7 +36,7 @@ echo ""
 # Test 2: Port Connectivity
 echo "🔌 Test 2: Port Connectivity (443)"
 echo "-----------------------------------"
-if timeout 5 bash -c "cat < /dev/null > /dev/tcp/sync.emr.fajr.org/443" 2>/dev/null; then
+if timeout 5 bash -c "cat < /dev/null > /dev/tcp/sync.firstline.care/443" 2>/dev/null; then
     echo -e "${GREEN}✅ Port 443 is accessible${NC}"
 else
     echo -e "${RED}❌ Port 443 is not accessible${NC}"
@@ -76,7 +76,7 @@ echo ""
 # Test 5: SSL Certificate
 echo "🔐 Test 5: SSL Certificate"
 echo "--------------------------"
-CERT_INFO=$(echo | openssl s_client -servername sync.emr.fajr.org -connect sync.emr.fajr.org:443 2>/dev/null | openssl x509 -noout -dates 2>/dev/null)
+CERT_INFO=$(echo | openssl s_client -servername sync.firstline.care -connect sync.firstline.care:443 2>/dev/null | openssl x509 -noout -dates 2>/dev/null)
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✅ SSL certificate is valid${NC}"

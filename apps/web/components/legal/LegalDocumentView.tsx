@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { LegalDocument, ContentBlock } from '@fajr/shared/legal-content';
+import type { LegalDocument, ContentBlock } from '@firstline/shared/legal-content';
 
 function renderContentBlock(block: ContentBlock, index: number) {
   switch (block.type) {

@@ -9,7 +9,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, TouchableOpacity, StyleSheet, type ViewStyle } from 'react-native';
 import { Phone } from 'lucide-react-native';
-import type { DirectoryUser } from '@fajr/shared/calls';
+import type { DirectoryUser } from '@firstline/shared/calls';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { borderRadius } from '../../utils/theme';
 import { CallDirectoryModal } from './CallDirectoryModal';

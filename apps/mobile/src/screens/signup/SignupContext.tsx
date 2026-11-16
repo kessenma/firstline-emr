@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useCallback, useMemo } from 'react';
-import type { SignupFormDataBase, MedicalLicenseBase } from '@fajr/shared/signup';
-import { getTotalSteps } from '@fajr/shared/signup';
+import type { SignupFormDataBase, MedicalLicenseBase } from '@firstline/shared/signup';
+import { getTotalSteps } from '@firstline/shared/signup';
 
 /** Mobile-specific medical license includes file URI info */
 export interface MobileMedicalLicense extends MedicalLicenseBase {

@@ -11,7 +11,7 @@
 -- pharmacy's fulfilment answer. A pharmacy that partially filled a script which
 -- is then cancelled has told us the patient already holds half the medication;
 -- folding cancellation into that enum overwrites it. The two are read together
--- through describePrescriptionCancellation() in @fajr/shared/medications.
+-- through describePrescriptionCancellation() in @firstline/shared/medications.
 --
 -- This also avoids ALTER TYPE ... ADD VALUE, whose new value cannot be used in
 -- the transaction that adds it — and migrations here run in one.

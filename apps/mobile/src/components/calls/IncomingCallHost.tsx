@@ -12,7 +12,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AudioSession } from '@livekit/react-native';
 import { Room, RoomEvent } from 'livekit-client';
-import type { DirectoryUser } from '@fajr/shared/calls';
+import type { DirectoryUser } from '@firstline/shared/calls';
 import { getApiUrl } from '../../config';
 import { getStoredToken } from '../../utils/storage';
 import { staffCallKit } from '../../services/StaffCallKit';

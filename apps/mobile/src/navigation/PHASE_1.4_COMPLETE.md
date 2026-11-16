@@ -124,13 +124,13 @@ apps/mobile/src/navigation/
 ### 4. Deep Linking Support ✅
 
 **Supported URL Schemes**:
-- App Scheme: `fajrmission://admin/dashboard`
-- HTTPS: `https://fajrmission.org/admin/dashboard`
+- App Scheme: `firstlinemission://admin/dashboard`
+- HTTPS: `https://firstline.care/admin/dashboard`
 
 **Configuration**:
 ```typescript
 linking={{
-  prefixes: ['fajrmission://', 'https://fajrmission.org'],
+  prefixes: ['firstlinemission://', 'https://firstline.care'],
   config: {
     screens: {
       Admin: {
@@ -147,10 +147,10 @@ linking={{
 **Testing Commands**:
 ```bash
 # iOS Simulator
-xcrun simctl openurl booted "fajrmission://admin/dashboard"
+xcrun simctl openurl booted "firstlinemission://admin/dashboard"
 
 # Android Emulator
-adb shell am start -W -a android.intent.action.VIEW -d "fajrmission://admin/dashboard"
+adb shell am start -W -a android.intent.action.VIEW -d "firstlinemission://admin/dashboard"
 ```
 
 ---

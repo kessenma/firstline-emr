@@ -16,7 +16,7 @@ import { videoCallSessions } from "@/db/schema";
 import {
   staffDisplayName,
   type VideoCallSession,
-} from "@fajr/shared/video-call";
+} from "@firstline/shared/video-call";
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

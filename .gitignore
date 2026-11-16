@@ -112,3 +112,7 @@ tmp/
 
 # compiled Go binaries (build output, not source)
 apps/notifications-server/notifications-server
+
+# Python bytecode (brand asset generator)
+__pycache__/
+*.pyc

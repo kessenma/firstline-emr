@@ -4,7 +4,7 @@
 import { sql } from "drizzle-orm";
 import { db } from "@/db";
 import { getReversedColumnMap, TABLE_COLUMN_MAPS } from "./columnMaps";
-import type { BackupTableManifest, BackupMode } from "@fajr/shared/admin";
+import type { BackupTableManifest, BackupMode } from "@firstline/shared/admin";
 
 interface GenerateBackupResult {
   buffer: Buffer;

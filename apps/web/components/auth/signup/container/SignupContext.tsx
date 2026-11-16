@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useCallback, useMemo, useEffect } from 'react';
-import { getFinalStep } from '@fajr/shared/signup';
-import type { AccountType, Gender, TotpCredentialData, MedicalLicenseBase, PasskeyCredential } from '@fajr/shared/signup';
+import { getFinalStep } from '@firstline/shared/signup';
+import type { AccountType, Gender, TotpCredentialData, MedicalLicenseBase, PasskeyCredential } from '@firstline/shared/signup';
 
 /** Web-specific medical license includes File object for upload */
 export interface WebMedicalLicense extends MedicalLicenseBase {

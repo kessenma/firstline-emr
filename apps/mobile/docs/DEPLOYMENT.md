@@ -1,4 +1,4 @@
-# Deployment Guide for Fajr EMR Mobile App
+# Deployment Guide for Firstline Mobile App
 
 ## Fastlane Match Setup (Code Signing)
 
@@ -6,7 +6,7 @@
 
 1. **Ruby environment**: Use rbenv with the version specified in `.ruby-version`
 2. **Bundler**: Install with `gem install bundler`
-3. **Access to Fajr-mobile-certs repository**: `git@github-work:YOUR_ORG/YOUR_CERTS_REPO.git`
+3. **Access to Firstline-mobile-certs repository**: `git@github-work:YOUR_ORG/YOUR_CERTS_REPO.git`
 
 ### Initial Setup
 
@@ -59,7 +59,7 @@ This will:
 - Generate App Store and Development certificates
 - Create provisioning profiles
 - Encrypt everything with your `MATCH_PASSWORD`
-- Push to the `Fajr-mobile-certs` repository
+- Push to the `Firstline-mobile-certs` repository
 
 #### 4. Sync Certificates on New Machines
 
@@ -139,7 +139,7 @@ npm run deploy:ios:clean
 #### "Git repository not found"
 
 Ensure:
-- The `Fajr-mobile-certs` repository exists on GitHub
+- The `Firstline-mobile-certs` repository exists on GitHub
 - You have SSH access: `ssh -T git@github-work`
 - Your git remote is correctly configured for the work account
 
@@ -175,19 +175,19 @@ npm run fastlane:init-session
 2. **Store** `MATCH_PASSWORD` securely (e.g., 1Password, LastPass)
 3. **Use readonly mode** in CI/CD: `npm run fastlane:sync`
 4. **Rotate credentials** regularly
-5. **Keep** `Fajr-mobile-certs` repository private
+5. **Keep** `Firstline-mobile-certs` repository private
 
 ### Resources
 
 - [Fastlane Match Documentation](https://docs.fastlane.tools/actions/match/)
-- [Fajr-mobile-certs Repository](https://github.com/YOUR_ORG/YOUR_CERTS_REPO)
+- [Firstline-mobile-certs Repository](https://github.com/YOUR_ORG/YOUR_CERTS_REPO)
 - [Code Signing Guide](https://codesigning.guide/)
 
 ---
 
-# Deployment Guide for Fajr EMR Mobile App (Continued)
+# Deployment Guide for Firstline Mobile App (Continued)
 
-This guide covers the complete deployment process for the Fajr EMR mobile application to TestFlight and the App Store.
+This guide covers the complete deployment process for the Firstline mobile application to TestFlight and the App Store.
 
 ## Quick Start
 

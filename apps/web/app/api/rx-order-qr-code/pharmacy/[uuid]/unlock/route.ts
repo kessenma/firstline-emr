@@ -5,7 +5,7 @@
 // front of them and neither of which is in the QR code.
 //
 // This replaces a `verifySessionFromRequest` check on the pharmacy view. That
-// check required a MedFlow account, which no outside pharmacy has — so the QR
+// check required a Firstline account, which no outside pharmacy has — so the QR
 // code could not actually be used by its intended audience.
 
 import { NextRequest, NextResponse } from "next/server";

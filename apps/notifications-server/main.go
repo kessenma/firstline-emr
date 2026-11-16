@@ -408,8 +408,8 @@ func startHealthServer() {
 		// Unlike the older /api/push/* handlers this one is authenticated: it
 		// can ring any user's phone, so an unauthenticated caller could use it
 		// to harass staff.
-		if config.MedFlowKey != "" {
-			if r.Header.Get("Authorization") != "Bearer "+config.MedFlowKey {
+		if config.ServiceKey != "" {
+			if r.Header.Get("Authorization") != "Bearer "+config.ServiceKey {
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
 				return
 			}

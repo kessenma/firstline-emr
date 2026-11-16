@@ -48,8 +48,8 @@ services:
     networks:
       - coolify
     labels:
-      # No caddy.* labels here on purpose: storage.fajrmission.org and
-      # storage-admin.fajrmission.org are served by the static
+      # No caddy.* labels here on purpose: storage.firstline.care and
+      # storage-admin.firstline.care are served by the static
       # /data/coolify/proxy/caddy/dynamic/object-storage*.caddy files on the
       # box. These labels never worked (Coolify does not interpolate ${VAR}
       # in labels, and caddy-docker-proxy >= 2.9 rejects "${" inside {{...}}

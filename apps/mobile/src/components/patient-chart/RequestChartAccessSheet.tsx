@@ -24,7 +24,7 @@ import {
   ROLE_LABELS,
   ROLE_DESCRIPTIONS,
   type CareTeamRole,
-} from '@fajr/shared/care-team';
+} from '@firstline/shared/care-team';
 
 interface RequestChartAccessSheetProps {
   visible: boolean;

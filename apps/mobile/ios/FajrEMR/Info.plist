@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>FajrEMR</string>
+	<string>Firstline</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -33,16 +33,14 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>FajrEMR needs microphone access for video consultations with patients and for voice dictation of clinical notes.</string>
+	<string>Firstline needs microphone access for video consultations with patients and for voice dictation of clinical notes.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>FajrEMR uses on-device speech recognition to transcribe clinical notes hands-free and, with consent, to write notes from video consultations. Speech is processed entirely on this device and is never sent to a server.</string>
+	<string>Firstline uses on-device speech recognition to transcribe clinical notes hands-free and, with consent, to write notes from video consultations. Speech is processed entirely on this device and is never sent to a server.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>FajrEMR needs access to your camera for video consultations with patients, to take profile photos, and to upload medical license documents.</string>
+	<string>Firstline needs access to your camera for video consultations with patients, to take profile photos, and to upload medical license documents.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>FajrEMR needs access to your photo library to select profile photos and medical license documents.</string>
+	<string>Firstline needs access to your photo library to select profile photos and medical license documents.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

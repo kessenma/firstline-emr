@@ -15,7 +15,7 @@ import { eq } from "drizzle-orm";
 import { verifySessionFromRequest } from "@/lib/dal";
 import { db } from "@/db";
 import { videoCallSessions } from "@/db/schema";
-import { isInviteExpired } from "@fajr/shared/video-call";
+import { isInviteExpired } from "@firstline/shared/video-call";
 import { mintCaptureToken } from "@/lib/server/videoCall";
 
 const UUID_REGEX =

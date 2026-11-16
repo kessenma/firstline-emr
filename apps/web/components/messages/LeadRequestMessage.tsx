@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Crown, Check, X, ExternalLink, Loader2 } from "lucide-react";
-import { getAnonymizedName } from "@fajr/shared/patient-utils";
+import { getAnonymizedName } from "@firstline/shared/patient-utils";
 
 interface LeadRequestData {
   patientId: string;

@@ -5,11 +5,11 @@ export function validateApiKey(authHeader: string | null): boolean {
         return false;
     }
 
-    const expectedKey = process.env.MEDFLOW_KEY;
+    const expectedKey = process.env.FIRSTLINE_SERVICE_KEY;
     // console.log("expected Key: "+expectedKey)
 
     if (!expectedKey) {
-        // console.error('MEDFLOW_KEY is missing in environment variables');
+        // console.error('FIRSTLINE_SERVICE_KEY is missing in environment variables');
         return false;
     }
 

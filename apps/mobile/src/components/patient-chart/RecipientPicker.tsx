@@ -5,7 +5,7 @@
 // offline — the staff_directory bucket already syncs account_type,
 // doctor_specialty AND missions, so no sync-rule change was needed.
 //
-// Tab config and filter predicates come from @fajr/shared/patient-share; the
+// Tab config and filter predicates come from @firstline/shared/patient-share; the
 // web picker uses the same ones. Only the rendering is written twice.
 
 import React from 'react';
@@ -21,7 +21,7 @@ import {
   filterRecipients,
   type RecipientTabId,
   type RecipientUser,
-} from '@fajr/shared/patient-share';
+} from '@firstline/shared/patient-share';
 
 interface Props {
   currentUserId: string;

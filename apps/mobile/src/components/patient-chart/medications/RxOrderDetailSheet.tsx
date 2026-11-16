@@ -23,8 +23,8 @@ import {
   hasPharmacyQrCode,
   hasSentPrescriptionLink,
   type RxOrder,
-} from '@fajr/shared/medications';
-import { MESSAGING_CHANNELS, getPatientChannel } from '@fajr/shared/messaging';
+} from '@firstline/shared/medications';
+import { MESSAGING_CHANNELS, getPatientChannel } from '@firstline/shared/messaging';
 import { useToast } from '../../../hooks/useToast';
 import { useRxOrderSend } from './useRxOrderSend';
 import { useRxOrderCancel } from './useRxOrderCancel';

@@ -63,12 +63,12 @@ export const ExportPatientChartView: React.FC<Props> = ({ data, exportDateISO })
       {/* Logo */}
       <div className="mb-4">
         <Image
-          src="/assets/images/fajr-logo.svg"
-          alt="Fajr MedFlow Logo"
-          width={160}
+          src="/assets/images/logo.svg"
+          alt="Firstline"
+          width={48}
           height={48}
           priority
-          className="h-12 w-auto"
+          className="h-12 w-12"
         />
       </div>
       {/* Header */}

@@ -19,7 +19,7 @@ import {
   buildPatientIdentity,
   photoCaptureFailureFrom,
   PHOTO_CAPTURE_FAILURE_MESSAGE,
-} from "@fajr/shared/video-call";
+} from "@firstline/shared/video-call";
 import type {
   CapturedPhoto,
   PhotoCaptureRequest,
@@ -28,7 +28,7 @@ import type {
   PhotoConsentRequest,
   PhotoConsentResponse,
   PhotoRemovedNotice,
-} from "@fajr/shared/video-call";
+} from "@firstline/shared/video-call";
 import { getMediaUrl, invalidateMediaUrl } from "@/lib/media";
 
 interface UsePhotoCaptureParams {

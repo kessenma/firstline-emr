@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, ShieldCheck } from 'lucide-react';
-import type { PatientRxTranslationKey } from '@fajr/shared/medications';
+import type { PatientRxTranslationKey } from '@firstline/shared/medications';
 import type { RxGateError } from './PatientRxViewModel';
 
 interface AccessCodeGateProps {

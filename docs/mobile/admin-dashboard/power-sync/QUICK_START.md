@@ -80,7 +80,7 @@ bucket_definitions:
 ### Restart PowerSync
 
 ```bash
-cd /Users/ke/ws/fajr-medflow-emr
+cd /Users/ke/ws/firstline-emr
 docker-compose -f docker-compose.powersync.yml restart powersync
 ```
 
@@ -179,12 +179,12 @@ export class PowerSyncService {
       this.db = new PowerSyncDatabase({
         schema: adminSchema,
         database: {
-          dbFilename: 'fajr-admin.db',
+          dbFilename: 'firstline-admin.db',
         },
       });
 
       // Connect to PowerSync server (through Next.js proxy)
-      const apiUrl = 'https://emr.fajr.org'; // or your API URL
+      const apiUrl = 'https://firstline.care'; // or your API URL
       const powerSyncUrl = `${apiUrl}/api/powersync`;
 
       await this.db.connect({

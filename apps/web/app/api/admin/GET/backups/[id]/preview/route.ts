@@ -8,7 +8,7 @@ import { eq, sql } from "drizzle-orm";
 import { verifySessionFromRequest } from "@/lib/dal";
 import { storageService } from "@/lib/storage";
 import { decryptBackup } from "@/lib/backup/encryptionService";
-import type { RestorePreviewTable } from "@fajr/shared/admin";
+import type { RestorePreviewTable } from "@firstline/shared/admin";
 
 export async function GET(
   request: Request,

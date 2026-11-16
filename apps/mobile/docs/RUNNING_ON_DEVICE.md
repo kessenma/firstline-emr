@@ -120,7 +120,7 @@ rock run:ios --device "iPhone 17 Pro"
    - Ensure automatic signing is enabled
 
 3. **Bundle ID Mismatch**
-   - Verify bundle ID in Xcode matches `org.fajr.emr`
+   - Verify bundle ID in Xcode matches `org.firstline.emr`
    - Check provisioning profile includes this bundle ID
 
 4. **Device Locked**

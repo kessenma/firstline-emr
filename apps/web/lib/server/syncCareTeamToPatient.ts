@@ -6,7 +6,7 @@ import { db } from "@/db";
 import { patientCareTeam, patients } from "@/db/schema";
 import { users } from "@/db/schema/users";
 import { eq, and, isNull } from "drizzle-orm";
-import type { CareTeamMemberJSON } from "@fajr/shared/care-team";
+import type { CareTeamMemberJSON } from "@firstline/shared/care-team";
 
 export async function syncCareTeamToPatient(
   patientId: string,

@@ -4,7 +4,7 @@
 
 import React from "react";
 import { ImageOff } from "lucide-react";
-import type { MediaItem } from "@fajr/shared/media";
+import type { MediaItem } from "@firstline/shared/media";
 import { MediaThumbnail } from "./MediaThumbnail";
 import { Skeleton } from "./skeleton";
 import { cn } from "@/lib/utils";

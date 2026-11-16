@@ -3,7 +3,7 @@
 // Past consults for this patient. Reads from PowerSync via PatientChartContext,
 // so it still renders with no connectivity.
 //
-// Duration and status labels come from @fajr/shared/video-call — the same
+// Duration and status labels come from @firstline/shared/video-call — the same
 // formatters the web chart uses, so the two never drift.
 
 import React, { useState } from 'react';
@@ -20,7 +20,7 @@ import {
   VIDEO_CALL_STATUS_LABELS,
   formatCallDuration,
   type VideoCallSession,
-} from '@fajr/shared/video-call';
+} from '@firstline/shared/video-call';
 import { useThemeColors } from '../../../../contexts/ThemeContext';
 import { spacing, borderRadius, typography } from '../../../../utils/theme';
 

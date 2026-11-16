@@ -1,6 +1,6 @@
 // apps/web/components/patient-dashboard/viewModel/useFilteredPatients.ts
 import { useMemo } from "react";
-import { applyDashboardFilters } from "@fajr/shared/patient-dashboard";
+import { applyDashboardFilters } from "@firstline/shared/patient-dashboard";
 import type { PatientWithMessages } from "./types";
 import useDashboardStore from "@/stores/useDashboardStore";
 

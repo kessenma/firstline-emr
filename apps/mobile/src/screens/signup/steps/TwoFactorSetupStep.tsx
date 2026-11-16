@@ -15,7 +15,7 @@ import { usePasskey } from '../../../hooks/usePasskey';
 import { CopyButton } from '../../../components/ui/CopyButton';
 import { API_CONFIG } from '../../../config';
 import { palette } from '../../../utils/colors';
-import { AUTHENTICATOR_APPS, HIPAA_2FA_NOTICE, TOTP_ISSUER, TOTP_MANUAL_SETUP_STEPS } from '@fajr/shared/2fa';
+import { AUTHENTICATOR_APPS, HIPAA_2FA_NOTICE, TOTP_ISSUER, TOTP_DIGITS, TOTP_PERIOD, TOTP_MANUAL_SETUP_STEPS } from '@firstline/shared/2fa';
 
 export const TwoFactorSetupStep: React.FC = () => {
   const { formData, updateFormData } = useSignupContext();
@@ -56,7 +56,7 @@ export const TwoFactorSetupStep: React.FC = () => {
       setSetupToken(data.setupToken);
       // Extract otpauth URI from the QR data (the setup endpoint returns it encoded in QR)
       // For mobile, we primarily use manual key + deep link
-      setOtpauthUri(`otpauth://totp/Fajr%20MedFlow%20EMR:${encodeURIComponent(formData.email)}?secret=${data.manualEntryKey}&issuer=Fajr%20MedFlow%20EMR&algorithm=SHA1&digits=6&period=30`);
+      setOtpauthUri(`otpauth://totp/${encodeURIComponent(TOTP_ISSUER)}:${encodeURIComponent(formData.email)}?secret=${data.manualEntryKey}&issuer=${encodeURIComponent(TOTP_ISSUER)}&algorithm=SHA1&digits=${TOTP_DIGITS}&period=${TOTP_PERIOD}`);
     } catch {
       setTotpError('Network error. Please try again.');
     } finally {

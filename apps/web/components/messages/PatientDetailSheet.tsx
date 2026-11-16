@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getAnonymizedName } from "@fajr/shared/patient-utils";
+import { getAnonymizedName } from "@firstline/shared/patient-utils";
 import {
   ExternalLink,
   Loader2,

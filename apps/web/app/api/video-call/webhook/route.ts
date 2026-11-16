@@ -18,7 +18,7 @@ import { eq } from "drizzle-orm";
 import { WebhookReceiver } from "livekit-server-sdk";
 import { db } from "@/db";
 import { videoCallSessions } from "@/db/schema";
-import { isPatientIdentity } from "@fajr/shared/video-call";
+import { isPatientIdentity } from "@firstline/shared/video-call";
 import { getLiveKitConfig } from "@/lib/server/videoCall";
 
 export async function POST(request: NextRequest) {

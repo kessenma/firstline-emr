@@ -27,7 +27,7 @@
   --font-figtree: var(--font-figtree), sans-serif;
 }
 
-/* Palette + role tokens auto-generated from @fajr/shared/theme */
+/* Palette + role tokens auto-generated from @firstline/shared/theme */
 @import './generated-palette.css';
 
 @keyframes aurora {

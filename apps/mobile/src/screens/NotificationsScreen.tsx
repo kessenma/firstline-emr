@@ -207,7 +207,7 @@ export default function NotificationsScreen() {
   const handleSwitchToProduction = () => {
     Alert.alert(
       'Switch to Production',
-      'This will switch your API calls to fajrmission.org and reload the app. Continue?',
+      'This will switch your API calls to firstline.care and reload the app. Continue?',
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -596,7 +596,7 @@ export default function NotificationsScreen() {
               ]}
             >
               <Text style={{ color: '#FFFFFF', fontWeight: '600' }}>
-                Switch to Production (fajrmission.org)
+                Switch to Production (firstline.care)
               </Text>
             </TouchableOpacity>
             <Text

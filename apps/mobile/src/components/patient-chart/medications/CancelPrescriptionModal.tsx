@@ -24,7 +24,7 @@ import {
 import { Ban } from 'lucide-react-native';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { spacing, borderRadius, typography } from '../../../utils/theme';
-import { isCancellationReasonRequired } from '@fajr/shared/medications';
+import { isCancellationReasonRequired } from '@firstline/shared/medications';
 
 interface CancelPrescriptionModalProps {
   visible: boolean;

@@ -56,7 +56,7 @@ import Animated, {
   runOnJS,
   withTiming,
 } from 'react-native-reanimated';
-import { getFileExtension, type MediaItem } from '@fajr/shared/media';
+import { getFileExtension, type MediaItem } from '@firstline/shared/media';
 import { spacing, typography, borderRadius } from '../../utils/theme';
 import {
   isDataUri,

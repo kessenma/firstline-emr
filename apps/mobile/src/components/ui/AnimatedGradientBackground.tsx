@@ -110,7 +110,7 @@ const AnimatedBlob = ({ config }: { config: BlobConfig }) => {
   );
 };
 
-// Blob configurations using Fajr brand colors
+// Blob configurations using Firstline brand colors
 const BLOB_CONFIGS: BlobConfig[] = [
   {
     id: 'blob1',

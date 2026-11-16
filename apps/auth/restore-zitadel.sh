@@ -62,7 +62,7 @@ load_env_file "$REPO_ROOT/.env.auth.local"
 [ -n "$_PRESET_MASTERKEY" ] && ZITADEL_MASTERKEY="$_PRESET_MASTERKEY"
 [ -n "$_PRESET_DOMAIN" ] && ZITADEL_DOMAIN="$_PRESET_DOMAIN"
 
-ZITADEL_DOMAIN="${ZITADEL_DOMAIN:-identity.fajrmission.org}"
+ZITADEL_DOMAIN="${ZITADEL_DOMAIN:-identity.firstline.care}"
 
 # ── Preflight: tools + required config ───────────────────────────────────────
 command -v pg_restore >/dev/null 2>&1 || fail "pg_restore not found. Install postgresql-client (matching server major version)."

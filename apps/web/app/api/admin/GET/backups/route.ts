@@ -7,7 +7,7 @@ import { backups } from "@/db/schema";
 import { users } from "@/db/schema";
 import { desc, eq, sql, and } from "drizzle-orm";
 import { verifySessionFromRequest } from "@/lib/dal";
-import type { BackupStatus, BackupMode } from "@fajr/shared/admin";
+import type { BackupStatus, BackupMode } from "@firstline/shared/admin";
 
 export async function GET(request: Request) {
   try {

@@ -68,7 +68,7 @@ mc mb rustfs-prod/YOUR_BUCKET_NAME
 
 **Example:**
 ```bash
-mc mb rustfs-local/medflow
+mc mb rustfs-local/firstline
 ```
 
 ### Step 4: Verify the bucket exists
@@ -78,7 +78,7 @@ mc mb rustfs-local/medflow
 mc ls rustfs-local
 
 # You should see:
-# [2024-12-12 10:00:00 PST]     0B medflow/
+# [2024-12-12 10:00:00 PST]     0B firstline/
 ```
 
 ### Step 5: Test upload
@@ -88,10 +88,10 @@ mc ls rustfs-local
 echo "test" > test.txt
 
 # Upload it
-mc cp test.txt rustfs-local/medflow/
+mc cp test.txt rustfs-local/firstline/
 
 # Verify
-mc ls rustfs-local/medflow/
+mc ls rustfs-local/firstline/
 ```
 
 ---
@@ -118,7 +118,7 @@ Default credentials (if not changed):
 
 1. Click "Buckets" in the left sidebar
 2. Click "Create Bucket" button
-3. Enter your bucket name (e.g., `medflow`)
+3. Enter your bucket name (e.g., `firstline`)
 4. Click "Create"
 
 ---
@@ -174,7 +174,7 @@ aws --profile rustfs \
 ```bash
 aws --profile rustfs \
   --endpoint-url http://localhost:9000 \
-  s3 mb s3://medflow
+  s3 mb s3://firstline
 ```
 
 ### Step 4: Verify
@@ -185,7 +185,7 @@ aws --profile rustfs \
   s3 ls
 
 # You should see:
-# 2024-12-12 10:00:00 medflow
+# 2024-12-12 10:00:00 firstline
 ```
 
 ---
@@ -206,7 +206,7 @@ set -e
 ENDPOINT="${OBJECT_STORAGE_ENDPOINT:-localhost:9000}"
 ACCESS_KEY="${OBJECT_STORAGE_KEY:-rustfsadmin}"
 SECRET_KEY="${OBJECT_STORAGE_SECRET:-rustfsadmin}"
-BUCKET="${OBJECT_STORAGE_BUCKET:-medflow}"
+BUCKET="${OBJECT_STORAGE_BUCKET:-firstline}"
 REGION="${OBJECT_STORAGE_REGION:-us-east-1}"
 
 # Determine protocol (local vs production)
@@ -326,7 +326,7 @@ exit
 - Not contain consecutive dots or dots next to hyphens
 
 **Good examples:**
-- `medflow`
+- `firstline`
 - `my-bucket-123`
 - `app.data.bucket`
 

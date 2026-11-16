@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 ENDPOINT="${OBJECT_STORAGE_ENDPOINT:-localhost:9000}"
 ACCESS_KEY="${OBJECT_STORAGE_KEY:-rustfsadmin}"
 SECRET_KEY="${OBJECT_STORAGE_SECRET:-rustfsadmin}"
-BUCKET="${OBJECT_STORAGE_BUCKET:-medflow}"
+BUCKET="${OBJECT_STORAGE_BUCKET:-firstline-media}"
 REGION="${OBJECT_STORAGE_REGION:-us-east-1}"
 
 # Determine protocol (local vs production)

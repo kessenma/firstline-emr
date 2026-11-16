@@ -17,7 +17,7 @@ import { storageService } from "@/lib/storage";
 import type {
   StorageCategoryId,
   StorageOwnerDetails,
-} from "@fajr/shared/admin";
+} from "@firstline/shared/admin";
 
 function unknownOwner(note: string, scopeId?: string): StorageOwnerDetails {
   return {

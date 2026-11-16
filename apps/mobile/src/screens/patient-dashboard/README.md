@@ -1,6 +1,6 @@
 # Patient Dashboard Module
 
-This module implements the Patient Dashboard screen for the Fajr Mobile EMR app using a View-ViewModel architecture pattern.
+This module implements the Patient Dashboard screen for the Firstline Mobile EMR app using a View-ViewModel architecture pattern.
 
 ## Architecture
 

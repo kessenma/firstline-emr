@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:fajrmission.org</string>
+		<string>webcredentials:firstline.care</string>
 	</array>
 </dict>
 </plist>

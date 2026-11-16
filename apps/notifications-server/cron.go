@@ -65,7 +65,7 @@ func (fc *FollowUpCron) fetchFollowUpThreads(ctx context.Context) ([]FollowUpThr
 		return nil, err
 	}
 
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", fc.config.MedFlowKey))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", fc.config.ServiceKey))
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
@@ -94,7 +94,7 @@ func (fc *FollowUpCron) sendFollowUp(ctx context.Context, thread FollowUpThread)
 	}
 
 	// Follow-up message template
-	followUpText := `Hi! This is a friendly reminder from the MedFlow team.
+	followUpText := `Hi! This is a friendly reminder from the Firstline team.
 
 We noticed you started a conversation with us, and we'd love to help you complete your registration.
 
@@ -119,7 +119,7 @@ If you have any questions or need assistance, please don't hesitate to reach out
 	// Save message to backend
 	telegramMsg := &TelegramMessage{
 		Text:      followUpText,
-		Sender:    "bot", // Will be transformed to "MedFlow Team" by backend
+		Sender:    "bot", // Backend is expected to relabel this to followUpSenderName
 		Timestamp: time.Now(),
 		Type:      "text",
 		MediaURL:  "",
@@ -139,11 +139,40 @@ If you have any questions or need assistance, please don't hesitate to reach out
 	return nil
 }
 
+// followUpSenders are the sender labels a follow-up may have been stored under.
+//
+// The rebrand changed the label, but rows written before it still carry the old
+// one. Matching only the current label would make every pre-rebrand thread look
+// like it had never been followed up, and the cron would message those patients
+// a second time. Keep the old label here until those rows are migrated.
+var followUpSenders = []string{followUpSenderName, "MedFlow Team"}
+
+// followUpSenderName is the display name follow-up reminders are attributed to.
+const followUpSenderName = "Firstline Team"
+
+// followUpTextPrefix is the leading text used to recognise a follow-up message.
+// It stops before the brand name so the check survives renames.
+const followUpTextPrefix = "Hi! This is a friend"
+
 // hasFollowUp checks if thread already received a follow-up
 func (fc *FollowUpCron) hasFollowUp(thread FollowUpThread) bool {
 	for _, msg := range thread.Messages {
-		if msg.Sender == "MedFlow Team" &&
-		   (msg.Text == "" || len(msg.Text) > 10 && msg.Text[:20] == "Hi! This is a friend") {
+		matchesSender := false
+		for _, sender := range followUpSenders {
+			if msg.Sender == sender {
+				matchesSender = true
+				break
+			}
+		}
+		if !matchesSender {
+			continue
+		}
+		// The prefix is deliberately short and brand-free so it still matches
+		// reminders sent before the rebrand. Guard the full prefix length --
+		// the previous bound was > 10, so an 11-to-19 character message
+		// panicked on the slice.
+		if msg.Text == "" || (len(msg.Text) >= len(followUpTextPrefix) &&
+			msg.Text[:len(followUpTextPrefix)] == followUpTextPrefix) {
 			return true
 		}
 	}
@@ -170,7 +199,7 @@ func (fc *FollowUpCron) saveFollowUpRecord(ctx context.Context, chatID, threadID
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", fc.config.MedFlowKey))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", fc.config.ServiceKey))
 
 	resp, err := httpClient.Do(req)
 	if err != nil {

@@ -29,7 +29,7 @@ import { useThemeColors } from '../../../../contexts/ThemeContext';
 import { spacing, borderRadius, typography } from '../../../../utils/theme';
 import { useBackupViewModel } from '../../../../viewModels/admin/useBackupViewModel';
 import PassphraseModal from './PassphraseModal';
-import type { BackupMode } from '@fajr/shared/admin';
+import type { BackupMode } from '@firstline/shared/admin';
 
 export default function BackupView() {
   const colors = useThemeColors();

@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 
-const ZITADEL_DOMAIN = process.env.ZITADEL_DOMAIN || "identity.fajrmission.org";
+const ZITADEL_DOMAIN = process.env.ZITADEL_DOMAIN || "identity.firstline.care";
 
 export async function GET() {
   const domain = ZITADEL_DOMAIN;

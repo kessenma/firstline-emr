@@ -5,9 +5,9 @@
 
 ---
 
-# LiveKit Setup Guide for MedFlow EMR
+# LiveKit Setup Guide for Firstline
 
-This guide will help you set up LiveKit for video calling in the MedFlow EMR application.
+This guide will help you set up LiveKit for video calling in the Firstline application.
 
 ## Overview
 
@@ -71,7 +71,7 @@ docker-compose -f docker-compose.video.yml logs -f livekit-server
 
 ### 1. Prerequisites
 
-- Domain name for LiveKit (e.g., `call.dev.emr.fajrscientific.org`)
+- Domain name for LiveKit (e.g., `call.dev.firstline.care`)
 - SSL certificate for the domain
 - Open UDP ports 50000-60000 for media traffic
 - Open TCP port 443 for TURN/TLS
@@ -94,15 +94,15 @@ Add these environment variables to your Coolify app:
 
 ```bash
 # Production LiveKit URLs
-LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org
-NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org
+LIVEKIT_URL=wss://call.dev.firstline.care
+NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.firstline.care
 
 # Your generated keys
 LIVEKIT_API_KEY=your_generated_api_key
 LIVEKIT_API_SECRET=your_generated_api_secret
 
 # TURN domain (same as LiveKit domain or separate)
-LIVEKIT_TURN_DOMAIN=call.dev.emr.fajrscientific.org
+LIVEKIT_TURN_DOMAIN=call.dev.firstline.care
 
 # Port (default is fine)
 LIVEKIT_PORT=7880
@@ -112,7 +112,7 @@ LIVEKIT_PORT=7880
 
 1. Create a new app in Coolify for LiveKit
 2. Set the Docker Compose file to `docker-compose.video.yml`
-3. Configure the domain: `call.dev.emr.fajrscientific.org`
+3. Configure the domain: `call.dev.firstline.care`
 4. Add the environment variables
 5. Deploy the app
 
@@ -129,8 +129,8 @@ Ensure these ports are open:
 Update your web app's environment variables in Coolify to point to the LiveKit server:
 
 ```bash
-LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org
-NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org
+LIVEKIT_URL=wss://call.dev.firstline.care
+NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.firstline.care
 LIVEKIT_API_KEY=your_generated_api_key
 LIVEKIT_API_SECRET=your_generated_api_secret
 ```
@@ -195,7 +195,7 @@ lk token create \
 
 1. **Using LiveKit CLI**:
 ```bash
-lk room list --url wss://call.dev.emr.fajrscientific.org
+lk room list --url wss://call.dev.firstline.care
 ```
 
 2. **Using Web App**:
@@ -237,7 +237,7 @@ docker-compose -f docker-compose.video.yml logs livekit-server
 LiveKit exposes a health endpoint:
 
 ```bash
-curl https://call.dev.emr.fajrscientific.org/
+curl https://call.dev.firstline.care/
 ```
 
 ### Prometheus Metrics (Optional)

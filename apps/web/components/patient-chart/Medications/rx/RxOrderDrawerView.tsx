@@ -34,8 +34,8 @@ import {
   formatMedicationDateOnly,
   hasPharmacyQrCode,
   type RxOrder,
-} from "@fajr/shared/medications";
-import { MESSAGING_CHANNELS, getPatientChannel } from "@fajr/shared/messaging";
+} from "@firstline/shared/medications";
+import { MESSAGING_CHANNELS, getPatientChannel } from "@firstline/shared/messaging";
 import { TelegramIcon } from "@/components/icons/TelegramIcon";
 import Tooltip from "@/components/form/Tooltip";
 import CancelPrescriptionDialog from "./CancelPrescriptionDialog";

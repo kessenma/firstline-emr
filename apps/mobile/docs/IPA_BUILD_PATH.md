@@ -70,7 +70,7 @@ apps/mobile/
 
 ### 1. **Archive Location** (Step 1)
 ```
-/Users/kyleessenmacher/WS/fajr-medflow-emr/apps/mobile/.rock/cache/ios/archive/FajrEMR.xcarchive
+/Users/kyleessenmacher/WS/firstline-emr/apps/mobile/.rock/cache/ios/archive/FajrEMR.xcarchive
 ```
 - Created by: `xcodebuild archive`
 - Contains: Compiled app bundle and debug symbols
@@ -78,7 +78,7 @@ apps/mobile/
 
 ### 2. **Temporary IPA Location** (Step 2)
 ```
-/Users/kyleessenmacher/WS/fajr-medflow-emr/apps/mobile/.rock/cache/ios/manual-export/FajrEMR.ipa
+/Users/kyleessenmacher/WS/firstline-emr/apps/mobile/.rock/cache/ios/manual-export/FajrEMR.ipa
 ```
 - Created by: Manual zip process
 - Purpose: Temporary staging location
@@ -86,7 +86,7 @@ apps/mobile/
 
 ### 3. **Final IPA Location** (Step 3) ⭐
 ```
-/Users/kyleessenmacher/WS/fajr-medflow-emr/apps/mobile/.rock/cache/ios/export/FajrEMR.ipa
+/Users/kyleessenmacher/WS/firstline-emr/apps/mobile/.rock/cache/ios/export/FajrEMR.ipa
 ```
 - **This is the file that gets uploaded to TestFlight**
 - Size: ~50-200MB (distribution build, no debug info)

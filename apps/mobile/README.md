@@ -1,6 +1,6 @@
-# MedFlow Mobile App
+# Firstline Mobile App
 
-This mobile application is a clone of the MedFlow web app (located in `apps/web`) with some slight modifications to adapt it for mobile use. The web app is built with Next.js, and its views are constructed using the API endpoints in `apps/web/app/api` and components in `apps/web/components`.
+This mobile application is a clone of the Firstline web app (located in `apps/web`) with some slight modifications to adapt it for mobile use. The web app is built with Next.js, and its views are constructed using the API endpoints in `apps/web/app/api` and components in `apps/web/components`.
 
 ## Getting Started
 

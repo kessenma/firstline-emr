@@ -10,7 +10,7 @@ import type { StorageImage, StorageStats } from '../../types/admin';
 import type {
   StorageCategoryId,
   StorageCategoryGroup,
-} from '@fajr/shared/admin';
+} from '@firstline/shared/admin';
 
 interface UseImageStorageViewModelResult {
   // Data

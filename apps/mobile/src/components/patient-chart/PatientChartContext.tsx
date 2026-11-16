@@ -21,8 +21,8 @@ import type { MedOrder } from '../../types/medOrders';
 import type { Note } from '../../types/notes';
 import { useCareTeam } from '../../hooks/useCareTeamActions';
 import { useCareTeamConflicts } from '../../hooks/useCareTeamConflicts';
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
-import type { VideoCallSession, VideoCallStatus } from '@fajr/shared/video-call';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
+import type { VideoCallSession, VideoCallStatus } from '@firstline/shared/video-call';
 
 // Re-export types for convenience
 export interface PatientInfo {

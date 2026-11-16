@@ -6,5 +6,5 @@ export {
   getSpecialtyTooltipMessage,
   isTriageUser,
   isDoctorUser as isDoctor,
-} from '@fajr/shared/patient-dashboard';
-export type { DashboardUserSession as UserSession } from '@fajr/shared/patient-dashboard';
+} from '@firstline/shared/patient-dashboard';
+export type { DashboardUserSession as UserSession } from '@firstline/shared/patient-dashboard';

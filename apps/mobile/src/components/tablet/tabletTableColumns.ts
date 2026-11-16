@@ -8,7 +8,7 @@ import {
   truncateText,
   formatSpecialties,
 } from '../../utils/patientUtils';
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
 
 export interface TabletColumn {
   key: string;

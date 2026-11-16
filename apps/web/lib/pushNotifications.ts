@@ -1,4 +1,4 @@
-// fajr-medflow-emr/apps/web/lib/pushNotifications.ts
+// apps/web/lib/pushNotifications.ts
 import axios from "axios";
 
 interface PushNotificationData {

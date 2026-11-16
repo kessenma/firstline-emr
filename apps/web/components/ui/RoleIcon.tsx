@@ -1,5 +1,5 @@
 // apps/web/components/ui/RoleIcon.tsx
-// Resolves shared role theming (@fajr/shared/theme) for web: the lucide-react
+// Resolves shared role theming (@firstline/shared/theme) for web: the lucide-react
 // icon for a role, plus the Tailwind-side glue (button variant, ring class)
 // that has to be written as literal class strings for the compiler to see them.
 // Mobile has the mirror of this file at apps/mobile/src/components/ui/RoleIcon.tsx.
@@ -21,7 +21,7 @@ import {
   type RoleColorKey,
   type RoleColorShade,
   type RoleIconName,
-} from "@fajr/shared/theme";
+} from "@firstline/shared/theme";
 
 const ROLE_ICON_COMPONENTS: Record<RoleIconName, LucideIcon> = {
   Stethoscope,

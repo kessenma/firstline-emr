@@ -1,5 +1,5 @@
 // Mobile color theme — imports shared palette, adds platform-specific theme layers.
-// Source of truth for palette/brand/role colors: @fajr/shared/theme
+// Source of truth for palette/brand/role colors: @firstline/shared/theme
 
 import {
   palette,
@@ -7,7 +7,7 @@ import {
   roleColors,
   documentTypeColors,
   medicalStatusColors,
-} from '@fajr/shared/theme';
+} from '@firstline/shared/theme';
 
 // Re-export shared values so existing mobile imports don't break
 export { palette, brandColors, roleColors, documentTypeColors, medicalStatusColors };

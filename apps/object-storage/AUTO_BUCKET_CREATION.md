@@ -42,10 +42,10 @@ All of this happens **during container startup** and is **visible in the deploym
 Configuration:
   Address:       :9100
   Port:          9100
-  Bucket:        fajr-media
+  Bucket:        firstline-media
   Region:        us-east-1
   Console:       true
-  Domains:       s3.emr.fajr.org
+  Domains:       s3.firstline.care
   Access Key:    admi***
 
 ========================================================================
@@ -58,18 +58,18 @@ RustFS started with PID: 7
 ✅ RustFS is ready!
 
 ========================================================================
-🪣 Creating Bucket: fajr-media
+🪣 Creating Bucket: firstline-media
 ========================================================================
 
-Checking if bucket 'fajr-media' exists...
-Bucket 'fajr-media' does not exist. Creating it...
-✅ Bucket 'fajr-media' created successfully!
+Checking if bucket 'firstline-media' exists...
+Bucket 'firstline-media' does not exist. Creating it...
+✅ Bucket 'firstline-media' created successfully!
 
-Bucket 'fajr-media' is ready!
+Bucket 'firstline-media' is ready!
 
 Listing all buckets...
 Found buckets:
-  - fajr-media
+  - firstline-media
 
 ========================================================================
 ✅ RustFS Startup Complete
@@ -85,7 +85,7 @@ Web Console:
   - Password: [REDACTED]
 
 Storage:
-  - Bucket: fajr-media
+  - Bucket: firstline-media
   - Region: us-east-1
 
 RustFS is now running. Waiting for signals...
@@ -159,7 +159,7 @@ The entrypoint reads these environment variables:
 
 ```bash
 # Required
-OBJECT_STORAGE_BUCKET=fajr-media              # Bucket to auto-create
+OBJECT_STORAGE_BUCKET=firstline-media              # Bucket to auto-create
 OBJECT_STORAGE_KEY=admin                      # Access key
 OBJECT_STORAGE_SECRET=YourSecurePassword123!  # Secret key
 OBJECT_STORAGE_REGION=us-east-1               # Region
@@ -167,7 +167,7 @@ OBJECT_STORAGE_REGION=us-east-1               # Region
 # Optional (with defaults)
 RUSTFS_ADDRESS=:9100                          # Port
 RUSTFS_CONSOLE_ENABLE=true                    # Enable console
-RUSTFS_SERVER_DOMAINS=s3.emr.fajr.org        # Server domain
+RUSTFS_SERVER_DOMAINS=s3.firstline.care        # Server domain
 ```
 
 ## Benefits
@@ -198,14 +198,14 @@ Please create the bucket manually using one of these methods:
 
 1. Using MinIO Client (mc) from host machine:
    mc alias set rustfs http://localhost:9100 admin [SECRET_KEY]
-   mc mb rustfs/fajr-media
+   mc mb rustfs/firstline-media
 
 2. Using RustFS Web Console:
    http://localhost:9001/rustfs/console/index.html
    Login with access key: admin
 
 3. Using AWS CLI:
-   aws --endpoint-url http://localhost:9100 s3 mb s3://fajr-media
+   aws --endpoint-url http://localhost:9100 s3 mb s3://firstline-media
 ```
 
 The container will **still start successfully** - you just need to create the bucket manually.
@@ -272,7 +272,7 @@ Just deploy as normal! The new entrypoint will:
 ### Verify It's Working
 Check your deployment logs for:
 ```
-✅ Bucket 'fajr-media' created successfully!
+✅ Bucket 'firstline-media' created successfully!
 ```
 
 ### After Deployment
@@ -287,13 +287,13 @@ docker-compose restart web
 
 1. **Check deployment logs** - Did bucket creation succeed?
    ```
-   Look for: ✅ Bucket 'fajr-media' created successfully!
+   Look for: ✅ Bucket 'firstline-media' created successfully!
    ```
 
 2. **Verify bucket name matches** - Typos are common
    ```bash
    # In .env
-   OBJECT_STORAGE_BUCKET=fajr-media
+   OBJECT_STORAGE_BUCKET=firstline-media
    
    # Check what was created
    mc alias set rustfs http://localhost:9100 admin YourSecurePassword123!
@@ -311,7 +311,7 @@ If you see warning in logs, create bucket manually:
 
 ```bash
 mc alias set rustfs http://localhost:9100 admin YourSecurePassword123!
-mc mb rustfs/fajr-media
+mc mb rustfs/firstline-media
 docker-compose restart web
 ```
 

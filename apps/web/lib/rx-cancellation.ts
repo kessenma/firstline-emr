@@ -17,7 +17,7 @@ import {
   validateCancellation,
   type PatientCancellationReasonCode,
   type RxCancellerRole,
-} from "@fajr/shared/medications";
+} from "@firstline/shared/medications";
 import { notificationService } from "@/lib/NotificationService";
 import { getCareTeamRecipients } from "@/lib/server/careTeamRecipients";
 import { getTelegramThreadByChatId } from "@/lib/telegram-db-helpers";
@@ -143,11 +143,11 @@ async function tellPatient({
       reason,
     });
 
-    // A pharmacist has no MedFlow account, so there is no users row to sign as
+    // A pharmacist has no Firstline account, so there is no users row to sign as
     // — the clinic signs instead, which is also who the patient should contact.
     const identity = actor
       ? await resolveSenderIdentity(actor)
-      : { senderName: "Fajr Mission", senderId: null };
+      : { senderName: "Firstline", senderId: null };
 
     await sendTelegramText({
       chatId,

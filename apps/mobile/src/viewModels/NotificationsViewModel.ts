@@ -1,4 +1,4 @@
-// fajr-medflow-emr/apps/mobile/src/viewModels/NotificationsViewModel.ts
+// apps/mobile/src/viewModels/NotificationsViewModel.ts
 'use client';
 
 import {

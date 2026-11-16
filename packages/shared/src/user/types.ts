@@ -1,11 +1,11 @@
-// @fajr/shared/user — Shared profile, settings, and credential types
+// @firstline/shared/user — Shared profile, settings, and credential types
 //
 // Pure TypeScript — no React/RN imports.
 // DB-canonical field names (camelCase of PostgreSQL columns).
 
 import type { AccountType, Gender } from '../patient/enums';
 
-// Re-export for convenience so consumers can import from @fajr/shared/user
+// Re-export for convenience so consumers can import from @firstline/shared/user
 export type { AccountType, Gender };
 
 // ─── Theme ──────────────────────────────────────────────────────────────────
@@ -43,7 +43,7 @@ export interface ProfileFormValuesBase {
 
 /**
  * Passkey credential as displayed in the profile screen.
- * NOT the registration-time credential shape from @fajr/shared/signup.
+ * NOT the registration-time credential shape from @firstline/shared/signup.
  */
 export interface PasskeyCredentialDisplay {
   id: string;

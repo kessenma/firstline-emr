@@ -330,4 +330,4 @@ See: https://docs.powersync.com/usage/installation/web-sdk
 
 ## License
 
-Part of Fajr Mission EMR system.
+Part of Firstline system.

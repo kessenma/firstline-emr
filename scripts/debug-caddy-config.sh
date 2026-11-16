@@ -14,7 +14,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-DOMAIN="ws.emr.fajr.org"
+DOMAIN="ws.firstline.care"
 
 echo -e "${BLUE}1. Checking Caddy container status${NC}"
 if docker ps | grep -q coolify-proxy; then

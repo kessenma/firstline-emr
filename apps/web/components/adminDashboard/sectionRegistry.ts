@@ -22,8 +22,8 @@ import {
   ClipboardList,
   HardDriveDownload,
 } from "lucide-react";
-import type { AdminSectionCategory, AdminSectionId } from "@fajr/shared/admin";
-import { ADMIN_CATEGORY_LABELS, ADMIN_CATEGORY_ORDER } from "@fajr/shared/admin";
+import type { AdminSectionCategory, AdminSectionId } from "@firstline/shared/admin";
+import { ADMIN_CATEGORY_LABELS, ADMIN_CATEGORY_ORDER } from "@firstline/shared/admin";
 
 import NewSignupsView from "./sections/new-signups/NewSignupsView";
 import DeniedDoctorsAndTriage from "./sections/denied-users/DeniedDoctorsTriageEvacView";
@@ -48,7 +48,7 @@ import AnalyticsView from "@/components/adminDashboard/sections/analytics/Analyt
 import DatabaseBackupsView from "./sections/database-backups/DatabaseBackupsView";
 import VerifyAuthMigrationView from "./sections/verify-auth-migration/VerifyAuthMigrationView";
 
-/** @deprecated Use AdminSectionCategory from @fajr/shared/admin */
+/** @deprecated Use AdminSectionCategory from @firstline/shared/admin */
 export type SectionCategory = AdminSectionCategory;
 
 export interface SectionDefinition {

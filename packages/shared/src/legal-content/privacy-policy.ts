@@ -1,7 +1,8 @@
 import { LegalDocument } from './types';
+import { BRAND_NAME, CONTACT_EMAIL } from '../constants/brand';
 
 export const privacyPolicy: LegalDocument = {
-  title: 'FAJR.EMR PRIVACY POLICY',
+  title: `${BRAND_NAME.toUpperCase()} PRIVACY POLICY`,
   lastUpdated: 'March 16, 2026',
   intro:
     'Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information.',
@@ -51,7 +52,7 @@ export const privacyPolicy: LegalDocument = {
       content: [
         {
           type: 'paragraph',
-          text: 'User data is retained for as long as necessary to fulfill the purposes outlined in this policy or as required by law.\nUsers may request deletion of their data by contacting info@fajr.org.',
+          text: `User data is retained for as long as necessary to fulfill the purposes outlined in this policy or as required by law.\nUsers may request deletion of their data by contacting ${CONTACT_EMAIL}.`,
         },
       ],
     },
@@ -96,5 +97,5 @@ export const privacyPolicy: LegalDocument = {
       ],
     },
   ],
-  contactEmail: 'info@fajr.org',
+  contactEmail: CONTACT_EMAIL,
 };

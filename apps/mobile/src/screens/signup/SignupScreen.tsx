@@ -7,7 +7,6 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Image,
   Alert,
 } from 'react-native';
 import Animated, {
@@ -32,6 +31,7 @@ import { MissionSelectStep } from './steps/MissionSelectStep';
 import { authService } from '../../services/AuthService';
 import { usePasskey } from '../../hooks/usePasskey';
 import { useOptionalToast } from '../../hooks/useToast';
+import { FirstlineMark } from '../../components/icons/FirstlineMark';
 
 interface SignupScreenProps {
   onSignupComplete: (user: any) => void;
@@ -258,11 +258,7 @@ const SignupScreenInner: React.FC<SignupScreenProps> = ({
             <Text style={styles.backToLoginText}>Sign In</Text>
           </TouchableOpacity>
           <View style={styles.logoRow}>
-            <Image
-              source={require('../../assets/fajr-triage-logo.png')}
-              style={styles.logoImage}
-              resizeMode="contain"
-            />
+            <FirstlineMark style={styles.logoImage} />
           </View>
           <View style={{ width: 70 }} />
         </View>

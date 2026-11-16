@@ -7,9 +7,10 @@ import { users, passkeyCredentials } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
+import { BRAND_NAME } from "@firstline/shared/constants";
 
 // WebAuthn Relying Party configuration
-const rpName = process.env.WEBAUTHN_RP_NAME || "Fajr Mission EMR";
+const rpName = process.env.WEBAUTHN_RP_NAME || BRAND_NAME;
 const rpID = process.env.WEBAUTHN_RP_ID || "localhost";
 const JWT_SECRET = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || "";
 

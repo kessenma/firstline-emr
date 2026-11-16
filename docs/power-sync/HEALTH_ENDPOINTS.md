@@ -10,7 +10,7 @@ PowerSync now supports **two health check endpoints** for maximum compatibility:
 
 ### 1. Official PowerSync Endpoint
 ```bash
-https://ws.emr.fajr.org/probes/liveness
+https://ws.firstline.care/probes/liveness
 ```
 - **Source:** Native PowerSync endpoint (official)
 - **Returns:** 200 OK when healthy
@@ -18,7 +18,7 @@ https://ws.emr.fajr.org/probes/liveness
 
 ### 2. Standard Health Endpoint (Aliased)
 ```bash
-https://ws.emr.fajr.org/health
+https://ws.firstline.care/health
 ```
 - **Source:** Caddy rewrite rule (redirects to `/probes/liveness`)
 - **Returns:** 200 OK when healthy
@@ -50,10 +50,10 @@ caddy.rewrite: "/health /probes/liveness"
 ### Test from outside the container (via Caddy)
 ```bash
 # Test the standard /health endpoint
-curl -i https://ws.emr.fajr.org/health
+curl -i https://ws.firstline.care/health
 
 # Test the official /probes/liveness endpoint
-curl -i https://ws.emr.fajr.org/probes/liveness
+curl -i https://ws.firstline.care/probes/liveness
 ```
 
 ### Test from inside the container (direct)
@@ -75,7 +75,7 @@ docker exec <container-id> curl -f http://localhost:6061/health
 
 ### Healthy Response
 ```bash
-$ curl -i https://ws.emr.fajr.org/health
+$ curl -i https://ws.firstline.care/health
 HTTP/2 200 OK
 content-type: application/json
 date: Sun, 29 Dec 2025 12:00:00 GMT
@@ -85,7 +85,7 @@ date: Sun, 29 Dec 2025 12:00:00 GMT
 
 ### Unhealthy Response (Container Down)
 ```bash
-$ curl -i https://ws.emr.fajr.org/health
+$ curl -i https://ws.firstline.care/health
 HTTP/2 502 Bad Gateway
 ...
 ```
@@ -114,14 +114,14 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 ```javascript
 // Use the standard /health endpoint for convenience
 const healthCheck = async () => {
-  const response = await fetch('https://ws.emr.fajr.org/health');
+  const response = await fetch('https://ws.firstline.care/health');
   return response.ok; // true if healthy
 };
 ```
 
 ### Monitoring (Uptime Kuma, etc.)
 ```
-URL: https://ws.emr.fajr.org/health
+URL: https://ws.firstline.care/health
 Method: GET
 Expected Status: 200
 ```
@@ -155,7 +155,7 @@ docker restart coolify-proxy
 sleep 10
 
 # Test again
-curl -i https://ws.emr.fajr.org/health
+curl -i https://ws.firstline.care/health
 ```
 
 ### Issue: Both endpoints return 502
@@ -187,8 +187,8 @@ docker inspect <container-id> | grep -A 20 '"Health"'
 ## Summary
 
 ✅ **Both endpoints work externally** (through Caddy):
-- `https://ws.emr.fajr.org/health` ← Use this for simplicity
-- `https://ws.emr.fajr.org/probes/liveness` ← Official PowerSync endpoint
+- `https://ws.firstline.care/health` ← Use this for simplicity
+- `https://ws.firstline.care/probes/liveness` ← Official PowerSync endpoint
 
 ✅ **Only one endpoint works internally** (inside container):
 - `http://localhost:6061/probes/liveness` ← Docker health checks use this

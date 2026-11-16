@@ -1,6 +1,6 @@
 # Error Handling Guide for Mobile App
 
-Complete guide for handling errors in the Fajr EMR mobile app.
+Complete guide for handling errors in the Firstline mobile app.
 
 ## Components Created
 

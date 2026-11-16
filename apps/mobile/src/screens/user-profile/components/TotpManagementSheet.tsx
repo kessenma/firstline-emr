@@ -19,7 +19,7 @@ import { CopyButton } from '../../../components/ui/CopyButton';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { spacing, borderRadius, typography } from '../../../utils/theme';
 import { API_CONFIG } from '../../../config';
-import { AUTHENTICATOR_APPS, HIPAA_2FA_NOTICE, TOTP_ISSUER, TOTP_MANUAL_SETUP_STEPS } from '@fajr/shared/2fa';
+import { AUTHENTICATOR_APPS, HIPAA_2FA_NOTICE, TOTP_ISSUER, TOTP_DIGITS, TOTP_PERIOD, TOTP_MANUAL_SETUP_STEPS } from '@firstline/shared/2fa';
 
 interface TotpManagementSheetProps {
   visible: boolean;
@@ -93,7 +93,7 @@ export const TotpManagementSheet: React.FC<TotpManagementSheetProps> = ({
       setManualEntryKey(data.manualEntryKey);
       setSetupToken(data.setupToken);
       setOtpauthUri(
-        `otpauth://totp/Fajr%20MedFlow%20EMR:${encodeURIComponent(userEmail)}?secret=${data.manualEntryKey}&issuer=Fajr%20MedFlow%20EMR&algorithm=SHA1&digits=6&period=30`,
+        `otpauth://totp/${encodeURIComponent(TOTP_ISSUER)}:${encodeURIComponent(userEmail)}?secret=${data.manualEntryKey}&issuer=${encodeURIComponent(TOTP_ISSUER)}&algorithm=SHA1&digits=${TOTP_DIGITS}&period=${TOTP_PERIOD}`,
       );
       setIsSettingUp(true);
     } catch {

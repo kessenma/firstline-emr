@@ -17,7 +17,7 @@ import {
   CheckCircle2,
   XCircle,
 } from 'lucide-react-native';
-import { getRoleColor } from '@fajr/shared/theme';
+import { getRoleColor } from '@firstline/shared/theme';
 import { useThemeColors } from '../../../../contexts/ThemeContext';
 import { spacing, borderRadius, typography } from '../../../../utils/theme';
 import { RoleIcon } from '../../../ui/RoleIcon';

@@ -12,7 +12,7 @@ import { RadioCard } from "../../ui/radio-card";
 import { Button } from "../../ui/button";
 import { ChevronDown, ChevronUp, NotebookPen } from "lucide-react";
 import ReadOnlyField from "../../form/ReadOnlyField";
-// Note shape and its type guards come from `@fajr/shared/patient`, the same
+// Note shape and its type guards come from `@firstline/shared/patient`, the same
 // module mobile uses. Web previously kept its own copies of both, so a change
 // to a note type on one platform would not have reached the other.
 import {
@@ -20,7 +20,7 @@ import {
   isPatientCallNote,
   isProcedureNote,
   isSubjectiveNote,
-} from "@fajr/shared/patient";
+} from "@firstline/shared/patient";
 import { TranscriptBlock } from "./TranscriptBlock";
 
 interface NotesViewProps {

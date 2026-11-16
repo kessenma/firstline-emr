@@ -27,14 +27,14 @@ import {
   PHOTO_REMOVED_RPC,
   PHOTO_RPC_REASON,
   isPatientIdentity,
-} from "@fajr/shared/video-call";
+} from "@firstline/shared/video-call";
 import type {
   PhotoCaptureRequest,
   PhotoCaptureResponse,
   PhotoConsentRequest,
   PhotoConsentResponse,
   PhotoRemovedNotice,
-} from "@fajr/shared/video-call";
+} from "@firstline/shared/video-call";
 import { getVideoCallTranslation } from "./video-call-patient-translations";
 
 /**

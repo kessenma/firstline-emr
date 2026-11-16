@@ -31,7 +31,7 @@ import {
   formatDuration,
   initialsOf,
   isMissedCall,
-} from '@fajr/shared/calls';
+} from '@firstline/shared/calls';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { spacing, borderRadius, typography } from '../../utils/theme';
 import { getApiUrl } from '../../config';

@@ -75,7 +75,7 @@ export function useCallPermissions(): UseCallPermissions {
     Linking.openSettings().catch(() => {
       Alert.alert(
         'Permissions needed',
-        'Enable camera and microphone access for FajrEMR in your device settings to join video calls.',
+        'Enable camera and microphone access for Firstline in your device settings to join video calls.',
       );
     });
   }, []);

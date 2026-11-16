@@ -112,7 +112,7 @@ export const backups = pgTable(
     deviceInfo: json("device_info").$type<BackupDeviceInfo>(),
     encrypted: boolean("encrypted").default(false).notNull(),
     // Auth bundle: app passkey/TOTP credentials + Zitadel DB dump, stored as a
-    // separate encrypted `.fajr-auth` object referenced by authDumpPath.
+    // separate encrypted `.firstline-auth` object referenced by authDumpPath.
     includesAuth: boolean("includes_auth").default(false).notNull(),
     authDumpPath: text("auth_dump_path"),
     authMeta: json("auth_meta").$type<BackupAuthMeta>(),

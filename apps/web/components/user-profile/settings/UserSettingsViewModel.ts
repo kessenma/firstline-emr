@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/hooks/useToast";
-import type { ThemeMode } from '@fajr/shared/user';
+import type { ThemeMode } from '@firstline/shared/user';
 
 // Default settings for new users - all notification settings default to false
 const DEFAULT_SETTINGS: UserSettings = {

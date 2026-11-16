@@ -4,6 +4,7 @@
 
 import { TOTP } from "otpauth";
 import crypto from "crypto";
+import { TOTP_ISSUER } from "@firstline/shared/2fa";
 
 const TOTP_ENCRYPTION_KEY = process.env.TOTP_ENCRYPTION_KEY || "";
 const ALGORITHM = "aes-256-gcm";
@@ -11,7 +12,8 @@ const IV_LENGTH = 12; // 96 bits recommended for GCM
 const TAG_LENGTH = 16; // 128 bits
 
 // TOTP configuration (standard for Google Authenticator / Authy / Microsoft Authenticator)
-const TOTP_ISSUER = "Fajr Mission EMR";
+// Imported rather than redeclared: this was a second copy of the shared
+// constant and the two had to be kept in sync by hand.
 const TOTP_DIGITS = 6;
 const TOTP_PERIOD = 30; // seconds
 const TOTP_ALGORITHM = "SHA1";

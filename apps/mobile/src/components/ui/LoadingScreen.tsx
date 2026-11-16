@@ -7,7 +7,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   Text,
-  Image,
   StyleSheet,
   ActivityIndicator,
   StatusBar,
@@ -22,6 +21,7 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import { brandColors } from '../../utils/colors';
+import { FirstlineMark } from '../icons/FirstlineMark';
 
 interface LoadingScreenProps {
   /** Whether the loading screen should be showing */
@@ -105,17 +105,13 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
 
       <Animated.View style={[styles.logoContainer, logoStyle]}>
-        <Image
-          source={require('../../assets/fajr-triage-logo.png')}
-          style={styles.logoImage}
-          resizeMode="contain"
-        />
+        <FirstlineMark style={styles.logoImage} color={textColor} />
       </Animated.View>
 
       <ActivityIndicator size="large" color={spinnerColor} style={styles.spinner} />
 
       <Animated.View style={[styles.textContainer, textStyle]}>
-        <Text style={[styles.title, { color: textColor }]}>Fajr EMR</Text>
+        <Text style={[styles.title, { color: textColor }]}>Firstline</Text>
         <Text style={[styles.subtitle, { color: subtextColor }]}>{message}</Text>
       </Animated.View>
     </Animated.View>

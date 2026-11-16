@@ -34,7 +34,7 @@ Use this checklist to ensure a smooth deployment of the translation service.
 - [ ] Remove old container if needed: `docker rm translation-service`
 
 ### Step 2: Build and Start New Service
-- [ ] Navigate to project root: `cd /path/to/fajr-medflow-emr`
+- [ ] Navigate to project root: `cd /path/to/firstline-emr`
 - [ ] Build and start: `docker-compose -f docker-compose.translation.yml up -d --build`
 - [ ] Wait 30 seconds for service to initialize
 - [ ] Check container is running: `docker ps | grep translation-service`

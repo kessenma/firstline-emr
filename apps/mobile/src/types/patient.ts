@@ -4,7 +4,7 @@
 
 import type { Gender, PatientStatus, PatientPriority, AccountType } from './enums';
 import type { Note } from './notes';
-import type { CareTeamMemberJSON } from '@fajr/shared/care-team';
+import type { CareTeamMemberJSON } from '@firstline/shared/care-team';
 
 export interface User {
   id: string;  // UUID v4 (PostgreSQL primary key)
@@ -79,7 +79,7 @@ export interface Patient {
   // Additional fields for patient chart
   notes?: Note[];
   photos?: { url: string; uploadedAt: Date }[];
-  rxOrders?: import('@fajr/shared/patient').RxOrderBase[];
+  rxOrders?: import('@firstline/shared/patient').RxOrderBase[];
 }
 
 export interface PatientWithMessages extends Patient {
@@ -107,7 +107,7 @@ export interface PatientUpdateParams {
   data: Partial<Patient>;
 }
 
-export type { CareTeamRole } from '@fajr/shared/care-team';
-export type { CareTeamMember } from '@fajr/shared/patient';
-export type { CareTeamConflict } from '@fajr/shared/patient';
-export type { RxOrderBase as RxOrder } from '@fajr/shared/patient';
+export type { CareTeamRole } from '@firstline/shared/care-team';
+export type { CareTeamMember } from '@firstline/shared/patient';
+export type { CareTeamConflict } from '@firstline/shared/patient';
+export type { RxOrderBase as RxOrder } from '@firstline/shared/patient';

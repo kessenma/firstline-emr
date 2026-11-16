@@ -12,7 +12,7 @@ import { Plus, Maximize2, Upload, X, AlertCircle, RefreshCw, ImageIcon, FileText
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { MediaGrid } from "@/components/ui/MediaGrid";
-import type { MediaItem } from "@fajr/shared/media";
+import type { MediaItem } from "@firstline/shared/media";
 
 interface PatientImageGalleryViewProps {
     patientId: string;

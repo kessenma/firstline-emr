@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Target Audience:** LLMs and Software Engineers  
-**Project:** MedFlow EMR Telegram Bot  
+**Project:** Firstline Telegram Bot  
 **Migration Type:** Node.js → Go
 
 ---
@@ -69,7 +69,7 @@ apps/telegram-bot/
 apps/telegram-bot-go/
 ├── main.go                    # Entry point, bot initialization
 ├── handlers.go                # Message and command handlers
-├── api.go                     # API client for MedFlow backend
+├── api.go                     # API client for Firstline backend
 ├── storage.go                 # S3/MinIO file operations
 ├── websocket.go               # WebSocket notifications
 ├── cron.go                    # Scheduled jobs (follow-ups)
@@ -102,10 +102,10 @@ apps/telegram-bot-go/
 - [ ] `/url` command (intake form link generation)
 - [ ] Follow-up message CRON job
 - [ ] Caption support for media messages
-- [ ] Sender field management (patient/bot/MedFlow Team)
+- [ ] Sender field management (patient/bot/Firstline Team)
 - [ ] Environment-based folder structure (dev/staging/prod)
 - [ ] Signed URL generation for private media
-- [ ] Authorization via MEDFLOW_KEY
+- [ ] Authorization via FIRSTLINE_SERVICE_KEY
 
 **Deliverable:** Completed checklist of all features to migrate
 
@@ -133,7 +133,7 @@ apps/telegram-bot-go/
 **Action:** Document all external API calls and their contracts
 
 **External Integrations:**
-1. **MedFlow Backend API:**
+1. **Firstline Backend API:**
    - `POST /api/telegram-thread/new-thread` - Create thread
    - `PATCH /api/telegram-thread/{chatId}/save-message` - Save message
    - `GET /api/telegram-thread/{chatId}/get-intake-url` - Get form URL
@@ -163,7 +163,7 @@ apps/telegram-bot-go/
 **Required Environment Variables:**
 ```
 TELEGRAM_BOT_TOKEN           # Telegram bot authentication token
-MEDFLOW_KEY                  # Backend API authorization
+FIRSTLINE_SERVICE_KEY                  # Backend API authorization
 API_BASE_URL                 # Backend API endpoint
 WEBSOCKET_SERVER_URL         # WebSocket service endpoint
 OBJECT_STORAGE_ENDPOINT      # S3/MinIO endpoint
@@ -217,7 +217,7 @@ Phase 7: Deployment & Cutover
 
 ```bash
 # Navigate to project root
-cd /Users/ke/ws/fajr-medflow-emr/apps
+cd /Users/ke/ws/firstline-emr/apps
 
 # Create new directory
 mkdir telegram-bot-go
@@ -268,7 +268,7 @@ import (
 
 type Config struct {
     TelegramToken        string
-    MedFlowKey          string
+    ServiceKey          string
     APIBaseURL          string
     WebSocketServerURL  string
     StorageEndpoint     string
@@ -282,7 +282,7 @@ type Config struct {
 func LoadConfig() (*Config, error) {
     cfg := &Config{
         TelegramToken:      os.Getenv("TELEGRAM_BOT_TOKEN"),
-        MedFlowKey:        os.Getenv("MEDFLOW_KEY"),
+        ServiceKey:        os.Getenv("FIRSTLINE_SERVICE_KEY"),
         APIBaseURL:        os.Getenv("API_BASE_URL"),
         WebSocketServerURL: os.Getenv("WEBSOCKET_SERVER_URL"),
         StorageEndpoint:   os.Getenv("OBJECT_STORAGE_ENDPOINT"),
@@ -308,8 +308,8 @@ func LoadConfig() (*Config, error) {
     if cfg.TelegramToken == "" {
         return nil, fmt.Errorf("TELEGRAM_BOT_TOKEN is required")
     }
-    if cfg.MedFlowKey == "" {
-        return nil, fmt.Errorf("MEDFLOW_KEY is required")
+    if cfg.ServiceKey == "" {
+        return nil, fmt.Errorf("FIRSTLINE_SERVICE_KEY is required")
     }
     if cfg.APIBaseURL == "" {
         return nil, fmt.Errorf("API_BASE_URL is required")
@@ -583,7 +583,7 @@ func (c *APIClient) SaveTelegramThread(ctx context.Context, chatID, language str
     }
 
     req.Header.Set("Content-Type", "application/json")
-    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.MedFlowKey))
+    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.ServiceKey))
 
     resp, err := c.httpClient.Do(req)
     if err != nil {
@@ -619,7 +619,7 @@ func (c *APIClient) SaveMessage(ctx context.Context, chatID string, msg *Telegra
     }
 
     req.Header.Set("Content-Type", "application/json")
-    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.MedFlowKey))
+    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.ServiceKey))
 
     resp, err := c.httpClient.Do(req)
     if err != nil {
@@ -1226,7 +1226,7 @@ func (c *APIClient) GetIntakeURL(ctx context.Context, chatID string) (string, er
         return "", fmt.Errorf("request creation error: %w", err)
     }
 
-    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.MedFlowKey))
+    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.config.ServiceKey))
 
     resp, err := c.httpClient.Do(req)
     if err != nil {
@@ -1379,7 +1379,7 @@ func (fc *FollowUpCron) fetchFollowUpThreads(ctx context.Context) ([]FollowUpThr
         return nil, err
     }
 
-    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", fc.config.MedFlowKey))
+    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", fc.config.ServiceKey))
 
     resp, err := httpClient.Do(req)
     if err != nil {
@@ -1408,7 +1408,7 @@ func (fc *FollowUpCron) sendFollowUp(ctx context.Context, thread FollowUpThread)
     }
 
     // Follow-up message template
-    followUpText := `Hi! This is a friendly reminder from the MedFlow team. 
+    followUpText := `Hi! This is a friendly reminder from the Firstline team. 
 
 We noticed you started a conversation with us, and we'd love to help you complete your registration.
 
@@ -1433,7 +1433,7 @@ If you have any questions or need assistance, please don't hesitate to reach out
     // Save message to backend
     telegramMsg := &TelegramMessage{
         Text:      followUpText,
-        Sender:    "bot", // Will be transformed to "MedFlow Team" by backend
+        Sender:    "bot", // Will be transformed to "Firstline Team" by backend
         Timestamp: time.Now(),
         Type:      "text",
         MediaURL:  "",
@@ -1456,7 +1456,7 @@ If you have any questions or need assistance, please don't hesitate to reach out
 // hasFollowUp checks if thread already received a follow-up
 func (fc *FollowUpCron) hasFollowUp(thread FollowUpThread) bool {
     for _, msg := range thread.Messages {
-        if msg.Sender == "MedFlow Team" && 
+        if msg.Sender == "Firstline Team" && 
            (msg.Text == "" || len(msg.Text) > 10 && msg.Text[:20] == "Hi! This is a friend") {
             return true
         }
@@ -1484,7 +1484,7 @@ func (fc *FollowUpCron) saveFollowUpRecord(ctx context.Context, chatID, threadID
     }
 
     req.Header.Set("Content-Type", "application/json")
-    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", fc.config.MedFlowKey))
+    req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", fc.config.ServiceKey))
 
     resp, err := httpClient.Do(req)
     if err != nil {
@@ -1846,7 +1846,7 @@ telegram-bot-cron:
 - [ ] Follow-up deduplication works
 - [ ] Environment-based folder structure (dev/staging/prod)
 - [ ] Private file access via signed URLs
-- [ ] Authorization with MEDFLOW_KEY
+- [ ] Authorization with FIRSTLINE_SERVICE_KEY
 - [ ] Proper error handling and logging
 
 ### ✅ Performance
@@ -1927,5 +1927,5 @@ docker-compose logs telegram-bot | grep ERROR
 
 **Diagnosis:**
 - Check API_BASE_URL
-- Verify MEDFLOW_KEY
+- Verify FIRSTLINE_SERVICE_KEY
 - Test API endpoint with curl

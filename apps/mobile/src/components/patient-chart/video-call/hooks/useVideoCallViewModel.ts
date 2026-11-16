@@ -7,12 +7,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   buildInviteMessage,
   summarizeCallHistory,
-} from '@fajr/shared/video-call';
+} from '@firstline/shared/video-call';
 import type {
   CallHistorySummary,
   VideoCallConnectionState,
   VideoCallSession,
-} from '@fajr/shared/video-call';
+} from '@firstline/shared/video-call';
 import { getApiUrl } from '../../../../config';
 import { getStoredToken } from '../../../../utils/storage';
 import { usePatientChart } from '../../PatientChartContext';

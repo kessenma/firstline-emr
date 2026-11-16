@@ -16,7 +16,7 @@ import { Priority } from "@/public/assets/icons/patient-dashboard/Priority"
 import type React from "react"
 import type { PatientWithMessages } from "../viewModel/types"
 import { useQueryClient } from "@tanstack/react-query"
-import { getRolesForAccountType, ROLE_LABELS, type CareTeamRole } from "@fajr/shared/care-team"
+import { getRolesForAccountType, ROLE_LABELS, type CareTeamRole } from "@firstline/shared/care-team"
 import { ROLE_BADGE_TAILWIND } from "@/lib/care-team-tailwind"
 
 interface TakeCaseCellProps {

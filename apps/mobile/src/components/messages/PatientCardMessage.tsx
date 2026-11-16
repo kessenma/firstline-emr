@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { User, ExternalLink } from 'lucide-react-native';
 import { useThemeColors } from '../../contexts/ThemeContext';
-import { getAnonymizedName } from '@fajr/shared/patient-utils';
-import { parsePatientCard } from '@fajr/shared/patient-share';
+import { getAnonymizedName } from '@firstline/shared/patient-utils';
+import { parsePatientCard } from '@firstline/shared/patient-share';
 import { useChartAccess } from '../../hooks/useChartAccess';
 import { PowerSyncService } from '../../services/powersync/PowerSyncService';
 import { TABLES } from '../../db/powerSyncSchema';

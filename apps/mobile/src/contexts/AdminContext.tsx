@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import { storageUtils } from '../utils/storage';
-import type { AdminUser } from '@fajr/shared/admin';
-import { AdminPermission } from '@fajr/shared/admin';
+import type { AdminUser } from '@firstline/shared/admin';
+import { AdminPermission } from '@firstline/shared/admin';
 
 export { AdminPermission };
 

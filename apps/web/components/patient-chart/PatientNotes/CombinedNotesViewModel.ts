@@ -10,7 +10,7 @@ import {
   isProcedureNote,
   isSubjectiveNote,
   type NoteBase as Note,
-} from "@fajr/shared/patient";
+} from "@firstline/shared/patient";
 import { usePatientDashboard } from "../PatientViewModelContext";
 
 // Define the ProcedureNote interface

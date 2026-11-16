@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type {
     PatientRxPublicView,
     PatientCancellationReasonCode,
-} from '@fajr/shared/medications';
+} from '@firstline/shared/medications';
 
 /** What the gate is currently telling the patient. */
 export type RxGateState =

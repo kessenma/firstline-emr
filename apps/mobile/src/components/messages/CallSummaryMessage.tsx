@@ -14,7 +14,7 @@ import {
   parseCallSummary,
   formatDuration,
   type CallSummaryPayload,
-} from '@fajr/shared/calls';
+} from '@firstline/shared/calls';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { spacing, borderRadius, typography } from '../../utils/theme';
 

@@ -6,7 +6,7 @@ import type {
   CreateRxOrderResponse,
   Prescription,
   RxOrder,
-} from "@fajr/shared/medications";
+} from "@firstline/shared/medications";
 
 import { usePatientDashboard } from "@/components/patient-chart/PatientViewModelContext";
 

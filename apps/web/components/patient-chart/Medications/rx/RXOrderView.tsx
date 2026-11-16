@@ -9,7 +9,7 @@ import { useRXOrderViewModel } from "./RXOrderViewModel";
 import { DoctorSpecialtyList } from "@/data/doctorSpecialty.enum";
 import { Plus, Minus } from "lucide-react";
 import { DatePickerFormField } from "@/components/form/DatePickerFormField";
-import { toDate, type RxOrder } from "@fajr/shared/medications";
+import { toDate, type RxOrder } from "@firstline/shared/medications";
 import { ToastComponent } from "@/components/hooks/useToast";
 import { ToastProvider } from "@/components/ui/toast";
 

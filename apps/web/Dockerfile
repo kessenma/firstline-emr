@@ -10,9 +10,9 @@ WORKDIR /app
 # Copy package files from apps/web
 COPY apps/web/package.json ./
 
-# Strip workspace dependency (@fajr/shared) before install — it's pure TS with
+# Strip workspace dependency (@firstline/shared) before install — it's pure TS with
 # no external deps, so we only need to symlink it in the builder stage.
-RUN sed -i '/"@fajr\/shared"/d' package.json
+RUN sed -i '/"@firstline\/shared"/d' package.json
 
 # Use BuildKit cache mount to cache bun's global cache between builds
 # This dramatically reduces memory usage and speeds up subsequent builds
@@ -51,7 +51,7 @@ COPY --from=deps /app/node_modules ./node_modules
 
 # Copy shared package source and symlink it into node_modules
 COPY packages/shared ./packages/shared
-RUN mkdir -p node_modules/@fajr && ln -s /app/packages/shared node_modules/@fajr/shared
+RUN mkdir -p node_modules/@firstline && ln -s /app/packages/shared node_modules/@firstline/shared
 
 # Set build arguments - ONLY for variables that must be baked into the build
 # All NEXT_PUBLIC_* variables need to be available at build time

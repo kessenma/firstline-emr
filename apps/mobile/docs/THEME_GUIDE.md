@@ -1,11 +1,11 @@
 # Theme System Quick Reference Guide
 
-> **Source of truth for colors/spacing**: `packages/shared/src/theme/` (`@fajr/shared/theme`)
+> **Source of truth for colors/spacing**: `packages/shared/src/theme/` (`@firstline/shared/theme`)
 > Mobile imports shared palette via `apps/mobile/src/utils/colors.ts`
 
 ## Overview
 
-This guide provides quick examples for using the theme system in the Fajr Mobile EMR app.
+This guide provides quick examples for using the theme system in the Firstline Mobile EMR app.
 
 ## Import Statements
 

@@ -55,7 +55,7 @@ export function AnalyticsView() {
 
           <View style={[styles.infoBox, { backgroundColor: colors.backgroundSecondary }]}>
             <Text style={[styles.infoText, { color: colors.textSecondary }]}>
-              Use your MedFlow account credentials (same login as the app) to access the analytics dashboard.
+              Use your Firstline account credentials (same login as the app) to access the analytics dashboard.
             </Text>
           </View>
 

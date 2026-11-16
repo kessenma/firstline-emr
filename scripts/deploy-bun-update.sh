@@ -18,7 +18,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 SERVER="${DEPLOY_SSH_TARGET:?set DEPLOY_SSH_TARGET, e.g. user@host}"
-PROJECT_DIR="/root/fajr-medflow-emr"  # Adjust this path as needed
+PROJECT_DIR="/root/firstline-emr"  # Adjust this path as needed
 BACKUP_DIR="~/deployments/backup-$(date +%Y%m%d-%H%M%S)"
 
 # Function to print colored output
@@ -50,7 +50,7 @@ echo "----------------------------"
 
 # Check if we're in the correct directory
 if [ ! -f "docker-compose.web.yml" ]; then
-    print_error "Not in project root directory. Please run from /Users/ke/ws/fajr-medflow-emr"
+    print_error "Not in project root directory. Please run from the repository root"
     exit 1
 fi
 
@@ -161,16 +161,16 @@ fi
 
 # Check web app endpoint
 print_info "Testing web app endpoint..."
-if curl -s -o /dev/null -w "%{http_code}" https://dev.emr.fajrscientific.org | grep -q "200"; then
-    print_success "Web app is accessible at https://dev.emr.fajrscientific.org"
+if curl -s -o /dev/null -w "%{http_code}" https://dev.firstline.care | grep -q "200"; then
+    print_success "Web app is accessible at https://dev.firstline.care"
 else
     print_warning "Web app endpoint returned non-200 status (might be loading)"
 fi
 
 # Check RustFS endpoint
 print_info "Testing RustFS S3 endpoint..."
-if curl -s -o /dev/null -w "%{http_code}" https://s3.emr.fajr.org | grep -qE "200|403|501"; then
-    print_success "RustFS S3 endpoint is accessible at https://s3.emr.fajr.org"
+if curl -s -o /dev/null -w "%{http_code}" https://s3.firstline.care | grep -qE "200|403|501"; then
+    print_success "RustFS S3 endpoint is accessible at https://s3.firstline.care"
 else
     print_warning "RustFS endpoint might not be configured correctly"
 fi

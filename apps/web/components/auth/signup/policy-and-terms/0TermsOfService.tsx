@@ -1,5 +1,5 @@
 import React from 'react';
-import { termsOfService } from '@fajr/shared/legal-content';
+import { termsOfService } from '@firstline/shared/legal-content';
 import LegalDocumentView from '@/components/legal/LegalDocumentView';
 
 const TermsOfService: React.FC = () => {

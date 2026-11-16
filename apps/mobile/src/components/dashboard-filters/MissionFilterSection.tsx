@@ -13,7 +13,7 @@ import {
   MISSION_GROUP_ORDER,
   MISSION_GROUP_LABELS,
   classifyMissionStatus,
-} from '@fajr/shared/patient-dashboard';
+} from '@firstline/shared/patient-dashboard';
 import type { MissionOption } from '../../hooks/useMissions';
 
 interface MissionFilterSectionProps {

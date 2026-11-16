@@ -35,7 +35,7 @@ function isRateLimited(chatId: string): boolean {
  * Called by the Go bot when a patient sends a link code.
  * Links an existing patient record to their Telegram chat ID.
  *
- * Auth: MEDFLOW_KEY (bearer token from Go bot)
+ * Auth: FIRSTLINE_SERVICE_KEY (bearer token from Go bot)
  *
  * Body: { code: string, telegramChatId: string }
  *
@@ -49,7 +49,7 @@ function isRateLimited(chatId: string): boolean {
  */
 export async function POST(request: NextRequest) {
   try {
-    // Auth: MEDFLOW_KEY or session/JWT
+    // Auth: FIRSTLINE_SERVICE_KEY or session/JWT
     const session = await verifySessionFromRequest(request);
     const authHeader = request.headers.get("authorization");
     const hasBearerToken = authHeader?.startsWith("Bearer ");
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     let isSystemAuth = false;
     if (hasBearerToken && !session) {
       const token = authHeader!.substring(7);
-      if (token !== process.env.MEDFLOW_KEY) {
+      if (token !== process.env.FIRSTLINE_SERVICE_KEY) {
         return NextResponse.json({ error: "Invalid token" }, { status: 401 });
       }
       isSystemAuth = true;

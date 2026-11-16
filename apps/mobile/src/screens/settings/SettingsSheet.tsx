@@ -34,7 +34,7 @@ import {
   CALL_TRANSCRIPTION_MODE_DESCRIPTIONS,
   CALL_TRANSCRIPTION_MODE_LABELS,
   type CallTranscriptionMode,
-} from '@fajr/shared/user';
+} from '@firstline/shared/user';
 import { useAppVersion } from '../../hooks/useAppVersion';
 import { useNotificationPreferences } from '../../hooks/useNotificationPreferences';
 import { spacing, borderRadius, typography } from '../../utils/theme';
@@ -605,7 +605,7 @@ export const SettingsSheet: React.FC<SettingsSheetProps> = ({
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={[styles.footerText, { color: colors.textTertiary }]}>
-            Fajr Mission EMR {displayVersion}
+            Firstline {displayVersion}
           </Text>
         </View>
         </View>

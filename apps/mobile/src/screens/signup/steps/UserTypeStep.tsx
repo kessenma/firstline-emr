@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { FileText } from 'lucide-react-native';
-import { getRoleColor } from '@fajr/shared/theme';
+import { getRoleColor } from '@firstline/shared/theme';
 import { useSignupContext } from '../SignupContext';
 import { palette } from '../../../utils/colors';
 import { RoleIcon } from '../../../components/ui/RoleIcon';

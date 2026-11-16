@@ -15,7 +15,7 @@ import {
   CLINICAL_BACKUP_TABLES,
   FULL_MIGRATION_TABLES,
   type ConflictStrategy,
-} from "@fajr/shared/admin";
+} from "@firstline/shared/admin";
 
 export async function POST(request: Request) {
   try {

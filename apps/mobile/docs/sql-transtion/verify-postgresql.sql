@@ -1,6 +1,6 @@
 -- PowerSync PostgreSQL Setup Verification Script
 -- Run this script to verify that PostgreSQL is properly configured for PowerSync
--- Usage: psql -U postgres -d fajr_emr -f powersync/verify-postgresql.sql
+-- Usage: psql -U postgres -d firstline_emr -f powersync/verify-postgresql.sql
 --
 -- Phase 0.3: Verify PowerSync Operation ✅ COMPLETE
 -- - PostgreSQL replication active and streaming

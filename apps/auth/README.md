@@ -1,20 +1,20 @@
-# Fajr SSO Authentication Service
+# Firstline SSO Authentication Service
 
-This service provides Single Sign-On (SSO) across all Fajr Mission applications using [Zitadel](https://zitadel.com/).
+This service provides Single Sign-On (SSO) across all Firstline applications using [Zitadel](https://zitadel.com/).
 
 ## Architecture
 
 ```
                          ┌─────────────────────────────────┐
                          │      Zitadel (Identity)         │
-                         │   identity.fajrmission.org      │
+                         │   identity.firstline.care      │
                          └───────────────┬─────────────────┘
                                          │ OIDC
             ┌────────────────────────────┼────────────────────────────┐
             │                            │                            │
             ▼                            ▼                            ▼
    ┌─────────────────┐        ┌─────────────────┐         ┌─────────────────┐
-   │   MedFlow EMR   │        │  OAuth2 Proxy   │         │  OAuth2 Proxy   │
+   │   Firstline   │        │  OAuth2 Proxy   │         │  OAuth2 Proxy   │
    │   (NextAuth)    │        │       ↓         │         │       ↓         │
    │                 │        │ Drizzle Studio  │         │  RustFS Console │
    └─────────────────┘        └─────────────────┘         └─────────────────┘
@@ -24,9 +24,9 @@ This service provides Single Sign-On (SSO) across all Fajr Mission applications 
 
 | Service | Domain | Purpose |
 |---------|--------|---------|
-| Zitadel | identity.fajrmission.org | Central identity provider |
-| OAuth2 Proxy (Analytics) | analytics.fajrmission.org | Protects Drizzle Studio |
-| OAuth2 Proxy (Storage) | console.storage.fajrmission.org | Protects RustFS Console |
+| Zitadel | identity.firstline.care | Central identity provider |
+| OAuth2 Proxy (Analytics) | analytics.firstline.care | Protects Drizzle Studio |
+| OAuth2 Proxy (Storage) | console.storage.firstline.care | Protects RustFS Console |
 
 ## Setup
 
@@ -69,11 +69,11 @@ docker-compose -f docker-compose.auth.yml up -d
 
 ### 5. Initial Zitadel Setup
 
-1. Access https://identity.fajrmission.org
+1. Access https://identity.firstline.care
 2. Login with the admin credentials from your env file
 3. Create a new project for your applications
 4. For each app that needs SSO, create an OIDC application:
-   - **MedFlow EMR**: Web application, Authorization Code flow
+   - **Firstline**: Web application, Authorization Code flow
    - **Analytics Proxy**: Web application, Authorization Code flow
    - **Storage Proxy**: Web application, Authorization Code flow
 
@@ -89,7 +89,7 @@ Add Zitadel as an OIDC provider in your NextAuth configuration.
 
 ## User Migration
 
-To migrate existing users from the MedFlow database to Zitadel:
+To migrate existing users from the Firstline database to Zitadel:
 
 1. Export users using the provided script (coming soon)
 2. Import via Zitadel Management API

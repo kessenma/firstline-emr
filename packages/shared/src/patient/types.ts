@@ -27,9 +27,9 @@ export interface CareTeamConflict {
   createdAt: string;
 }
 
-// Medication order shapes live in `@fajr/shared/medications` — the single
+// Medication order shapes live in `@firstline/shared/medications` — the single
 // definition shared by web, mobile and the API routes. These aliases keep the
-// older `@fajr/shared/patient` import path working.
+// older `@firstline/shared/patient` import path working.
 export type {
   Medication,
   Prescription,

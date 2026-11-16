@@ -51,13 +51,13 @@ export const MMKV_KEYS = {
   VOICE_SENSITIVITY: 'voice_dictation_sensitivity',
 } as const;
 
-// Voice sensitivity types and constants — centralized in @fajr/shared/media
+// Voice sensitivity types and constants — centralized in @firstline/shared/media
 export {
   type VoiceSensitivity,
   SENSITIVITY_LABELS,
   SENSITIVITY_DESCRIPTIONS,
   SENSITIVITY_MULTIPLIERS,
-} from '@fajr/shared/media';
+} from '@firstline/shared/media';
 
 // JSON schema for LLM proofreading of dictated text
 export const PROOFREADING_SCHEMA = {

@@ -1,5 +1,5 @@
 // apps/web/app/api/setup/upload-and-preview/route.ts
-// Accepts an encrypted .fajr-backup file + passphrase, decrypts, validates,
+// Accepts an encrypted .firstline-backup file + passphrase, decrypts, validates,
 // stores temporarily, and returns a preview of the backup contents.
 export const dynamic = "force-dynamic";
 
@@ -10,11 +10,11 @@ import { users } from "@/db/schema";
 import { count } from "drizzle-orm";
 import { decryptBackup } from "@/lib/backup/encryptionService";
 import { storageService } from "@/lib/storage";
-import { BACKUP_MIN_PASSPHRASE_LENGTH } from "@fajr/shared/backup";
+import { BACKUP_MIN_PASSPHRASE_LENGTH } from "@firstline/shared/backup";
 import {
   CLINICAL_BACKUP_TABLES,
   FULL_MIGRATION_TABLES,
-} from "@fajr/shared/admin";
+} from "@firstline/shared/admin";
 
 export async function POST(request: Request) {
   try {

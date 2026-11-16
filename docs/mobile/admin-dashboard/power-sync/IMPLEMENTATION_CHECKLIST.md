@@ -1,7 +1,7 @@
 # PowerSync Integration - Implementation Checklist
 ## Admin Dashboard Offline-First Implementation
 
-**Project:** Fajr.EMR Mobile Admin Dashboard  
+**Project:** Firstline Mobile Admin Dashboard  
 **Goal:** Enable offline-first admin functionality using PowerSync  
 **Timeline:** 2-3 weeks  
 **Status:** 🟡 In Progress
@@ -129,7 +129,7 @@ Overall Progress: 3.4/6 phases complete (57%)
 - [x] Import `adminSchema`
 - [x] Update `initialize()` method to use admin schema
 - [x] Set database filename: `fajr-emr.db` (combined schema)
-- [x] Configure PowerSync URL: `https://ws.emr.fajr.org`
+- [x] Configure PowerSync URL: `https://ws.firstline.care`
 - [x] Add token parameter to `initialize()`
 - [x] Add connection configuration with retry settings
 - [x] Add error handling for initialization failures
@@ -182,7 +182,7 @@ Overall Progress: 3.4/6 phases complete (57%)
 **Implementation Notes:**
 - PowerSync initialization added to `AuthContext.login()` method
 - Checks `userData.isAdmin` flag before initializing
-- Connects to live server: `https://ws.emr.fajr.org`
+- Connects to live server: `https://ws.firstline.care`
 - Uses combined schema (patients + admin tables) from `powerSyncSchema.ts`
 - Gracefully handles initialization failures (doesn't block login)
 - Disconnects PowerSync on logout

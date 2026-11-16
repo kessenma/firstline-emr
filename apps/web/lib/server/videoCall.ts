@@ -20,7 +20,7 @@ import {
   buildPatientIdentity,
   isInviteExpired,
   staffDisplayName,
-} from "@fajr/shared/video-call";
+} from "@firstline/shared/video-call";
 
 export interface LiveKitConfig {
   apiKey: string;
@@ -95,7 +95,7 @@ export function getAppBaseUrl(): string {
   return (
     process.env.NEXTAUTH_URL ||
     process.env.NEXT_PUBLIC_APP_URL ||
-    "https://fajrmission.org"
+    "https://firstline.care"
   );
 }
 

@@ -31,10 +31,10 @@ import {
 import type {
   StartCallResponse,
   VideoCallConnectionState,
-} from '@fajr/shared/video-call';
+} from '@firstline/shared/video-call';
 import { getApiUrl } from '../../../config';
 import { getStoredToken } from '../../../utils/storage';
-import { languageToBcp47 } from '@fajr/shared/constants';
+import { languageToBcp47 } from '@firstline/shared/constants';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useCallTranscriptionMode } from '../../../hooks/useCallTranscriptionMode';
 import { useCallPermissions } from './hooks/useCallPermissions';

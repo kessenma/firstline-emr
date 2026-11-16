@@ -13,7 +13,7 @@ services:
     volumes:
       - ./tmp/gorush-keys:/keys
     networks:
-      - medflow-local
+      - firstline-local
     entrypoint: /bin/sh
     command: >
       -c "
@@ -62,7 +62,7 @@ services:
       GORUSH_API_CONFIG_URI: "/api/config"
       GORUSH_API_HEALTH_URI: "/healthz"
     networks:
-      - medflow-local
+      - firstline-local
     ports:
       - "8088:8088"
     healthcheck:
@@ -80,7 +80,7 @@ services:
       - ./.env
     environment:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      MEDFLOW_KEY: ${MEDFLOW_KEY}
+      FIRSTLINE_SERVICE_KEY: ${FIRSTLINE_SERVICE_KEY}
       API_BASE_URL: http://host.docker.internal:${PORT_ENV:-3000}
       NOTIFICATIONS_PORT: ${NOTIFICATIONS_PORT:-8080}
       OBJECT_STORAGE_CDN_ENDPOINT: ${OBJECT_STORAGE_CDN_ENDPOINT}
@@ -96,7 +96,7 @@ services:
       gorush:
         condition: service_started
     networks:
-      - medflow-local
+      - firstline-local
     ports:
       - "${NOTIFICATIONS_PORT:-8080}:8080"
     healthcheck:
@@ -113,5 +113,5 @@ services:
       start_period: 10s
 
 networks:
-  medflow-local:
+  firstline-local:
     driver: bridge

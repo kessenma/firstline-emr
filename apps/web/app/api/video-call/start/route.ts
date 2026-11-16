@@ -14,8 +14,8 @@ import {
   VIDEO_CALL_INVITE_TTL_MS,
   buildInviteUrl,
   buildRoomName,
-} from "@fajr/shared/video-call";
-import { normalizeLanguage } from "@fajr/shared/constants/languages";
+} from "@firstline/shared/video-call";
+import { normalizeLanguage } from "@firstline/shared/constants/languages";
 import {
   generateInviteToken,
   generateRoomSuffix,

@@ -19,7 +19,7 @@ echo "========================================================================"
 echo ""
 
 # Configuration from environment variables
-BUCKET="${OBJECT_STORAGE_BUCKET:-fajr-media}"
+BUCKET="${OBJECT_STORAGE_BUCKET:-firstline-media}"
 ACCESS_KEY="${RUSTFS_ACCESS_KEY:-${OBJECT_STORAGE_KEY:-admin}}"
 SECRET_KEY="${RUSTFS_SECRET_KEY:-${OBJECT_STORAGE_SECRET:-admin}}"
 ADDRESS="${RUSTFS_ADDRESS:-:9100}"

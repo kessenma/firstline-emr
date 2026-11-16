@@ -22,6 +22,8 @@
     "db:drop": "drizzle-kit drop",
     "db:check": "drizzle-kit check",
     "db:check-pending": "~/.bun/bin/bun scripts/check-migrations.ts",
+    "db:baseline": "~/.bun/bin/bun scripts/generate-baseline.ts",
+    "db:baseline:check": "~/.bun/bin/bun scripts/generate-baseline.ts --check",
     "db:test": "~/.bun/bin/bun -e \"import { testConnection } from './db/connection'; testConnection();\"",
     "db:test-setup": "~/.bun/bin/bun db/testSetup.ts",
     "db:check-patient-data": "~/.bun/bin/bun scripts/fix-malformed-patient-data.ts",
@@ -68,7 +70,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.908.0",
     "@aws-sdk/s3-request-presigner": "^3.908.0",
-    "@fajr/shared": "workspace:*",
+    "@firstline/shared": "workspace:*",
     "@ffmpeg/ffmpeg": "^0.12.15",
     "@ffmpeg/util": "^0.12.2",
     "@google-cloud/translate": "^9.2.1",

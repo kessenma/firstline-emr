@@ -90,7 +90,7 @@ export const ServerSwitcher: React.FC<ServerSwitcherProps> = ({ onClose }) => {
     const targetLabel =
       selected === 'custom'
         ? baseUrl.trim()
-        : 'Production (fajrmission.org)';
+        : 'Production (firstline.care)';
 
     Alert.alert(
       'Switch server?',
@@ -148,7 +148,7 @@ export const ServerSwitcher: React.FC<ServerSwitcherProps> = ({ onClose }) => {
           {
             label: 'Production',
             value: 'production',
-            description: 'fajrmission.org',
+            description: 'firstline.care',
             icon: <Globe size={20} color={colors.primary} strokeWidth={2} />,
           },
           {

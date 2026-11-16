@@ -1,7 +1,7 @@
 // apps/web/db/schema/shared-types.contract.ts
 //
 // Compile-time bridge between the Drizzle rows and the cross-platform contracts
-// in `@fajr/shared` (medications and notes). Mobile reads the same records over
+// in `@firstline/shared` (medications and notes). Mobile reads the same records over
 // PowerSync and cannot see this schema, so a column that is renamed, dropped,
 // or narrowed here would otherwise drift silently until it broke on a device.
 //
@@ -9,8 +9,8 @@
 // If a change here trips the assertions below, update the shared types (and the
 // PowerSync schema + sync rules) rather than loosening the assertion.
 
-import type { MedOrder as SharedMedOrder, RxOrder as SharedRxOrder } from "@fajr/shared/medications";
-import type { NoteBase, NoteEditBase } from "@fajr/shared/patient";
+import type { MedOrder as SharedMedOrder, RxOrder as SharedRxOrder } from "@firstline/shared/medications";
+import type { NoteBase, NoteEditBase } from "@firstline/shared/patient";
 import type { RxOrder as DrizzleRxOrder } from "./patients";
 import type { MedOrder as DrizzleMedOrder } from "./medOrders";
 import type { Note as DrizzleNote, NoteEdit as DrizzleNoteEdit } from "./notes";

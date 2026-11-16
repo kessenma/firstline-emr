@@ -9,7 +9,7 @@
 
 ## What Was Done
 
-I've set up a complete LiveKit server infrastructure for your MedFlow EMR video calling feature. Here's what was created:
+I've set up a complete LiveKit server infrastructure for your Firstline video calling feature. Here's what was created:
 
 ## 📁 New Files Created
 
@@ -77,17 +77,17 @@ openssl rand -base64 32  # API Secret
 
 - **Name**: `livekit-server`
 - **Docker Compose**: `docker-compose.video.yml`
-- **Domain**: `call.dev.emr.fajrscientific.org`
+- **Domain**: `call.dev.firstline.care`
 
 ### 3. Add Environment Variables in Coolify:
 
 ```bash
-LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org
-NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org
+LIVEKIT_URL=wss://call.dev.firstline.care
+NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.firstline.care
 LIVEKIT_API_KEY=<your_generated_key>
 LIVEKIT_API_SECRET=<your_generated_secret>
 LIVEKIT_PORT=7880
-LIVEKIT_TURN_DOMAIN=call.dev.emr.fajrscientific.org
+LIVEKIT_TURN_DOMAIN=call.dev.firstline.care
 NODE_ENV=production
 ```
 

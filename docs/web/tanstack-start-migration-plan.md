@@ -1,5 +1,5 @@
 # TanStack Start Migration Plan
-## Fajr.EMR Next.js to TanStack Start Migration
+## Firstline Next.js to TanStack Start Migration
 
 **Document Version:** 1.0  
 **Created:** 2024  
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document outlines a comprehensive plan to migrate the Fajr.EMR application from Next.js 16 (App Router) to TanStack Start. Based on analysis of the codebase, this is a **LARGE-SCALE MIGRATION** that will require significant effort and careful planning.
+This document outlines a comprehensive plan to migrate the Firstline application from Next.js 16 (App Router) to TanStack Start. Based on analysis of the codebase, this is a **LARGE-SCALE MIGRATION** that will require significant effort and careful planning.
 
 ### Migration Scope Assessment
 

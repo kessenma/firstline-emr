@@ -5,4 +5,4 @@
 // prescription rendered down the med-order branch. They now delegate to the
 // shared implementation that mobile uses.
 
-export { isRxOrder, isMedOrder } from "@fajr/shared/medications";
+export { isRxOrder, isMedOrder } from "@firstline/shared/medications";

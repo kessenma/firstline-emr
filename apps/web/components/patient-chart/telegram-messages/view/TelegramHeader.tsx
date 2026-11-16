@@ -3,7 +3,7 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import { getAnonymizedName } from "@fajr/shared/patient-utils";
+import { getAnonymizedName } from "@firstline/shared/patient-utils";
 import { Button } from "@/components/ui/button";
 import { CardTitle } from "@/components/ui/card";
 import {

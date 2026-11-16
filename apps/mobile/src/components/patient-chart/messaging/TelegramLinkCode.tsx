@@ -87,10 +87,10 @@ function generateLocalCode(language: Languages): string {
   return code;
 }
 
-// Bot username — the live production bot (@fajr_mission_bot).
+// Bot username — the live production bot (@firstline_care_bot).
 // Mobile has no env layer for this, so it is pinned here; keep it in sync with
 // NEXT_PUBLIC_TELEGRAM_BOT_NAME on the web app.
-const BOT_USERNAME = 'fajr_mission_bot';
+const BOT_USERNAME = 'firstline_care_bot';
 
 interface TelegramLinkCodeProps {
   patientId: string;

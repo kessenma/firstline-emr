@@ -11,7 +11,7 @@ import { getApiUrl } from '../../../config';
 import { Message, ThreadInfo, Thread, Participant } from '../../../types/messages';
 import { useMediaManager } from '../../../hooks/useMediaManager';
 import { TokenStorage } from '../../../services/TokenStorage';
-import { buildPatientCardPayload, serializePatientCard } from '@fajr/shared/patient-share';
+import { buildPatientCardPayload, serializePatientCard } from '@firstline/shared/patient-share';
 
 /** Safely parse a JSON text column from SQLite */
 function parseJson<T>(value: any, fallback: T): T {

@@ -8,7 +8,7 @@ import { db } from "@/db";
 import { patients, patientCareTeam } from "@/db/schema";
 import { eq, and, isNull, sql } from "drizzle-orm";
 import { PatientStatusList } from "@/data/patientStatus.enum";
-import { isLeadRole, CARE_TEAM_ROLES, type CareTeamRole } from "@fajr/shared/care-team";
+import { isLeadRole, CARE_TEAM_ROLES, type CareTeamRole } from "@firstline/shared/care-team";
 import { syncCareTeamToPatient } from "@/lib/server/syncCareTeamToPatient";
 import { addUserToPatientTelegramThread } from "@/lib/telegram-thread-sync";
 

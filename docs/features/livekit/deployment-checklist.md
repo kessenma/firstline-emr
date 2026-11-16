@@ -12,16 +12,16 @@ Use this checklist when deploying LiveKit to production with Coolify.
 ## Pre-Deployment
 
 ### 1. Domain and DNS
-- [ ] Register domain for LiveKit (e.g., `call.dev.emr.fajrscientific.org`)
+- [ ] Register domain for LiveKit (e.g., `call.dev.firstline.care`)
 - [ ] Configure DNS A record pointing to your server IP
 - [ ] (Optional) Register separate TURN domain if needed
-- [ ] Verify DNS propagation: `nslookup call.dev.emr.fajrscientific.org`
+- [ ] Verify DNS propagation: `nslookup call.dev.firstline.care`
 
 ### 2. SSL Certificates
 - [ ] Obtain SSL certificate for LiveKit domain
 - [ ] Verify certificate is valid and trusted
 - [ ] Configure certificate in Coolify/Caddy
-- [ ] Test HTTPS access: `curl https://call.dev.emr.fajrscientific.org`
+- [ ] Test HTTPS access: `curl https://call.dev.firstline.care`
 
 ### 3. Generate API Credentials
 - [ ] Generate secure API key: `openssl rand -base64 32`
@@ -42,25 +42,25 @@ Use this checklist when deploying LiveKit to production with Coolify.
 - [ ] Create new app in Coolify
 - [ ] Name: `livekit-server` or similar
 - [ ] Set Docker Compose file: `docker-compose.video.yml`
-- [ ] Configure domain: `call.dev.emr.fajrscientific.org`
+- [ ] Configure domain: `call.dev.firstline.care`
 - [ ] Enable SSL/TLS
 
 ### 6. Configure Environment Variables
 Add these environment variables in Coolify:
 
-- [ ] `LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org`
-- [ ] `NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org`
+- [ ] `LIVEKIT_URL=wss://call.dev.firstline.care`
+- [ ] `NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.firstline.care`
 - [ ] `LIVEKIT_API_KEY=<your_generated_key>`
 - [ ] `LIVEKIT_API_SECRET=<your_generated_secret>`
 - [ ] `LIVEKIT_PORT=7880`
-- [ ] `LIVEKIT_TURN_DOMAIN=call.dev.emr.fajrscientific.org`
+- [ ] `LIVEKIT_TURN_DOMAIN=call.dev.firstline.care`
 - [ ] `NODE_ENV=production`
 
 ### 7. Update Web App Configuration
 Update environment variables in your web app (Coolify):
 
-- [ ] `LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org`
-- [ ] `NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org`
+- [ ] `LIVEKIT_URL=wss://call.dev.firstline.care`
+- [ ] `NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.firstline.care`
 - [ ] `LIVEKIT_API_KEY=<same_as_livekit_server>`
 - [ ] `LIVEKIT_API_SECRET=<same_as_livekit_server>`
 
@@ -73,7 +73,7 @@ Update environment variables in your web app (Coolify):
 ## Post-Deployment Testing
 
 ### 9. Verify Server is Running
-- [ ] Check health endpoint: `curl https://call.dev.emr.fajrscientific.org/`
+- [ ] Check health endpoint: `curl https://call.dev.firstline.care/`
 - [ ] Verify WebSocket connection in browser console
 - [ ] Check Docker logs in Coolify
 

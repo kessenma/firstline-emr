@@ -1,4 +1,4 @@
-# `@fajr/shared/user` — Implementation Guide
+# `@firstline/shared/user` — Implementation Guide
 
 Shared profile, settings, and credential types for web and mobile.
 
@@ -55,7 +55,7 @@ const userProfileSchema = z.object({
 ## Design Decisions
 
 - **Single module** — not split into `user` + `user-utils`. Scope is small. Split later if utils grow.
-- **AccountType/Gender stay in `@fajr/shared/patient`** — already imported widely. Re-exported from `@fajr/shared/user` for convenience.
+- **AccountType/Gender stay in `@firstline/shared/patient`** — already imported widely. Re-exported from `@firstline/shared/user` for convenience.
 - **MedicalLicense uses base + platform variants** — mobile has stored-record shape (with `fileUrl`, `status`), web has signed-URL shape. Base captures the intersection.
 - **Pure TS validation** — no Zod dependency in shared. Each platform keeps its own Zod schema / form hooks.
 
@@ -80,7 +80,7 @@ Import from `zod/v3` (the compat path web already uses) for the v3 API, or `zod`
 ## Migration Checklist
 
 ### Mobile
-- [ ] `apps/mobile/src/screens/user-profile/types.ts` — re-export from `@fajr/shared/user`
+- [ ] `apps/mobile/src/screens/user-profile/types.ts` — re-export from `@firstline/shared/user`
 - [ ] `apps/mobile/src/screens/user-profile/useProfileViewModel.ts` — import `ProfileFormValuesBase`, extend locally
 - [ ] `apps/mobile/src/hooks/usePatientChartViewPreference.ts` — import `PatientChartViewMode` from shared
 
@@ -93,6 +93,6 @@ Import from `zod/v3` (the compat path web already uses) for the v3 API, or `zod`
 
 1. `cd packages/shared && npx tsc --noEmit` — shared module compiles
 2. `cd apps/web && pnpm build` — web builds with new imports
-3. `cd apps/mobile && npx rspack build` or run app — mobile resolves `@fajr/shared/user`
+3. `cd apps/mobile && npx rspack build` or run app — mobile resolves `@firstline/shared/user`
 4. Grep for old local type definitions to confirm they're replaced
 5. Run profile screen on both platforms — edit/save cycle works

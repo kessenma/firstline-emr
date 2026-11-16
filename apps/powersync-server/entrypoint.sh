@@ -149,12 +149,12 @@ client_auth:
   supabase: false
   jwks:
     keys:
-      - kid: "fajr-emr-key"
+      - kid: "firstline-emr-key"
         kty: oct
         k: ${JWT_KEY_B64URL}
         alg: HS256
   audience: ["powersync", "powersync-dev"]
-  issuer: https://fajrmission.org
+  issuer: https://firstline.care
 
 # Settings for telemetry reporting
 telemetry:

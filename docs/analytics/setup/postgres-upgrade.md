@@ -58,7 +58,7 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 import os
 
 # PostgreSQL connection
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost/medflow")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost/firstline")
 
 engine = create_async_engine(DATABASE_URL, echo=False)
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -78,7 +78,7 @@ async def get_db():
 ```python
 # config.py updates
 # Add PostgreSQL configuration alongside existing MongoDB config
-POSTGRES_DB = os.getenv("POSTGRES_DB", "postgresql://user:password@localhost/medflow")
+POSTGRES_DB = os.getenv("POSTGRES_DB", "postgresql://user:password@localhost/firstline")
 STAGE_POSTGRES_DB = os.getenv("STAGE_POSTGRES_DB", POSTGRES_DB)
 PROD_POSTGRES_DB = os.getenv("PROD_POSTGRES_DB", POSTGRES_DB)
 ```

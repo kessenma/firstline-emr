@@ -1,6 +1,6 @@
 // apps/mobile/src/screens/patient-dashboard/DashboardHelpSheet.tsx
 // The "how does this work" explainer. Content comes from
-// @fajr/shared/patient-dashboard so it cannot drift from the web version.
+// @firstline/shared/patient-dashboard so it cannot drift from the web version.
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
@@ -11,7 +11,7 @@ import {
   getDashboardHelpSections,
   getDashboardHelpTitle,
   type DashboardHelpView,
-} from '@fajr/shared/patient-dashboard';
+} from '@firstline/shared/patient-dashboard';
 
 interface DashboardHelpSheetProps {
   visible: boolean;

@@ -22,7 +22,7 @@ import { getTelegramThreadByChatId } from "@/lib/telegram-db-helpers";
 import {
   buildPrescriptionTelegramPayload,
   isPrescriptionCancelled,
-} from "@fajr/shared/medications";
+} from "@firstline/shared/medications";
 import {
   generateAccessCode,
   generateCodeSalt,

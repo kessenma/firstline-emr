@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `AuthContext` provides authentication state management for the Fajr Mission EMR mobile app.
+The `AuthContext` provides authentication state management for the Firstline mobile app.
 
 ## Features
 

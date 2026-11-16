@@ -15,11 +15,11 @@ import { Play, ImageOff, FileText, Music } from 'lucide-react-native';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { borderRadius, typography } from '../../utils/theme';
 
-import type { MediaType as SharedMediaType, MediaItem } from '@fajr/shared/media';
+import type { MediaType as SharedMediaType, MediaItem } from '@firstline/shared/media';
 
 export type MediaType = SharedMediaType;
 
-/** @deprecated Use MediaItem from '@fajr/shared/media' instead */
+/** @deprecated Use MediaItem from '@firstline/shared/media' instead */
 export type MediaThumbnailItem = MediaItem;
 
 interface MediaThumbnailProps {

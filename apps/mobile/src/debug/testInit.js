@@ -1,4 +1,4 @@
-// fajr-medflow-emr/apps/mobile/src/debug/testInit.js
+// apps/mobile/src/debug/testInit.js
 // Debug utility to help identify white screen issues in the app
 
 import { AppRegistry } from 'react-native';

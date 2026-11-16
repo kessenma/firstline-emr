@@ -3,11 +3,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { usePatientDashboard } from "../PatientViewModelContext";
-import { buildInviteMessage } from "@fajr/shared/video-call";
+import { buildInviteMessage } from "@firstline/shared/video-call";
 import type {
   StartCallResponse,
   VideoCallSession,
-} from "@fajr/shared/video-call";
+} from "@firstline/shared/video-call";
 
 export type InviteSendState = "idle" | "sending" | "sent" | "failed";
 

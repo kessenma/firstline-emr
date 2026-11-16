@@ -1,5 +1,6 @@
 // utils/emails/resend-config.ts
 import { Resend } from 'resend';
+import { BRAND_NAME, BRAND_DOMAIN } from '@firstline/shared/constants';
 
 let _resend: Resend | null = null;
 const getResend = () => {
@@ -9,7 +10,10 @@ const getResend = () => {
     return _resend;
 };
 
-const FROM_ADDRESS = 'Fajr MedFlow <noreply@alert.fajrmission.org>';
+// The sending domain must have SPF/DKIM configured in Resend before this is
+// switched, or outbound mail silently fails rather than erroring.
+const FROM_ADDRESS =
+    process.env.EMAIL_FROM_ADDRESS ?? `${BRAND_NAME} <noreply@alert.${BRAND_DOMAIN}>`;
 
 export interface EmailParams {
     to: string;

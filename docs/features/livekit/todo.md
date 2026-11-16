@@ -82,9 +82,9 @@ npm run dev
 ### 1. Pre-Deployment
 
 - [ ] Read `apps/docs/livekit/DEPLOYMENT_CHECKLIST.md`
-- [ ] Ensure you have a domain: `call.dev.emr.fajrscientific.org`
+- [ ] Ensure you have a domain: `call.dev.firstline.care`
 - [ ] Configure DNS A record
-- [ ] Verify DNS propagation: `nslookup call.dev.emr.fajrscientific.org`
+- [ ] Verify DNS propagation: `nslookup call.dev.firstline.care`
 
 ### 2. Generate Production Credentials
 
@@ -110,27 +110,27 @@ openssl rand -base64 32
 - [ ] Name: `livekit-server`
 - [ ] Repository: Your repo
 - [ ] Docker Compose file: `docker-compose.video.yml`
-- [ ] Domain: `call.dev.emr.fajrscientific.org`
+- [ ] Domain: `call.dev.firstline.care`
 - [ ] Enable SSL/TLS
 
 ### 4. Configure LiveKit Environment in Coolify
 
 Add these environment variables to the LiveKit app:
 
-- [ ] `LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org`
-- [ ] `NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org`
+- [ ] `LIVEKIT_URL=wss://call.dev.firstline.care`
+- [ ] `NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.firstline.care`
 - [ ] `LIVEKIT_API_KEY=<your_generated_key>`
 - [ ] `LIVEKIT_API_SECRET=<your_generated_secret>`
 - [ ] `LIVEKIT_PORT=7880`
-- [ ] `LIVEKIT_TURN_DOMAIN=call.dev.emr.fajrscientific.org`
+- [ ] `LIVEKIT_TURN_DOMAIN=call.dev.firstline.care`
 - [ ] `NODE_ENV=production`
 
 ### 5. Update Web App Environment in Coolify
 
 Add these to your existing web app:
 
-- [ ] `LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org`
-- [ ] `NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.emr.fajrscientific.org`
+- [ ] `LIVEKIT_URL=wss://call.dev.firstline.care`
+- [ ] `NEXT_PUBLIC_LIVEKIT_URL=wss://call.dev.firstline.care`
 - [ ] `LIVEKIT_API_KEY=<same_as_livekit_server>`
 - [ ] `LIVEKIT_API_SECRET=<same_as_livekit_server>`
 
@@ -154,7 +154,7 @@ Add these to your existing web app:
 
 - [ ] Test health endpoint:
 ```bash
-curl https://call.dev.emr.fajrscientific.org/
+curl https://call.dev.firstline.care/
 ```
 
 - [ ] Test WebSocket connection (browser console)
@@ -284,7 +284,7 @@ After deployment, verify:
 - Test Call: `http://localhost:3000/video?room=test&user=doctor1`
 
 **Production URLs:**
-- LiveKit: `wss://call.dev.emr.fajrscientific.org`
+- LiveKit: `wss://call.dev.firstline.care`
 - Web App: `https://your-app.com`
 - Test Call: `https://your-app.com/video?room=test&user=doctor1`
 

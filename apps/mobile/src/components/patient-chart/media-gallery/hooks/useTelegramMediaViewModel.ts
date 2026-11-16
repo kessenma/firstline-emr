@@ -11,8 +11,8 @@ import {
   downloadAndCacheMedia,
 } from '../../../../services/TelegramMediaCacheService';
 import type { MediaThumbnailItem } from '../../../ui/MediaThumbnail';
-import { mapApiMediaType, matchesMediaFilter } from '@fajr/shared/media';
-import type { MediaFilter } from '@fajr/shared/media';
+import { mapApiMediaType, matchesMediaFilter } from '@firstline/shared/media';
+import type { MediaFilter } from '@firstline/shared/media';
 
 export type TelegramMediaFilter = MediaFilter;
 

@@ -176,7 +176,7 @@ export default function SetupPage() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Database className="h-10 w-10 text-primary" />
             <h1 className="text-3xl font-bold text-foreground">
-              Fajr MedFlow Setup
+              Firstline Setup
             </h1>
           </div>
           <p className="text-muted-foreground">
@@ -210,7 +210,7 @@ export default function SetupPage() {
                 Import Existing Database
               </h3>
               <p className="text-sm text-muted-foreground">
-                Restore from an encrypted backup file (.fajr-backup) exported
+                Restore from an encrypted backup file (.firstline-backup) exported
                 from another server or mobile device.
               </p>
             </button>
@@ -232,7 +232,7 @@ export default function SetupPage() {
                 Upload Encrypted Backup
               </h3>
               <p className="text-sm text-muted-foreground">
-                Select a .fajr-backup file and enter the passphrase used to
+                Select a .firstline-backup file and enter the passphrase used to
                 encrypt it.
               </p>
             </div>
@@ -242,7 +242,7 @@ export default function SetupPage() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".fajr-backup"
+                accept=".firstline-backup"
                 className="hidden"
                 onChange={(e) => {
                   setFile(e.target.files?.[0] || null);
@@ -267,7 +267,7 @@ export default function SetupPage() {
                   <div>
                     <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">
-                      Click to select a .fajr-backup file
+                      Click to select a .firstline-backup file
                     </p>
                   </div>
                 )}

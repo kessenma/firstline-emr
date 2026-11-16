@@ -23,7 +23,7 @@ import type { RxOrder } from '@/db/schema/patients';
 import { TextFormField } from "@/components/ui/TextFormField";
 import { PharmacyIdentityGate, type PharmacyGateError } from './PharmacyIdentityGate';
 import CancelPrescriptionDialog from '@/components/patient-chart/Medications/rx/CancelPrescriptionDialog';
-import { describePrescriptionCancellation } from '@fajr/shared/medications';
+import { describePrescriptionCancellation } from '@firstline/shared/medications';
 
 const PharmacyView = ({ uuid }: { uuid: string }) => {
     const [rxOrder, setRxOrder] = useState<RxOrder | null>(null);

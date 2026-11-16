@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { generateWaveform, formatAudioTime } from "@fajr/shared/media";
+import { generateWaveform, formatAudioTime } from "@firstline/shared/media";
 
 interface AudioNotePlayerProps {
   mediaUrl: string;

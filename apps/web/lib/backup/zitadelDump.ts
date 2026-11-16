@@ -91,7 +91,7 @@ export function getWebauthnRpId(): string {
 }
 
 export function getZitadelExternalDomain(): string {
-  return process.env.ZITADEL_DOMAIN || "identity.fajrmission.org";
+  return process.env.ZITADEL_DOMAIN || "identity.firstline.care";
 }
 
 export function getZitadelVersion(): string {

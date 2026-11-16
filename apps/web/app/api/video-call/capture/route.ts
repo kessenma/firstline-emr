@@ -29,7 +29,7 @@ import {
   PHOTO_CAPTURE_CONTENT_TYPE,
   PHOTO_CAPTURE_MAX_BYTES,
   isInviteExpired,
-} from "@fajr/shared/video-call";
+} from "@firstline/shared/video-call";
 
 export async function POST(request: NextRequest) {
   try {

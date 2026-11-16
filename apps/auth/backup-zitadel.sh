@@ -54,7 +54,7 @@ load_env_file "$REPO_ROOT/.env.auth.local"
 [ -n "$_PRESET_MASTERKEY" ] && ZITADEL_MASTERKEY="$_PRESET_MASTERKEY"
 [ -n "$_PRESET_DOMAIN" ] && ZITADEL_DOMAIN="$_PRESET_DOMAIN"
 
-ZITADEL_DOMAIN="${ZITADEL_DOMAIN:-identity.fajrmission.org}"
+ZITADEL_DOMAIN="${ZITADEL_DOMAIN:-identity.firstline.care}"
 ZITADEL_VERSION="${ZITADEL_VERSION:-v2.64.1}"
 OUTPUT_DIR="${1:-$REPO_ROOT/zitadel-backups}"
 

@@ -196,7 +196,7 @@ Your `package.json` should include:
 
 ```json
 {
-  "name": "fajr-medflow-mobile",
+  "name": "firstline-firstline-mobile",
   "version": "1.0.0",
   "dependencies": {
     "react": "^18.2.0",

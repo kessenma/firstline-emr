@@ -1,6 +1,6 @@
 # Notifications Server
 
-A Go-based microservice for handling push notifications (APNs/FCM) and Telegram bot integration for the Fajr Mission EMR system.
+A Go-based microservice for handling push notifications (APNs/FCM) and Telegram bot integration for the Firstline system.
 
 ## Features
 
@@ -39,10 +39,10 @@ NOTIFICATIONS_SERVER_URL=http://localhost:8080
 Required environment variables in root `.env`:
 
 ```bash
-DATABASE_URL=postgresql://user:password@localhost:5432/medflow
+DATABASE_URL=postgresql://user:password@localhost:5432/firstline
 APNS_KEY_BASE64=<your_base64_encoded_apns_key>
 TELEGRAM_BOT_TOKEN=<optional>
-MEDFLOW_KEY=<optional>
+FIRSTLINE_SERVICE_KEY=<optional>
 NOTIFICATIONS_PORT=8080
 ```
 
@@ -157,7 +157,7 @@ Returns server health status.
 | `DATABASE_URL` | PostgreSQL connection string | Yes | - |
 | `GORUSH_URL` | Gorush service URL | Yes | `http://gorush:8088` |
 | `TELEGRAM_BOT_TOKEN` | Telegram bot token | No | - |
-| `MEDFLOW_KEY` | API authentication key | No | - |
+| `FIRSTLINE_SERVICE_KEY` | API authentication key | No | - |
 | `API_BASE_URL` | Backend API URL | Yes | - |
 | `NOTIFICATIONS_PORT` | Server port | No | `8080` |
 | `OBJECT_STORAGE_*` | S3-compatible storage config | No | - |
@@ -242,7 +242,7 @@ For issues:
 4. Test database connectivity
 5. Consult troubleshooting guides above
 
-This is a Go-based server that handles notifications for the MedFlow EMR system, including:
+This is a Go-based server that handles notifications for the Firstline system, including:
 - Telegram bot integration for patient communication
 - Mobile app push notifications via gorush https://github.com/appleboy/gorush
 
@@ -283,7 +283,7 @@ The notifications server provides:
 
 ```
 ┌─────────────────┐         ┌──────────────────┐         ┌─────────────────┐
-│   Telegram      │◄───────►│  Notifications   │◄───────►│   MedFlow API   │
+│   Telegram      │◄───────►│  Notifications   │◄───────►│   Firstline API   │
 │   Bot           │         │  Server (Go)     │         │                 │
 └─────────────────┘         └──────────────────┘         └─────────────────┘
                                 │       │                    │
@@ -351,8 +351,8 @@ curl http://localhost:8088/api/stat/app
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `TELEGRAM_BOT_TOKEN` | Telegram bot API token | Yes |
-| `MEDFLOW_KEY` | API authorization key | Yes |
-| `API_BASE_URL` | MedFlow backend URL | Yes |
+| `FIRSTLINE_SERVICE_KEY` | API authorization key | Yes |
+| `API_BASE_URL` | Firstline backend URL | Yes |
 | `GORUSH_URL` | Gorush server URL | No (default: http://gorush:8088) |
 | `WEBSOCKET_SERVER_URL` | WebSocket server URL | No |
 | `OBJECT_STORAGE_*` | RustFS S3 configuration | Yes |
@@ -416,7 +416,7 @@ go build -o notifications-server .
 
 # Run with environment variables
 export TELEGRAM_BOT_TOKEN=your_token
-export MEDFLOW_KEY=your_key
+export FIRSTLINE_SERVICE_KEY=your_key
 # ... other env vars
 
 ./notifications-server
@@ -438,7 +438,7 @@ The service is designed to run in Coolify with the provided `docker-compose.noti
 ```bash
 # Deploy to Coolify
 # Use docker-compose.notifications.yml as the compose file
-# Domain: notifications.dev.emr.fajrscientific.org
+# Domain: notifications.dev.firstline.care
 ```
 
 ### Health Monitoring
@@ -487,7 +487,7 @@ The service provides comprehensive logging with structured output:
 ### Common Issues
 
 1. **Bot not responding**: Check `TELEGRAM_BOT_TOKEN`
-2. **API errors**: Verify `MEDFLOW_KEY` and `API_BASE_URL`
+2. **API errors**: Verify `FIRSTLINE_SERVICE_KEY` and `API_BASE_URL`
 3. **File upload failures**: Check RustFS credentials and bucket permissions
 4. **Health check failures**: Ensure port 8080 is accessible
 5. **RustFS console access**: Verify `RUSTFS_ACCESS_KEY` and `RUSTFS_SECRET_KEY` are set
@@ -511,4 +511,4 @@ curl http://localhost:8080/health
 
 ## License
 
-Internal MedFlow EMR project.
+Internal Firstline project.

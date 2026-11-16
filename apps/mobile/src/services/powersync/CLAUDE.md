@@ -11,10 +11,10 @@ PowerSync provides offline-first data sync between PostgreSQL (web backend) and 
 | Auth token | 30 days | API calls | `TokenStorage.setAuthToken()` (MMKV) |
 | PowerSync token | 24 hours | WebSocket sync | `TokenStorage.setPowerSyncToken()` (MMKV) |
 
-- PowerSync token **must** include `kid: "fajr-emr-key"` in JWT header (auth token lacks this → causes PSYNC_S2101)
+- PowerSync token **must** include `kid: "firstline-emr-key"` in JWT header (auth token lacks this → causes PSYNC_S2101)
 - Refresh endpoint: `POST /api/auth/refresh-powersync` (uses auth token as Bearer)
 - Proactive refresh: 4 hours before expiry (`TokenStorage.needsPowerSyncRefresh()`)
-- JWT config: `apps/web/lib/jwt-config.ts` — audience `["powersync", "powersync-dev"]`, issuer `https://fajrmission.org`
+- JWT config: `apps/web/lib/jwt-config.ts` — audience `["powersync", "powersync-dev"]`, issuer `https://firstline.care`
 
 ## Initialization Flow
 
@@ -128,7 +128,7 @@ All use `db.watch()` (callback-based, not async iterables — Hermes compatible)
 
 ## Server Deployment
 
-- Docker: `docker-compose.powersync.yml` (port 6061, Caddy reverse proxy at `sync.fajrmission.org`)
+- Docker: `docker-compose.powersync.yml` (port 6061, Caddy reverse proxy at `sync.firstline.care`)
 - `entrypoint.sh`: parses `DATABASE_URL`, base64url-encodes `JWT_SECRET`, generates config at runtime
 - Health: `/probes/liveness` endpoint
 - Replication: `powersync_slot` + `powersync_publication` on PostgreSQL

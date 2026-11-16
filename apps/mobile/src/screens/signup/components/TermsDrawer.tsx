@@ -13,8 +13,8 @@ import { palette } from '../../../utils/colors';
 import {
   privacyPolicy,
   termsOfService,
-} from '@fajr/shared/legal-content';
-import type { LegalDocument, ContentBlock } from '@fajr/shared/legal-content';
+} from '@firstline/shared/legal-content';
+import type { LegalDocument, ContentBlock } from '@firstline/shared/legal-content';
 
 interface TermsDrawerProps {
   isOpen: boolean;

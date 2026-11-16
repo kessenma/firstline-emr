@@ -4,7 +4,7 @@ This directory contains the LiveKit server configuration and Docker setup for vi
 
 ## Overview
 
-LiveKit is a WebRTC SFU (Selective Forwarding Unit) that enables real-time video and audio communication. This setup is configured to work with the MedFlow EMR application.
+LiveKit is a WebRTC SFU (Selective Forwarding Unit) that enables real-time video and audio communication. This setup is configured to work with the Firstline application.
 
 ## Local Development
 

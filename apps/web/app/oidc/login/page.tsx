@@ -355,7 +355,7 @@ export default function OidcLoginPage() {
             <ShieldAlert className="mx-auto h-10 w-10 text-blue-500 mb-3" />
             <h1 className="text-xl font-semibold text-white">Admin Authentication</h1>
             <p className="text-sm text-slate-400 mt-2">
-              Sign in with your Fajr EMR admin credentials to access this service.
+              Sign in with your Firstline admin credentials to access this service.
             </p>
           </div>
 
@@ -483,7 +483,7 @@ export default function OidcLoginPage() {
 
         {/* Footer */}
         <p className="text-center text-xs text-slate-500 mt-4">
-          Protected by Fajr Mission EMR
+          Protected by Firstline
         </p>
       </motion.div>
     </div>

@@ -2,7 +2,7 @@
 "use client"
 
 import type React from "react"
-import { getAnonymizedName } from "@fajr/shared/patient-utils"
+import { getAnonymizedName } from "@firstline/shared/patient-utils"
 
 interface PatientNameCellProps {
     firstName?: string

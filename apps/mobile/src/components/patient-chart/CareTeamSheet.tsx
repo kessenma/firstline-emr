@@ -25,8 +25,8 @@ import {
   ROLE_LABELS,
   ROLE_BADGE_COLORS,
   isLeadRole,
-} from '@fajr/shared/care-team';
-import type { CareTeamRole } from '@fajr/shared/care-team';
+} from '@firstline/shared/care-team';
+import type { CareTeamRole } from '@firstline/shared/care-team';
 
 interface CareTeamSheetProps {
   visible: boolean;

@@ -26,14 +26,14 @@ export default Repack.defineRspackConfig({
     // Ensure packages outside apps/mobile (e.g. packages/shared) can resolve dependencies
     modules: ['node_modules', path.resolve(__dirname, 'node_modules')],
     alias: {
-      // Map @fajr/shared subpath exports (Repack disables exportsFields by default,
+      // Map @firstline/shared subpath exports (Repack disables exportsFields by default,
       // so packages/shared's package.json "exports" map is invisible to the bundler).
       // The prefix alias points at src/ rather than enumerating every subpath, so new
       // packages/shared/<name>/index.ts entries resolve without an edit here, and
-      // nested paths like @fajr/shared/constants/foo work too. The `$` suffix makes
+      // nested paths like @firstline/shared/constants/foo work too. The `$` suffix makes
       // the bare-specifier alias exact so it doesn't shadow the prefix one.
-      '@fajr/shared$': path.resolve(__dirname, '../../packages/shared/src/index.ts'),
-      '@fajr/shared': path.resolve(__dirname, '../../packages/shared/src'),
+      '@firstline/shared$': path.resolve(__dirname, '../../packages/shared/src/index.ts'),
+      '@firstline/shared': path.resolve(__dirname, '../../packages/shared/src'),
       // react-native-executorch-bare-resource-fetcher's "exports" map defines "."
       // only under the `import` condition — no `require`, no `default`. Re.Pack
       // resolves commonjs-typed dependencies with ['react-native', 'require'], so

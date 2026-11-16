@@ -17,7 +17,7 @@ import {
   AlertCircle,
   ChevronRight,
 } from 'lucide-react-native';
-import { getRoleTheme, getRoleColor } from '@fajr/shared/theme';
+import { getRoleTheme, getRoleColor } from '@firstline/shared/theme';
 import { useThemeColors } from '../../../../contexts/ThemeContext';
 import { spacing, typography, borderRadius, shadows } from '../../../../utils/theme';
 import { RoleIcon } from '../../../ui/RoleIcon';

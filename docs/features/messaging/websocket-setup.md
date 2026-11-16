@@ -46,7 +46,7 @@ Required environment variables in `.env`:
 ```env
 # WebSocket Configuration
 WEBSOCKET_PORT=3001
-NEXT_PUBLIC_WEBSOCKET_URL=https://ws.dev.emr.fajrscientific.org  # For production
+NEXT_PUBLIC_WEBSOCKET_URL=https://ws.dev.firstline.care  # For production
 # NEXT_PUBLIC_WEBSOCKET_URL=http://localhost:3001  # For local development
 
 # Enable WebSockets (optional, defaults to false)
@@ -59,7 +59,7 @@ NEXT_PUBLIC_ENABLE_WEBSOCKETS=true
   - In Docker: `http://websocket-server:3001`
   
 - **NEXT_PUBLIC_WEBSOCKET_URL**: Used by the browser (client-side) to connect to WebSocket server
-  - In production: `https://ws.dev.emr.fajrscientific.org` (via Caddy proxy)
+  - In production: `https://ws.dev.firstline.care` (via Caddy proxy)
   - In development: `http://localhost:3001`
 
 ## Caddy Proxy Configuration
@@ -68,7 +68,7 @@ The WebSocket server is exposed via Caddy reverse proxy with the following label
 
 ```yaml
 labels:
-  caddy: ws.dev.emr.fajrscientific.org
+  caddy: ws.dev.firstline.care
   caddy.@socketio.path: "/socket.io/*"
   caddy.handle.@socketio: "reverse_proxy {{upstreams 3001}}"
   caddy.handle.@socketio.reverse_proxy.transport.versions: "h2c 1.1"
@@ -187,7 +187,7 @@ docker-compose -f docker-compose.web.yml logs -f websocket-server
 docker-compose -f docker-compose.web.yml up -d
 
 # Verify WebSocket server is running
-curl https://ws.dev.emr.fajrscientific.org/health
+curl https://ws.dev.firstline.care/health
 ```
 
 ## Troubleshooting

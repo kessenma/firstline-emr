@@ -20,7 +20,7 @@ import {
   describePrescriptionDelivery,
   isRxOrder as isRxOrderGuard,
   type RxOrder,
-} from "@fajr/shared/medications";
+} from "@firstline/shared/medications";
 
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";

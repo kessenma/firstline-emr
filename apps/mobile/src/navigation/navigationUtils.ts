@@ -88,8 +88,8 @@ export function parseAdminDeepLink(url: string): {
   screen?: string;
   params?: Record<string, string>;
 } | null {
-  // fajrmission://admin/dashboard
-  // https://fajrmission.org/admin/dashboard
+  // firstline://admin/dashboard
+  // https://firstline.care/admin/dashboard
   const adminPathMatch = url.match(/admin\/([^?]+)/);
 
   if (!adminPathMatch) {

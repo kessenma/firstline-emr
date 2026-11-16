@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGlobalContext } from "@/components/globalContext/GlobalContext";
 import translate from "@/utils/translate/translate";
-import { evaluateChartAccess } from "@fajr/shared/care-team";
+import { evaluateChartAccess } from "@firstline/shared/care-team";
 import type { PatientWithMessages } from "../viewModel/types";
 import type { Patient } from "@/db/schema/patients";
 

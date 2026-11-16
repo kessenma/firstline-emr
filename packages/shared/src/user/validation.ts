@@ -1,4 +1,4 @@
-// @fajr/shared/user — Pure TypeScript validation (no Zod dependency)
+// @firstline/shared/user — Pure TypeScript validation (no Zod dependency)
 
 import type { ProfileFormValuesBase, ThemeMode, PatientChartViewMode } from './types';
 import { PROFILE_CONSTRAINTS } from './constants';

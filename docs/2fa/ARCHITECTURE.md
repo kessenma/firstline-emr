@@ -14,7 +14,7 @@ TOTP secrets are encrypted at rest using AES-256-GCM:
 - **Library**: Node.js `crypto` module (no external deps)
 
 The `otpauth` npm package handles TOTP generation and verification with standard parameters:
-- Issuer: "Fajr Mission EMR"
+- Issuer: "Firstline"
 - Algorithm: SHA-1 (standard for authenticator app compatibility)
 - Digits: 6
 - Period: 30 seconds

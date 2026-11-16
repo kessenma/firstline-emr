@@ -330,7 +330,7 @@ async initialize(authToken: string): Promise<void> {
     this.db = new PowerSyncDatabase({
       schema: adminSchema,
       database: {
-        dbFilename: 'fajr-admin.db',
+        dbFilename: 'firstline-admin.db',
       },
     });
 

@@ -43,7 +43,7 @@ import {
 } from "./utils/business-rules";
 import { ChatThreadModal } from "./ChatThreadModal";
 import { PatientStatusList } from "@/data/patientStatus.enum";
-import { getRolesForAccountType, ROLE_LABELS, ROLE_DESCRIPTIONS, type CareTeamRole } from "@fajr/shared/care-team";
+import { getRolesForAccountType, ROLE_LABELS, ROLE_DESCRIPTIONS, type CareTeamRole } from "@firstline/shared/care-team";
 import { UserPlus } from "lucide-react";
 
 interface PatientMobileActionsProps {
