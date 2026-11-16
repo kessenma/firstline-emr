@@ -10,9 +10,11 @@ services:
       context: ./apps/object-storage
       dockerfile: Dockerfile
     restart: always
+    # Only ./.env: Coolify writes it from the resource's environment variables.
+    # (A gitignored ./.env.object-storage.local used to be listed here too, but it
+    # doesn't exist in a Coolify checkout, so compose refused to start.)
     env_file:
       - ./.env
-      - ./.env.object-storage.local
     environment:
       RUSTFS_ADDRESS: ":${OBJECT_STORAGE_PORT:-9100}"
       RUSTFS_CONSOLE_ENABLE: ${RUSTFS_CONSOLE_ENABLE:-true}
