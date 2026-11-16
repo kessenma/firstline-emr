@@ -29,14 +29,13 @@ services:
       OBJECT_STORAGE_REGION: ${OBJECT_STORAGE_REGION}
       RUSTFS_GLOBAL_REGION: ${RUSTFS_GLOBAL_REGION:-${OBJECT_STORAGE_REGION}}
       OBJECT_STORAGE_CDN_ENDPOINT: ${OBJECT_STORAGE_CDN_ENDPOINT}
+    # Credentials come from RUSTFS_ACCESS_KEY / RUSTFS_SECRET_KEY above, never
+    # from flags: RustFS prints its full command line at startup, so keys passed
+    # as --access-key/--secret-key end up in `docker logs` (and `ps`).
     command:
       - "--address"
       - ":${OBJECT_STORAGE_PORT:-9100}"
       - "--console-enable"
-      - "--access-key"
-      - "${OBJECT_STORAGE_KEY}"
-      - "--secret-key"
-      - "${OBJECT_STORAGE_SECRET}"
       - "--region"
       - "${OBJECT_STORAGE_REGION:-us-east-1}"
       # --server-domains removed - causes virtual-host mode which breaks bucket creation
