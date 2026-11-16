@@ -8,7 +8,7 @@
     },
     "build": {
       "dependsOn": ["^build", "generate:css"],
-      "outputs": [".next/**", "dist/**", "!.next/cache/**"]
+      "outputs": [".next/**", "dist/**", "out/**", "!.next/cache/**"]
     },
     "lint": {
       "outputs": []

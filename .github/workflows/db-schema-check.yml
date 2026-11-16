@@ -14,11 +14,13 @@ on:
     paths:
       - "apps/web/db/schema/**"
       - "apps/web/db/migrations/**"
+      - "apps/web/db/baseline/**"
       - "apps/web/drizzle.config.ts"
   pull_request:
     paths:
       - "apps/web/db/schema/**"
       - "apps/web/db/migrations/**"
+      - "apps/web/db/baseline/**"
       - "apps/web/drizzle.config.ts"
 
 concurrency:
@@ -51,7 +53,7 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      # Scoped to apps/web and its workspace deps (@fajr/shared). The mobile
+      # Scoped to apps/web and its workspace deps (@firstline/shared). The mobile
       # workspace pulls the whole React Native tree and this job never touches it.
       - name: 📦 Install dependencies
         run: pnpm install --frozen-lockfile --filter 'web...'
@@ -59,6 +61,13 @@ jobs:
       - name: 🔎 Validate migration journal
         working-directory: apps/web
         run: pnpm run db:check
+
+      # Fresh installs (self-hosters, staging) don't replay db/migrations: the
+      # history can't build a schema from empty. They get db/baseline/schema.sql
+      # instead, so it must match db/schema and cover the newest migration.
+      - name: 🧱 Check fresh-install baseline is current
+        working-directory: apps/web
+        run: node --no-warnings scripts/generate-baseline.ts --check
 
       - name: 🧬 Check schema matches committed migrations
         working-directory: apps/web

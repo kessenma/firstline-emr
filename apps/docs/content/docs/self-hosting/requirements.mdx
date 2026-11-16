@@ -1,0 +1,141 @@
+---
+title: Requirements
+description: How much server you need, broken down per service, plus disk, domains and accounts.
+---
+
+## Server
+
+- **Linux** on **amd64 (x86_64) or arm64**. Use an **Ubuntu LTS** release unless you have a reason not
+  to. Coolify supports other distributions, but Firstline is tested on Ubuntu.
+- **Root SSH access** with a key. Coolify manages the server over SSH.
+- A **fresh server** is strongly recommended. Coolify and Firstline expect to own ports 80 and 443.
+
+## How much RAM and CPU
+
+How much memory you need depends on which services you run (see the [Overview](/self-hosting/overview/)).
+
+<Callout title="Where these numbers come from">
+  These are measurements from Firstline's own production server (Nov 2026): a small organization, at
+  low traffic. Treat them as a **baseline, not a guarantee**. Usage grows with the number of staff,
+  patients and media files.
+</Callout>
+
+### Per service
+
+| Service | RAM in use (idle) | Disk | Can run elsewhere? |
+| --- | --- | --- | --- |
+| **Coolify itself** (dashboard, its database, Redis, realtime, Caddy proxy) | ~570 MB | ~110 MB + images | No |
+| **Web app** | ~900 MB | Image only | No |
+| **PostgreSQL 17** | ~150 MB | Grows with records (195 MB in production) | Yes: any managed Postgres 17 |
+| **Object storage** (RustFS) | ~270 MB | Grows with media (160 MB in production) | Yes: any S3-compatible service |
+| **Telegram bot** (notifications server) | ~45 MB | Negligible | No |
+| **Admin SSO** (Zitadel + proxies) | ~150 MB | Uses PostgreSQL | No |
+| **Video calls** (LiveKit) | ~50 MB idle. CPU and bandwidth rise during calls | Negligible | No |
+| **Translation** | ~2 GB (loads a translation model) | Model download | No |
+| **Database browser** (Drizzle Studio) | Small | Negligible | No |
+
+For context, upstream guidance for some of these is far larger (Zitadel suggests 512 MB as a floor for
+its process, and RustFS lists 1–2 GB for test setups). That guidance targets bigger deployments than a
+single clinic, but it's a reason not to run right at the limit.
+
+### Building the web app needs extra headroom
+
+By default, Coolify **builds** each service on the same server it runs on. Building the web app is the
+most memory-hungry moment in a Firstline server's life: **about 2.5 GB at peak** (measured Nov 2026).
+The currently running version keeps serving traffic while the new one builds, so that 2.5 GB comes **on
+top of** your idle usage. If the server runs out of memory, the build fails, and other services can be
+killed.
+
+### Suggested sizes
+
+| Profile | Runs on the server | Idle RAM | RAM while rebuilding the web app | Suggested server |
+| --- | --- | --- | --- | --- |
+| **Minimal** | Coolify + web app. PostgreSQL and object storage are external | ~1.5 GB | ~4 GB | **2 vCPU / 4 GB + a swap file** |
+| **Standard** | Coolify + web app + PostgreSQL + object storage + Telegram bot | ~2 GB | ~4.5 GB | **4 vCPU / 8 GB** (4 GB + swap works, but it's tight) |
+| **Full** | Standard + Admin SSO + video calls + translation | ~4.5 GB | ~7 GB | **4 vCPU / 8 GB** minimum; **16 GB** if you run translation |
+
+Firstline's own production server is the **Full** profile minus translation, on 4 vCPU / 8 GB. It uses
+about 2.3 GB of RAM at idle.
+
+<Callout title="Small servers: add swap">
+  A swap file gives a 4 GB server enough breathing room to survive a web app build. See [Provision a
+  server → Add swap](/self-hosting/provision-server/#add-swap-small-servers). Swap is slow, so treat it
+  as a safety net, not extra RAM.
+</Callout>
+
+## Disk
+
+Most of the disk goes to software, not patient data:
+
+| What | Production today |
+| --- | --- |
+| Docker images for all services | ~7.5 GB |
+| System logs (journald, before capping) | 3.1 GB |
+| Operating system + Coolify | a few GB |
+| **PostgreSQL data + media files** | **~355 MB** |
+
+Plan for roughly **15 GB of baseline** plus your **patient data** plus **local backups**. **40 GB is a
+sensible starting disk** for a small organization. Grow it when you need to; most providers let you
+resize a disk or attach a volume later.
+
+What drives growth:
+
+- **Media** (photos, audio notes, documents) grows much faster than database records. Organizations
+  with a lot of media should plan for a bigger disk, or put object storage on an external service.
+- **Backups** stored on the same server take space too. Keep copies **off** the server anyway.
+- **Old Docker images** pile up after redeploys. Coolify can clean them up automatically; check its
+  server settings.
+
+Cap system logs as described in [Provision a server](/self-hosting/provision-server/#cap-system-log-size).
+
+## Using an external database or object storage
+
+Some organizations don't want patient records or media stored on the app server. Both can live
+elsewhere.
+
+### External PostgreSQL
+
+- Use **PostgreSQL 17**. Firstline's backup tools use the version 17 client, which can't back up a
+  newer server.
+- Keep it on a **private network**, or at least locked down to your server's IP. Never expose it
+  publicly.
+- If you use Admin SSO, Zitadel needs a second database named `zitadel`.
+
+### External object storage
+
+- Any **S3-compatible** service that supports **path-style URLs over HTTPS** should work. Examples:
+  Hetzner Object Storage, Backblaze B2, Cloudflare R2, AWS S3.
+- Staff browsers load media directly from storage using short-lived signed URLs, so the storage endpoint
+  must be reachable from wherever your staff work.
+
+### Trade-offs
+
+| | On your server | External service |
+| --- | --- | --- |
+| **Data location** | Exactly where your server is | Wherever the provider stores it. Check their region and data-processing terms |
+| **Backups** | Your job | Often built in (snapshots, versioning) |
+| **Cost** | Included in the server | Billed separately, usually by GB |
+| **Setup** | Deploy one more Coolify resource | Create an account, bucket or database, and credentials |
+
+<Callout title="Guides coming">
+  Step-by-step guides for connecting an external database and external object storage will be part of
+  the service guides.
+</Callout>
+
+## Domain and DNS
+
+- A **domain you control**, where you can create DNS records.
+- An `A` record (and `AAAA` for IPv6) for each hostname you'll use, all pointing at your server. See
+  [Overview → Domains](/self-hosting/overview/#domains-youll-need).
+- Coolify issues HTTPS certificates automatically once DNS points at the server and ports 80 and 443 are
+  open.
+
+## Accounts you may need
+
+These are only needed for the features that use them:
+
+| Feature | Account |
+| --- | --- |
+| Patient Telegram bot | A Telegram bot token from [@BotFather](https://t.me/BotFather) |
+| Outgoing email | A [Resend](https://resend.com) API key and a verified sending domain |
+| Deploying from your own fork | A GitHub account or organization |

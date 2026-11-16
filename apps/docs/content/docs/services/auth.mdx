@@ -1,0 +1,40 @@
+---
+title: Admin SSO (Zitadel)
+description: What the optional Zitadel stack does in Firstline, and when you need it.
+---
+
+<Callout title="Guide coming">
+  A full setup guide for this stack is being written. This page explains what it does, so you can decide
+  whether you need it.
+</Callout>
+
+## What it is
+
+`docker-compose.auth.yml` runs [Zitadel](https://zitadel.com), an open-source identity provider, plus
+two small sign-in proxies (oauth2-proxy). Together they put **single sign-on in front of the admin
+consoles**:
+
+- the database browser (Drizzle Studio) at `analytics.<your-domain>`
+- the object-storage console (RustFS) at `storage-admin.<your-domain>`
+
+Zitadel signs admins in **with their Firstline accounts**, using the web app as the identity source, and
+only lets administrators through.
+
+## What it isn't
+
+Zitadel is **not** how staff log in to Firstline. The web app has its own login, with passwords,
+passkeys and two-factor authentication, and that login works without Zitadel.
+
+## Do you need it?
+
+| If you… | Then |
+| --- | --- |
+| Run a minimal install (web app, database, storage) | Skip it |
+| Want admins to browse the database or storage from a browser | Deploy it, together with the database browser and the storage console |
+| Use Firstline's backup feature with "include authentication" | Deploy it (that option backs up Zitadel's data) |
+
+## Resources
+
+About 150 MB of RAM at idle for Zitadel and its proxies on Firstline's production server. It also needs a
+second PostgreSQL database named `zitadel`. Zitadel's own guidance is at least 512 MB of RAM for the
+process. See [Requirements](/self-hosting/requirements/).

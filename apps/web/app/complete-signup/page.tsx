@@ -9,7 +9,7 @@ import { Card } from './../../components/ui/card';
 import { RadioCard } from './../../components/ui/radio-card';
 import { Button } from "./../../components/ui/button";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
-import "../about/aboutPage.css";
+import "./aboutPage.css";
 
 
 const SignupSuccess = () => {

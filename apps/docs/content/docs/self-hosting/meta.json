@@ -1,0 +1,11 @@
+{
+  "title": "Self-hosting",
+  "pages": [
+    "overview",
+    "requirements",
+    "provision-server",
+    "install-docker",
+    "install-coolify",
+    "next-steps"
+  ]
+}

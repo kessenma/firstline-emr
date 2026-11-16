@@ -4,8 +4,8 @@
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { Menu } from 'lucide-react'
+import { FirstlineMark } from "@/components/icons/FirstlineMark"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion"
 import LanguagePopover from "../telegram-patient/aboutPage/LanguagePopover"
@@ -85,13 +85,13 @@ const LoggedOutNav: React.FC<LoggedOutNavProps> = ({ className }) => {
                                 onClick={handleLogoClick}
                                 className={`cursor-pointer transition-transform duration-300 ease-in-out ${isPulsing ? 'pulse-on-click' : 'hover:scale-150'}`}
                             >
-                                <Image src="/assets/images/logo.svg" alt="MedFlow logo" width={30} height={30} className="object-contain" />
+                                <FirstlineMark className="h-[30px] w-[30px] text-foreground" />
                             </div>
                             <motion.p
                                 className={`text-xl font-bold text-foreground cursor-pointer transition-opacity duration-300 ${isScrolled ? "opacity-0" : "opacity-100"}`}
                                 onClick={handleLogoClick}
                             >
-                                Fajr.EMR
+                                Firstline
                             </motion.p>
                         </Link>
                     </div>
@@ -143,7 +143,7 @@ const LoggedOutNav: React.FC<LoggedOutNavProps> = ({ className }) => {
                                     }}
                                 >
                                     <NavItem href="/new-patient">New Patient</NavItem>
-                                    <NavItem href="/about">About</NavItem>
+                                    <NavItem href="https://firstline.care">About</NavItem>
                                     <NavItem href="/auth/login">Login</NavItem>
                                 </motion.div>
                             )}

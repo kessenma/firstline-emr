@@ -1,0 +1,164 @@
+---
+title: Provision a server
+description: Create the Linux server, lock down SSH and set up a firewall before installing anything.
+---
+
+Any VPS or dedicated server running a recent **Ubuntu LTS** works. Hetzner Cloud is used below as an
+example because that's where Firstline's own production server runs, but the steps are the same with any
+provider.
+
+Size the server using [Requirements](/self-hosting/requirements/).
+
+<Steps>
+<Step>
+
+### Create the server
+
+Pick an Ubuntu LTS image, a location close to your users, and a server size from the requirements page.
+Add your SSH public key when creating it, so you never log in with a password.
+
+With the Hetzner Cloud CLI ([`hcloud`](https://github.com/hetznercloud/cli)):
+
+```bash
+# See what's available first — names change over time
+hcloud server-type list
+hcloud image list --type system | grep -i ubuntu
+hcloud location list
+
+# Upload your SSH public key once
+hcloud ssh-key create --name my-laptop --public-key-from-file ~/.ssh/id_ed25519.pub
+
+# Create the server (replace the type, image and location with your choices)
+hcloud server create \
+  --name firstline \
+  --type <server-type> \
+  --image <ubuntu-lts-image> \
+  --location <location> \
+  --ssh-key my-laptop
+```
+
+You can do the same in the Hetzner Cloud Console in a browser.
+
+</Step>
+<Step>
+
+### Point DNS at the server
+
+Create `A` (and `AAAA`, if you use IPv6) records for your app domain, your Coolify dashboard domain and
+any service subdomains you plan to use (see [Overview → Domains](/self-hosting/overview/#domains-youll-need)).
+They all point at the server's public IP. DNS can take a while to propagate, so do this early.
+
+</Step>
+<Step>
+
+### Update the system
+
+```bash
+ssh root@<server-ip>
+apt update && apt upgrade -y
+```
+
+Ubuntu Server installs `unattended-upgrades` by default, which applies security updates automatically.
+Check it's enabled:
+
+```bash
+systemctl status unattended-upgrades
+```
+
+</Step>
+<Step>
+
+### Lock down SSH
+
+Coolify manages the server over SSH as `root` with a key, so **keep key-based root login on**, but turn
+off password logins entirely. Edit `/etc/ssh/sshd_config` (or add a file in `/etc/ssh/sshd_config.d/`):
+
+```text
+PermitRootLogin prohibit-password
+PubkeyAuthentication yes
+PasswordAuthentication no
+```
+
+Then restart SSH, **keeping your current session open** until you've confirmed a new one works:
+
+```bash
+systemctl restart ssh
+```
+
+</Step>
+<Step>
+
+### Set up a firewall at your provider
+
+Use your hosting provider's firewall (Hetzner Cloud Firewall, AWS security groups, etc.) rather than
+`ufw` on the server.
+
+<Callout type="warn" title="Docker bypasses ufw">
+  Docker writes its own iptables rules for published container ports, so blocking a port with `ufw`
+  doesn't reliably block a Docker-published port. A provider-level firewall sits in front of the server
+  and isn't affected.
+</Callout>
+
+Allow these inbound ports:
+
+| Port | Why | Keep open? |
+| --- | --- | --- |
+| `22/tcp` | SSH | Yes. Restrict it to your own IPs if you can |
+| `80/tcp` | HTTP, and HTTPS certificate issuance | Yes |
+| `443/tcp` | HTTPS for every Firstline service | Yes |
+| `8000/tcp`, `6001/tcp`, `6002/tcp` | Coolify dashboard, live updates and terminal by IP address | **Only during setup.** Close them once the dashboard has its own domain |
+
+Only if you use video calls (LiveKit): `7881/tcp`, `7882/udp`, `3478/udp` and `30000-30019/udp`.
+
+With `hcloud`:
+
+```bash
+hcloud firewall create --name firstline
+for port in 22 80 443 8000 6001 6002; do
+  hcloud firewall add-rule firstline --direction in --protocol tcp --port "$port" \
+    --source-ips 0.0.0.0/0 --source-ips ::/0
+done
+hcloud firewall apply-to-resource firstline --type server --server firstline
+```
+
+</Step>
+<Step>
+
+### Cap system log size
+
+Logs from systemd's journal can quietly use gigabytes of disk. Firstline's production server had
+3.1 GB of logs. Cap them:
+
+```bash
+mkdir -p /etc/systemd/journald.conf.d
+printf '[Journal]\nSystemMaxUse=500M\n' > /etc/systemd/journald.conf.d/size.conf
+systemctl restart systemd-journald
+```
+
+The Coolify installer configures log rotation for Docker containers separately.
+
+</Step>
+<Step>
+
+### Add swap (small servers)
+
+Most cloud images ship without swap. On servers with **4 GB of RAM or less**, add a swap file so a web
+app build doesn't run out of memory (see [Requirements](/self-hosting/requirements/#building-the-web-app-needs-extra-headroom)):
+
+```bash
+fallocate -l 4G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
+
+free -h   # the Swap line should show 4.0Gi
+```
+
+</Step>
+</Steps>
+
+## Upstream docs
+
+- [Hetzner Cloud CLI](https://github.com/hetznercloud/cli)
+- [Coolify: firewall](https://coolify.io/docs/knowledge-base/server/firewall)

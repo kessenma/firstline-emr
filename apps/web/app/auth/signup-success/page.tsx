@@ -61,8 +61,8 @@ export default function SignupSuccessPage() {
                                 Please check-in with your admin for next steps.
                             </p>
                             <p className="mt-5 text-sm text-muted-foreground">
-                                If you want to learn more about Fajr.EMR, visit our{' '}
-                                <a href="/about" className="text-primary underline">About Page</a>.
+                                If you want to learn more about Firstline, visit our{' '}
+                                <a href="https://firstline.care" className="text-primary underline">website</a>.
                             </p>
                         </>
                     )}

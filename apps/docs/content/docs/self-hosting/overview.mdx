@@ -1,0 +1,90 @@
+---
+title: Overview
+description: What a self-hosted Firstline install is made of, and which parts you actually need.
+---
+
+A Firstline install is one Linux server running Docker and Coolify. Coolify deploys the Firstline
+services from the GitHub repository. Each service is its own Docker Compose stack in the repository
+root (`docker-compose.*.yml`), and you add each one to Coolify as a separate resource.
+
+<Callout type="info" title="What self-hosting supports today">
+  Self-hosted installs currently support the **web app**. The iOS app and its offline sync aren't yet
+  supported on self-hosted servers. Staff notifications for self-hosted installs are in progress.
+</Callout>
+
+## Services
+
+| Service | What it does | Compose file | Self-hosted |
+| --- | --- | --- | --- |
+| **Web app** | The EMR itself: patient charts, messaging, admin dashboard and the API | `docker-compose.web.yml` | Required |
+| **PostgreSQL 17** | Stores all EMR records | Not in a compose file. Create it as a Coolify database, or use an external one | Required |
+| **Object storage** (RustFS) | Patient photos, audio notes and documents | `docker-compose.object-storage.yml` | Required. On the server, or an external S3-compatible service |
+| **Notifications server** | The patient-facing Telegram bot (intake forms, doctor–patient messaging) | `docker-compose.notifications.yml` | Optional |
+| **Video calls** (LiveKit) | In-app video calling | `docker-compose.livekit.yml` | Optional |
+| **Translation** | Arabic → English message translation | `docker-compose.translation.yml` | Optional (needs ~2 GB RAM) |
+| **Admin SSO** (Zitadel) | Single sign-on in front of the admin consoles below | `docker-compose.auth.yml` | Optional |
+| **Database browser** (Drizzle Studio) | Read and query the database from the browser, for admins | `docker-compose.analytics.yml` | Optional (uses Admin SSO) |
+| **Offline sync** (PowerSync) | Keeps the iOS app working offline | `docker-compose.powersync.yml` | Not yet supported |
+
+A minimal install is the **web app + PostgreSQL + object storage**. Add the rest when you need those
+features. [Requirements](/self-hosting/requirements/) lists the server resources each service uses.
+
+<Callout title="Zitadel is not how your staff log in">
+  Staff sign in to Firstline through the web app's own login, which includes passkeys and two-factor
+  authentication. Zitadel only adds single sign-on in front of the admin consoles (the database browser
+  and the storage console). You can skip it on a minimal install.
+</Callout>
+
+## How traffic flows
+
+```text
+                 Internet (HTTPS :443)
+                          │
+               ┌──────────▼──────────┐
+               │  Coolify proxy      │   Caddy: TLS certificates + routing
+               │  (Caddy)            │   by domain name
+               └──┬───────┬───────┬──┘
+                  │       │       │
+       app domain │  s3.  │       │ optional: livekit., identity.,
+                  │       │       │ analytics., storage-admin.
+          ┌───────▼──┐ ┌──▼─────┐ └──► optional services
+          │ Web app  │ │ RustFS │
+          └────┬─────┘ └────────┘
+               │
+          ┌────▼────────┐
+          │ PostgreSQL  │   private: never exposed to the internet
+          └─────────────┘
+```
+
+Every service joins Coolify's shared Docker network (`coolify`), so services reach each other by name
+(for example `web` and `rustfs-server`) without going through the internet.
+
+## Domains you'll need
+
+You need a domain you control. Firstline uses one domain for the app and subdomains for the other
+services:
+
+| Hostname | Used by | Needed |
+| --- | --- | --- |
+| Your app domain, e.g. `emr.example.org` | Web app | Always |
+| `s3.` | Object storage API (browsers and phones load media from it) | If you run object storage on the server |
+| `livekit.` | Video calls | If you use video |
+| `identity.` | Zitadel | If you use Admin SSO |
+| `analytics.`, `storage-admin.` | Admin consoles | If you use Admin SSO |
+| A dashboard domain, e.g. `coolify.example.org` | The Coolify dashboard | Recommended |
+
+<Callout type="warn" title="Some config still assumes firstline.care">
+  A few compose files and settings still have `firstline.care` written into them, rather than reading
+  it from an environment variable. The service guides will cover exactly what to change for your
+  domain.
+</Callout>
+
+## First boot
+
+When the web app starts against an empty database, it shows a **setup** page. There you can start fresh
+or import a Firstline backup file.
+
+<Callout type="error" title="The first account to sign up becomes the admin">
+  On a fresh install, the first person to sign up is automatically approved and made an administrator.
+  Sign up yourself **right after the first deploy**, before you share the URL with anyone.
+</Callout>

@@ -50,6 +50,18 @@ if (fs.existsSync(rootEnv)) {
 
 const MIGRATIONS_DIR = path.resolve(process.cwd(), "db", "migrations");
 const JOURNAL = path.join(MIGRATIONS_DIR, "meta", "_journal.json");
+const BASELINE = path.resolve(process.cwd(), "db", "baseline", "schema.sql");
+
+/**
+ * Database objects the baseline can't carry because they aren't in db/schema
+ * (triggers, functions, hand-tuned indexes). Applied right after the baseline on
+ * a fresh install. Each file must be idempotent.
+ */
+const POST_BASELINE_FILES = [
+  "add_patient_realtime_trigger.sql",
+  "add_telegram_realtime_trigger.sql",
+  "2025_12_19_01_add_composite_indexes.sql",
+];
 
 const APPLY = process.argv.includes("--apply");
 
@@ -190,6 +202,74 @@ async function readApplied(pool: Pool) {
   return rows;
 }
 
+/**
+ * A database is "fresh" only if drizzle has never touched it AND the public
+ * schema has no tables at all. Both conditions, so this can never fire against
+ * an existing database whose ledger is missing for some other reason.
+ */
+async function isFreshDatabase(pool: Pool): Promise<boolean> {
+  const { rows } = await pool.query<{ ledger: boolean; tables: string }>(
+    `select to_regclass('drizzle.__drizzle_migrations') is not null as ledger,
+            (select count(*) from information_schema.tables
+              where table_schema = 'public') as tables`,
+  );
+  return !rows[0]?.ledger && Number(rows[0]?.tables ?? 0) === 0;
+}
+
+/**
+ * Fresh install: the migration history can't be replayed from empty (see
+ * scripts/generate-baseline.ts), so install the generated baseline schema and
+ * record every journal migration it covers as applied. One transaction: either
+ * the whole baseline lands with its ledger, or nothing does.
+ */
+async function installBaseline(pool: Pool, entries: Migration[]): Promise<void> {
+  if (!fs.existsSync(BASELINE)) {
+    throw new Error(`Fresh database but no baseline at ${BASELINE}`);
+  }
+  const baselineSql = fs.readFileSync(BASELINE, "utf8");
+  const covers = baselineSql.match(/^-- covers-journal-through: (\S+)$/m)?.[1];
+  const coverIdx = entries.findIndex((entry) => entry.tag === covers);
+  if (!covers || coverIdx === -1) {
+    throw new Error(
+      `Baseline header names "${covers ?? "nothing"}", which isn't in the journal. ` +
+        "Regenerate it: cd apps/web && pnpm db:baseline",
+    );
+  }
+  const covered = entries.slice(0, coverIdx + 1);
+
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query(baselineSql);
+    for (const file of POST_BASELINE_FILES) {
+      await client.query(fs.readFileSync(path.join(MIGRATIONS_DIR, file), "utf8"));
+    }
+    // Same ledger drizzle's migrator creates and reads.
+    await client.query("CREATE SCHEMA IF NOT EXISTS drizzle");
+    await client.query(
+      `CREATE TABLE IF NOT EXISTS drizzle.__drizzle_migrations (
+         id SERIAL PRIMARY KEY, hash text NOT NULL, created_at bigint)`,
+    );
+    for (const entry of covered) {
+      await client.query(
+        "INSERT INTO drizzle.__drizzle_migrations (hash, created_at) VALUES ($1, $2)",
+        [entry.hash, entry.when],
+      );
+    }
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK").catch(() => {});
+    throw error;
+  } finally {
+    client.release();
+  }
+
+  console.log(
+    `✔ Fresh database: installed the baseline schema and recorded ` +
+      `${covered.length} migration(s) through ${covers} as applied.`,
+  );
+}
+
 async function main(): Promise<number> {
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
@@ -207,6 +287,16 @@ async function main(): Promise<number> {
   const pool = new Pool({ connectionString, connectionTimeoutMillis: 15_000 });
 
   try {
+    // Brand-new install: lay down the baseline first. Anything newer than the
+    // baseline then flows through the normal path below. On an empty database
+    // nothing can be lost, so the risk gate doesn't apply to those.
+    let freshInstall = false;
+    if (APPLY && (await isFreshDatabase(pool))) {
+      console.log("Empty database detected: installing the baseline schema.");
+      await installBaseline(pool, entries);
+      freshInstall = true;
+    }
+
     const applied = await readApplied(pool);
     const watermark = applied.reduce(
       (max, row) => Math.max(max, Number(row.created_at ?? 0)),
@@ -255,7 +345,7 @@ async function main(): Promise<number> {
     // Risky pending migrations are never applied unattended, and their presence
     // fails the deploy rather than letting the safe ones through — applying half
     // a release's migrations is worse than applying none.
-    const risky = findRisks(pending);
+    const risky = freshInstall ? [] : findRisks(pending);
     if (risky.length > 0) {
       console.error("");
       console.error("✖ REFUSING TO AUTO-APPLY — pending migrations need review.");

@@ -1,0 +1,31 @@
+---
+title: Next steps
+description: What comes after Coolify, and what's still being written.
+---
+
+With Docker and Coolify running, the remaining work is deploying the Firstline services into Coolify.
+Step-by-step guides for each service are being written. Until they're published, this page shows the
+order to work in.
+
+## Deployment order
+
+1. **PostgreSQL 17**: a Coolify-managed database on the server, or an external one. Keep it off the
+   public internet.
+2. **Object storage**: the RustFS stack (`docker-compose.object-storage.yml`) or an external
+   S3-compatible bucket.
+3. **Web app**: `docker-compose.web.yml`. The web app guide will cover preparing a brand-new
+   database. Sign up immediately after the first deploy (the first account becomes the admin).
+4. **Optional services** as you need them: the Telegram bot, video calls, translation, admin SSO.
+
+## Status of the mobile app
+
+The Firstline iOS app works offline using PowerSync, and currently connects to Firstline's own servers.
+Using it with a self-hosted server is **not supported yet**. Self-hosted installs should use the web
+app, which works in any modern browser on desktop, tablet and phone.
+
+## Get help
+
+- Report bugs or ask questions in
+  [GitHub issues](https://github.com/kessenma/firstline-emr/issues).
+- Report security problems **privately**, as described in the
+  [security policy](https://github.com/kessenma/firstline-emr/blob/main/SECURITY.md).

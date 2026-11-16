@@ -22,6 +22,6 @@ Setting up coolify + docker + env’s
 9. Continue the manual installation (click continue)
 10. Go here  https://github.com/settings/apps/new  login
 11. Name your new GitHub app that will connect to this server
-12. Setup your GitHub app:  Repository permissions: Homepage url = the IP of coolify callback url = http://116.203.27.52:8000/api/oauth/github/callback Webhook url: http://116.203.27.52:8000/api/webhooks/github web hook Secret (optional): make it something random and copy it for coolify/ ijdfbgiaberigbigerub8y8dgyx8y8yqwvxhv0q308hgbxg0h0389h Contents → Read-only Metadata → Read-only Subscribe to events Push (optional, for auto-deploys)
-13. Copy the  app ID 1193501 / 1234567890 client ID Iv23li6ZgnaAYtHz9wl3  client secret 4d12d0653e58fcc54edb9a1cd7a3893391b9ad0d  web hook secret ijdfbgiaberigbigerub8y8dgyx8y8yqwvxhv0q308hgbxg0h0389h
+12. Setup your GitHub app:  Repository permissions: Homepage url = the IP of coolify callback url = http://<SERVER_IP>:8000/api/oauth/github/callback Webhook url: http://<SERVER_IP>:8000/api/webhooks/github web hook Secret (optional): make it something random and copy it for coolify/ <WEBHOOK_SECRET> Contents → Read-only Metadata → Read-only Subscribe to events Push (optional, for auto-deploys)
+13. Copy the  app ID <APP_ID> client ID <CLIENT_ID>  client secret <CLIENT_SECRET>  web hook secret <WEBHOOK_SECRET>
     1. Generate the private key and copy it

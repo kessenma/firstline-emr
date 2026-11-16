@@ -1,0 +1,38 @@
+{
+  "name": "site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Firstline public site (firstline.care). Static Next.js export.",
+  "scripts": {
+    "dev": "next dev --port 3200",
+    "build": "next build",
+    "start": "serve out -l 3200",
+    "check-types": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@firstline/shared": "workspace:*",
+    "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.24",
+    "lucide-react": "0.562.0",
+    "next": "16.2.10",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^22.10.2",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "postcss": "^8.5.6",
+    "serve": "^14.2.7",
+    "tailwindcss": "^4.1.17",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "5.9.3"
+  }
+}

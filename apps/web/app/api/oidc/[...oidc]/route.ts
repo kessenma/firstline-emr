@@ -124,7 +124,7 @@ async function handleOidcRequest(req: NextRequest): Promise<Response> {
       }
 
       // Validate client_id
-      const expectedClientId = process.env.OIDC_ZITADEL_CLIENT_ID || 'fajr-emr-oidc';
+      const expectedClientId = process.env.OIDC_ZITADEL_CLIENT_ID || 'firstline-emr-oidc';
       if (clientId !== expectedClientId) {
         return NextResponse.json(
           { error: 'invalid_client', error_description: 'Unknown client' },
@@ -165,7 +165,7 @@ async function handleOidcRequest(req: NextRequest): Promise<Response> {
       });
 
       // Redirect to login page - use NEXTAUTH_URL for production domain
-      const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_API_URL || 'https://fajrmission.org';
+      const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_API_URL || 'https://firstline.care';
       const loginUrl = new URL('/oidc/login', baseUrl);
       loginUrl.searchParams.set('interaction', interactionId);
 
@@ -204,7 +204,7 @@ async function handleOidcRequest(req: NextRequest): Promise<Response> {
       }
 
       // Validate client credentials
-      const expectedClientId = process.env.OIDC_ZITADEL_CLIENT_ID || 'fajr-emr-oidc';
+      const expectedClientId = process.env.OIDC_ZITADEL_CLIENT_ID || 'firstline-emr-oidc';
       const expectedClientSecret = process.env.OIDC_ZITADEL_CLIENT_SECRET;
 
       if (clientId !== expectedClientId || clientSecret !== expectedClientSecret) {
@@ -405,9 +405,11 @@ async function generateIdToken(
   }
 
   const user = userResult[0];
-  const issuer = process.env.NODE_ENV === 'production'
-    ? 'https://fajrmission.org/api/oidc'
-    : 'http://localhost:3000/api/oidc';
+  // Must match the provider's issuer (lib/oidc-provider.ts getIssuerUrl) so
+  // self-hosted installs on their own domain issue tokens Zitadel will accept.
+  const issuerBase = process.env.OIDC_ISSUER_URL
+    || (process.env.NODE_ENV === 'production' ? 'https://firstline.care' : 'http://localhost:3000');
+  const issuer = `${issuerBase}/api/oidc`;
 
   // Get the key ID from JWKS
   const jwks = getJwks();

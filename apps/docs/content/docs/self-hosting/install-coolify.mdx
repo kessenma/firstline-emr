@@ -1,0 +1,133 @@
+---
+title: Install Coolify
+description: Install Coolify, secure the dashboard, switch its proxy to Caddy, and connect it to GitHub.
+---
+
+[Coolify](https://coolify.io) is how you'll deploy and manage every Firstline service. This page covers
+only what a Firstline install needs. For anything else, the [Coolify docs](https://coolify.io/docs) are
+the source of truth.
+
+<Callout type="error" title="Have the next 10 minutes free">
+  The first person to open a new Coolify dashboard creates the admin account, and that account has root
+  access to your server. Coolify only accepts that first registration for **10 minutes** after it
+  starts, so create your admin account right after the installer finishes.
+</Callout>
+
+<Steps>
+<Step>
+
+### Run the installer
+
+On the server, as `root`:
+
+```bash
+curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash
+```
+
+This installs Docker (if it isn't already installed; see [Install Docker](/self-hosting/install-docker/)),
+plus `curl`, `git`, `jq` and `openssl`. It also creates Coolify's files under `/data/coolify` and starts
+Coolify.
+
+</Step>
+<Step>
+
+### Create the admin account
+
+Open `http://<server-ip>:8000` in a browser **straight away** and register. Use a strong, unique
+password, then turn on two-factor authentication in your Coolify profile.
+
+</Step>
+<Step>
+
+### Switch the proxy to Caddy
+
+Coolify ships with Traefik as its reverse proxy. **Firstline's compose files are written for Caddy**: its
+services route traffic with Caddy labels, which Traefik ignores. Switch now, while nothing is deployed
+yet:
+
+1. Go to **Servers → (your server) → Proxy** and select **Stop Proxy**. Wait for **Proxy Exited**.
+2. Select **Switch Proxy**, confirm, and choose **Caddy**.
+3. Select **Start Proxy**.
+
+<Callout type="warn">
+  Switching proxies later interrupts traffic to every app on the server until each one is redeployed.
+  On a fresh server there's nothing to interrupt, which is why this step comes first.
+</Callout>
+
+</Step>
+<Step>
+
+### Give the dashboard its own domain
+
+1. Create a DNS `A` record such as `coolify.example.org` that points at the server (see
+   [Provision a server](/self-hosting/provision-server/)).
+2. In Coolify, go to **Settings → General** and set **URL** to `https://coolify.example.org`. It must
+   start with `https://`, and it can't include a path.
+3. Open the new address and check that it loads with a valid certificate.
+
+Use a hostname for the dashboard that no Firstline service uses.
+
+</Step>
+<Step>
+
+### Close the setup ports
+
+Once the dashboard works on its domain, remove `8000`, `6001` and `6002` from your provider firewall.
+Keep `22`, `80` and `443`.
+
+</Step>
+<Step>
+
+### Connect Coolify to GitHub
+
+Coolify deploys Firstline from its GitHub repository. **Fork
+[kessenma/firstline-emr](https://github.com/kessenma/firstline-emr)** into your organization's GitHub
+account first, so you decide when updates reach your server.
+
+Then connect the fork with a GitHub App, which lets Coolify redeploy automatically when you push:
+
+1. In Coolify, open **Sources** → **New source → GitHub App**.
+2. Name it. Enter your GitHub organization name only if the fork lives in an organization.
+3. Under webhook endpoint, choose your instance's URL, `https://coolify.example.org`. GitHub has to be
+   able to reach it for automatic deploys to work.
+4. Select **Register with GitHub**, give the app a unique name on GitHub, and create it. GitHub sends
+   you back to Coolify, which stores the app's credentials.
+5. Select **Install repositories** and choose **only your Firstline fork**.
+
+<Callout type="error" title="Treat GitHub App credentials as secrets">
+  The app's client secret, webhook secret and private key give access to your repositories. Coolify
+  stores them for you. Never paste them into docs, tickets or chat. If one leaks, regenerate it in
+  GitHub (**Settings → Developer settings → GitHub Apps**) and update it in Coolify.
+</Callout>
+
+</Step>
+<Step>
+
+### Back up Coolify's secrets
+
+`/data/coolify/source/.env` holds Coolify's own encryption keys (`APP_KEY` and others). Without it, you
+can't restore Coolify on a new server. Copy it to a password manager or other secure storage **off** the
+server:
+
+```bash
+# From your own machine
+scp root@<server-ip>:/data/coolify/source/.env ./coolify-instance.env
+```
+
+Delete the local copy once it's stored safely.
+
+</Step>
+</Steps>
+
+## What's next
+
+Coolify is ready. Next you'll deploy the Firstline services into it, starting with the database, object
+storage and the web app. See [Next steps](/self-hosting/next-steps/).
+
+## Upstream docs
+
+- [Coolify: installation](https://coolify.io/docs/get-started/installation)
+- [Coolify: proxies](https://coolify.io/docs/knowledge-base/server/proxies)
+- [Coolify: instance settings](https://coolify.io/docs/core/instance-management/instance-settings)
+- [Coolify: set up a GitHub App](https://coolify.io/docs/applications/sources/github/app)
+- [Coolify: firewall](https://coolify.io/docs/knowledge-base/server/firewall)

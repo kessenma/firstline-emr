@@ -1,0 +1,116 @@
+---
+title: Install Docker
+description: Which Docker version Firstline needs, the easiest way to get it, and how to check it.
+---
+
+Everything in Firstline runs in Docker containers, and Coolify itself runs on Docker.
+
+## Which version
+
+| | Version |
+| --- | --- |
+| **Minimum** | Docker Engine **24** or newer, with the Docker Compose v2 plugin. This is Coolify's requirement, and it also covers Firstline's needs (BuildKit builds and Compose v2 health-check dependencies) |
+| **Known good** | Docker Engine **29.6.1** + Docker Compose **v5.3.0** on **Ubuntu 26.04 LTS**, the combination Firstline's production server runs (checked Nov 2026) |
+
+Install Docker from **Docker's official packages**.
+
+<Callout type="error" title="Don't use the snap package or Ubuntu's docker.io">
+  Coolify doesn't support Docker installed through **snap**. Ubuntu's own `docker.io` package is also
+  not the official build and often lags behind. If either is installed, remove it first (see the manual
+  steps below).
+</Callout>
+
+## Install it
+
+<Tabs items={['Let Coolify install it (recommended)', 'Install manually']}>
+<Tab value="Let Coolify install it (recommended)">
+
+On a fresh server you don't need to install Docker yourself. **The Coolify installer installs Docker
+Engine from Docker's official packages** when your distribution supports it, and configures logging
+and daemon settings for you.
+
+Skip ahead to [Install Coolify](/self-hosting/install-coolify/), then come back and run the
+[checks below](#check-the-installed-version).
+
+</Tab>
+<Tab value="Install manually">
+
+Install manually if Docker must be in place before Coolify, or your organization manages packages
+centrally. These are the steps from
+[Docker's Ubuntu guide](https://docs.docker.com/engine/install/ubuntu/).
+
+**1. Remove snap and unofficial packages**
+
+```bash
+# Snap Docker, if present
+sudo snap remove docker 2>/dev/null || true
+
+# Unofficial / conflicting packages
+sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc docker-buildx podman-docker containerd runc | cut -f1)
+```
+
+**2. Add Docker's apt repository**
+
+```bash
+# Add Docker's official GPG key:
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
+```
+
+**3. Install Docker Engine and the Compose plugin**
+
+```bash
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+**4. Smoke test**
+
+```bash
+sudo docker run hello-world
+```
+
+</Tab>
+</Tabs>
+
+## Check the installed version
+
+Run these on the server, whichever way you installed:
+
+```bash
+docker version --format 'Engine {{.Server.Version}}'
+docker compose version
+```
+
+You want **Engine 24 or newer** and a **Compose v2+** plugin (the version string starts with `v2` or
+higher, e.g. `Docker Compose version v5.3.0`).
+
+If `docker compose` isn't found but `docker-compose` (with a hyphen) is, you have the old standalone
+Compose v1. Install the `docker-compose-plugin` package from Docker's repository instead.
+
+Also check that Docker didn't come from snap:
+
+```bash
+snap list docker 2>/dev/null \
+  && echo "Snap Docker found: remove it" \
+  || echo "OK: not a snap install"
+```
+
+## Upstream docs
+
+- [Docker: Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+- [Coolify: installation requirements](https://coolify.io/docs/get-started/installation)

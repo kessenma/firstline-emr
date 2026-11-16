@@ -1,0 +1,51 @@
+---
+title: Welcome
+description: Documentation for the IT teams who install and run Firstline EMR for their organization.
+---
+
+Firstline is an open-source electronic medical records (EMR) system. It's built for mission teams and
+clinics that need patient charts, care-team messaging, Telegram-based patient intake and video calls,
+running on a server they control.
+
+These docs are for the **IT manager** (or volunteer, or contractor) who sets that server up and keeps it
+running. You don't need to be a developer, but you should be comfortable with SSH and a Linux terminal.
+
+<Callout type="warn" title="Read this before using real patient data">
+  Firstline is pre-production software. It hasn't had a third-party security audit and isn't certified
+  for HIPAA, GDPR or any other regulatory regime. Do your own security review and put the right legal
+  and administrative safeguards in place first. See the project's [security
+  policy](https://github.com/kessenma/firstline-emr/blob/main/SECURITY.md).
+</Callout>
+
+## How a Firstline install fits together
+
+Firstline runs as a set of Docker containers on a single Linux server. You manage them with
+[Coolify](https://coolify.io), an open-source, self-hosted platform for deploying apps (a bit like
+running your own Heroku). Coolify builds Firstline from its GitHub repository, handles HTTPS
+certificates, and gives you a web dashboard for logs, environment variables and redeploys.
+
+You'll be responsible for that server. Coolify does a lot for you, but expect to learn its dashboard,
+because that's where you'll do most day-to-day work.
+
+## The path to a running install
+
+<Cards>
+  <Card title="1. Overview" href="/self-hosting/overview/">
+    What gets deployed, what's required and what's optional.
+  </Card>
+  <Card title="2. Requirements" href="/self-hosting/requirements/">
+    Server size, disk, domain and DNS.
+  </Card>
+  <Card title="3. Provision a server" href="/self-hosting/provision-server/">
+    Create the server, SSH access and firewall.
+  </Card>
+  <Card title="4. Install Docker" href="/self-hosting/install-docker/">
+    Which version, and how to check it.
+  </Card>
+  <Card title="5. Install Coolify" href="/self-hosting/install-coolify/">
+    Install, secure, and connect it to GitHub.
+  </Card>
+  <Card title="6. Next steps" href="/self-hosting/next-steps/">
+    Deploying the Firstline services (guides in progress).
+  </Card>
+</Cards>
